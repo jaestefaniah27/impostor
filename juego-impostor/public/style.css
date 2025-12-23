@@ -1,0 +1,61 @@
+:root {
+    --bg: #1e272e;
+    --card: #2f3640;
+    --accent: #00a8ff;
+    --danger: #e74c3c;
+    --text: #f5f6fa;
+    --cover: #fbc531;
+}
+
+body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 20px; text-align: center; user-select: none; }
+.container { max-width: 500px; margin: 0 auto; padding-bottom: 50px; }
+.hidden { display: none !important; }
+
+/* HOME y GENERAL */
+.card { background: var(--card); padding: 15px; border-radius: 12px; margin-bottom: 15px; text-align: left; }
+.card h3 { margin-top: 0; color: #dcdde1; border-bottom: 1px solid #455a64; padding-bottom: 5px; }
+.input-row { display: flex; gap: 10px; }
+input, textarea { width: 100%; padding: 12px; border-radius: 6px; border: none; background: #353b48; color: white; margin-bottom: 5px; box-sizing: border-box; font-size: 1em; }
+.tags-container { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 10px; }
+.tag { background: #4cd137; color: #1e272e; padding: 5px 12px; border-radius: 15px; cursor: pointer; font-weight: bold; }
+
+/* BOTONES */
+button { border: none; border-radius: 8px; cursor: pointer; font-weight: bold; transition: transform 0.1s; }
+button:active { transform: scale(0.98); }
+.btn-main { background: var(--accent); color: white; width: 100%; padding: 15px; font-size: 1.2em; margin-top: 10px; box-shadow: 0 4px 0 #007bbd; }
+.btn-secondary { background: #718093; color: white; width: 100%; padding: 10px; margin-top: 5px; }
+.btn-icon { width: 50px; background: var(--accent); color: white; font-size: 1.5em; }
+.btn-text { background: none; color: #7f8fa6; text-decoration: underline; margin-top: 15px; }
+.bottom-btn { margin-top: 30px; }
+
+/* GRID TEMAS */
+.grid-container { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
+.theme-box { background: var(--card); padding: 15px; border-radius: 8px; border: 2px solid transparent; cursor: pointer; }
+.theme-box.selected { border-color: var(--accent); background: #233642; box-shadow: 0 0 10px var(--accent); }
+
+/* CARTA MÁGICA */
+.full-height { min-height: 80vh; display: flex; flex-direction: column; justify-content: center; }
+.magic-card-container {
+    position: relative; width: 100%; height: 320px; background: white; border-radius: 15px; overflow: hidden;
+    cursor: pointer; box-shadow: 0 10px 25px rgba(0,0,0,0.5); margin: 20px auto;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+}
+.card-content { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; background: #f5f6fa; color: #2f3640; padding: 20px; text-align: center; }
+.secret-text { font-size: 2.2em; font-weight: bold; text-transform: uppercase; color: #2c3e50; }
+.role-subtext { font-size: 1.2em; color: #7f8fa6; margin-top: 10px; }
+.card-cover {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: var(--cover);
+    display: flex; justify-content: center; align-items: center; color: #2f3640; font-weight: bold; font-size: 1.4em; z-index: 10;
+    transition: transform 0.25s ease-out;
+}
+.magic-card-container.revealed .card-cover { transform: translateY(-100%); }
+
+/* --- NUEVO: FASE DE JUEGO ACTIVO --- */
+.timer-big { font-size: 5em; font-weight: bold; color: var(--accent); margin: 20px 0; font-family: monospace; text-shadow: 0 0 10px rgba(0,168,255,0.3); }
+.voting-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 10px; width: 100%; }
+.vote-card {
+    background: var(--danger); color: white; padding: 20px; border-radius: 10px; cursor: pointer;
+    box-shadow: 0 4px 0 #c0392b; text-align: center;
+}
+.vote-card:active { transform: translateY(4px); box-shadow: none; }
+.instruction { color: #bdc3c7; font-style: italic; opacity: 0.8; }

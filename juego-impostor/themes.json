@@ -1,0 +1,54 @@
+[
+    {
+        "id": 1,
+        "name": "Cocina",
+        "words": [
+            {
+                "text": "Sartén",
+                "hint": "Para freír"
+            },
+            {
+                "text": "Microondas",
+                "hint": "Calienta rápido"
+            },
+            {
+                "text": "Nevera",
+                "hint": "Enfría"
+            },
+            {
+                "text": "Tenedor",
+                "hint": "Cubierto con pinchos"
+            },
+            {
+                "text": "Chef",
+                "hint": "Persona que cocina"
+            }
+        ]
+    },
+    {
+        "id": 2,
+        "name": "Transporte",
+        "words": [
+            {
+                "text": "Avión",
+                "hint": "Vuela alto"
+            },
+            {
+                "text": "Submarino",
+                "hint": "Bajo el agua"
+            },
+            {
+                "text": "Caballo",
+                "hint": "Animal"
+            },
+            {
+                "text": "Patinete",
+                "hint": "Dos ruedas y manillar"
+            },
+            {
+                "text": "Cohete",
+                "hint": "Espacial"
+            }
+        ]
+    }
+]

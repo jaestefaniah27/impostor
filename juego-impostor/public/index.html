@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>El Impostor Pro</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div id="screen-home" class="container">
+        <h1>🕵️ El Impostor</h1>
+        
+        <div class="card">
+            <h3>👥 Jugadores</h3>
+            <div id="players-list" class="tags-container"></div>
+            <div class="input-row">
+                <input type="text" id="new-player" placeholder="Nombre...">
+                <button onclick="addPlayer()" class="btn-icon">+</button>
+            </div>
+        </div>
+
+        <div class="card">
+            <h3>⏱️ Duración Partida</h3>
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+                <input type="range" id="game-timer-input" min="5" max="21" value="10" step="1" oninput="updateTimeDisplay()" style="width:70%">
+                <span id="time-display" style="font-weight:bold; color:var(--accent)">10 min</span>
+            </div>
+        </div>
+
+        <div class="card">
+            <h3>⚙️ Impostores</h3>
+            <label>Cantidad: <span id="impostor-val">1</span></label>
+            <input type="range" id="impostor-count" min="1" max="3" value="1" oninput="updateConfigDisplay()">
+        </div>
+
+        <div class="card">
+            <h3>📝 Crear Tema</h3>
+            <input type="text" id="create-theme-name" placeholder="Nombre (Ej: Animales)">
+            <p class="instruction" style="margin:5px 0; font-size:0.8em;">Formato: Palabra:Pista, Palabra:Pista</p>
+            <textarea id="create-theme-words" placeholder="León:Rey selva, Pez:Nada, ..."></textarea>
+            <button class="btn-secondary" onclick="saveNewTheme()">Guardar Tema</button>
+        </div>
+
+        <button class="btn-main" onclick="goToThemeSelection()">ELEGIR TEMAS</button>
+    </div>
+
+    <div id="screen-themes" class="container hidden">
+        <h2>Elige Temas</h2>
+        <div id="themes-grid" class="grid-container"></div>
+        <button class="btn-main" onclick="startGameSetup()">¡EMPEZAR!</button>
+        <button class="btn-text" onclick="showScreen('screen-home')">Volver</button>
+    </div>
+
+    <div id="screen-reveal" class="container hidden full-height">
+        <h2 id="current-player-display">Nombre</h2>
+        <p class="instruction">Mantén pulsada la carta para ver</p>
+
+        <div class="magic-card-container" id="magic-card">
+            <div class="card-content">
+                <div id="secret-word" class="secret-text">...</div>
+                <div id="secret-role" class="role-subtext"></div>
+            </div>
+            <div class="card-cover">
+                <span>🤫 MANTENER</span>
+            </div>
+        </div>
+
+        <button id="next-btn" class="btn-main bottom-btn" onclick="nextPlayer()">SIGUIENTE</button>
+    </div>
+
+    <div id="screen-active" class="container hidden">
+        <div id="timer-display" class="timer-big">10:00</div>
+        <h3>¿Quién es el impostor?</h3>
+        <p class="instruction">Pulsa en un jugador para expulsarlo</p>
+        
+        <div id="voting-list" class="voting-grid">
+            </div>
+
+        <button class="btn-secondary bottom-btn" onclick="revealSolution()">RENDARSE / VER SOLUCIÓN</button>
+    </div>
+
+    <div id="screen-result" class="container hidden full-height">
+        <h1 id="result-title">...</h1>
+        <div id="result-icon" style="font-size: 5em; margin: 20px;"></div>
+        <p id="result-msg" style="font-size: 1.2em;"></p>
+        
+        <div id="impostor-guess-area" class="hidden">
+            <p style="color:var(--accent)">El impostor tiene una oportunidad de ganar si adivina la palabra.</p>
+            <button class="btn-main" onclick="revealSolution()">REVELAR PALABRA SECRETA</button>
+        </div>
+
+        <button id="continue-btn" class="btn-main hidden" onclick="continueGame()">SEGUIR JUGANDO</button>
+    </div>
+
+    <div id="screen-solution" class="container hidden full-height">
+        <h1>PARTIDA FINALIZADA</h1>
+        <div class="card">
+            <h3>Palabra Secreta:</h3>
+            <h1 style="color:var(--accent); font-size:3em; margin:10px 0;" id="final-word">???</h1>
+        </div>
+        <button class="btn-main" onclick="location.reload()">JUGAR OTRA VEZ</button>
+    </div>
+
+    <script>
+        let players = ['Ana', 'Juan', 'Pedro'];
+        let themes = [];
+        let selectedThemesIds = [];
+        let gameData = { assignments: [], currentIndex: 0, secretWord: '', secretHint: '', impostorsCaught: 0, totalImpostors: 0 };
+        let timerInterval;
+        let timeRemaining = 600; // Segundos
+
+        window.onload = () => {
+            renderPlayers();
+            fetchThemes();
+            setupCardInteractions();
+            updateTimeDisplay();
+        };
+
+        // --- CONFIGURACIÓN ---
+        function updateTimeDisplay() {
+            const val = parseInt(document.getElementById('game-timer-input').value);
+            const display = document.getElementById('time-display');
+            if (val > 20) {
+                display.innerText = "Infinito";
+            } else {
+                display.innerText = val + " min";
+            }
+        }
+
+        async function saveNewTheme() {
+            const name = document.getElementById('create-theme-name').value;
+            const rawText = document.getElementById('create-theme-words').value;
+            if(!name || !rawText) return alert("Faltan datos");
+
+            // Parsear formato "Palabra:Pista, Palabra2:Pista2"
+            const words = rawText.split(',').map(item => {
+                const parts = item.split(':');
+                return {
+                    text: parts[0].trim(),
+                    hint: parts[1] ? parts[1].trim() : "Sin pista"
+                };
+            }).filter(w => w.text.length > 0);
+
+            await fetch('/api/themes', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ name, words })
+            });
+            alert("Tema guardado");
+            document.getElementById('create-theme-name').value = '';
+            document.getElementById('create-theme-words').value = '';
+            fetchThemes();
+        }
+
+        // --- GAMEPLAY FASE 1: REPARTO ---
+        function startGameSetup() {
+            if(selectedThemesIds.length === 0) return alert("Elige un tema");
+            
+            // 1. Recopilar palabras y pistas
+            let pool = [];
+            themes.forEach(t => {
+                if(selectedThemesIds.includes(t.id)) pool = pool.concat(t.words);
+            });
+
+            // 2. Elegir palabra secreta
+            const selectedObj = pool[Math.floor(Math.random() * pool.length)];
+            gameData.secretWord = selectedObj.text;
+            gameData.secretHint = selectedObj.hint;
+
+            // 3. Asignar roles
+            let impostorCount = parseInt(document.getElementById('impostor-count').value);
+            gameData.totalImpostors = impostorCount;
+            gameData.impostorsCaught = 0;
+            let assignments = new Array(players.length).fill(null);
+            let placed = 0;
+
+            while(placed < impostorCount) {
+                let r = Math.floor(Math.random() * players.length);
+                if(!assignments[r]) {
+                    assignments[r] = { isImpostor: true, name: players[r], alive: true };
+                    placed++;
+                }
+            }
+            for(let i=0; i<players.length; i++) {
+                if(!assignments[i]) {
+                    assignments[i] = { isImpostor: false, name: players[i], alive: true };
+                }
+            }
+
+            gameData.assignments = assignments;
+            gameData.currentIndex = 0;
+            setupCardForPlayer();
+            showScreen('screen-reveal');
+        }
+
+        function setupCardForPlayer() {
+            const currentP = gameData.assignments[gameData.currentIndex];
+            document.getElementById('current-player-display').innerText = "Turno de: " + currentP.name;
+            
+            const wordDiv = document.getElementById('secret-word');
+            const roleDiv = document.getElementById('secret-role');
+            
+            if(currentP.isImpostor) {
+                wordDiv.innerText = "😈 IMPOSTOR";
+                wordDiv.style.color = "#e74c3c";
+                // AHORA EL IMPOSTOR VE LA PISTA DE LA PALABRA
+                roleDiv.innerHTML = "Tu pista es:<br><strong style='color:#f1c40f'>" + gameData.secretHint + "</strong>";
+            } else {
+                wordDiv.innerText = gameData.secretWord;
+                wordDiv.style.color = "#2ecc71";
+                roleDiv.innerText = "Palabra Secreta";
+            }
+
+            const btn = document.getElementById('next-btn');
+            if(gameData.currentIndex >= players.length - 1) {
+                btn.innerText = "EMPEZAR CRONÓMETRO";
+                btn.onclick = startActiveGame;
+            } else {
+                btn.innerText = "SIGUIENTE JUGADOR";
+                btn.onclick = () => {
+                     gameData.currentIndex++;
+                     setupCardForPlayer();
+                };
+            }
+        }
+
+        // --- GAMEPLAY FASE 2: VOTACIONES Y TIEMPO ---
+        function startActiveGame() {
+            showScreen('screen-active');
+            renderVotingList();
+            
+            // Configurar Timer
+            const minutes = parseInt(document.getElementById('game-timer-input').value);
+            if(minutes > 20) {
+                document.getElementById('timer-display').innerText = "♾️";
+            } else {
+                timeRemaining = minutes * 60;
+                updateTimerUI();
+                timerInterval = setInterval(() => {
+                    timeRemaining--;
+                    updateTimerUI();
+                    if(timeRemaining <= 0) clearInterval(timerInterval);
+                }, 1000);
+            }
+        }
+
+        function updateTimerUI() {
+            const m = Math.floor(timeRemaining / 60).toString().padStart(2,'0');
+            const s = (timeRemaining % 60).toString().padStart(2,'0');
+            document.getElementById('timer-display').innerText = `${m}:${s}`;
+        }
+
+        function renderVotingList() {
+            const container = document.getElementById('voting-list');
+            container.innerHTML = '';
+            
+            gameData.assignments.forEach((p, index) => {
+                if(p.alive) {
+                    const btn = document.createElement('div');
+                    btn.className = 'vote-card';
+                    btn.innerHTML = `<strong>${p.name}</strong><br><small>Expulsar</small>`;
+                    btn.onclick = () => votePlayer(index);
+                    container.appendChild(btn);
+                }
+            });
+        }
+
+        function votePlayer(index) {
+            if(!confirm(`¿Seguro que queréis expulsar a ${gameData.assignments[index].name}?`)) return;
+
+            const player = gameData.assignments[index];
+            player.alive = false; // Lo matamos
+            
+            showScreen('screen-result');
+            const title = document.getElementById('result-title');
+            const icon = document.getElementById('result-icon');
+            const msg = document.getElementById('result-msg');
+            const impostorArea = document.getElementById('impostor-guess-area');
+            const continueBtn = document.getElementById('continue-btn');
+
+            if(player.isImpostor) {
+                // IMPOSTOR PILLADO
+                title.innerText = "¡IMPOSTOR PILLADO!";
+                title.style.color = "#2ecc71";
+                icon.innerText = "🎉";
+                msg.innerText = `${player.name} era un Impostor.`;
+                gameData.impostorsCaught++;
+                
+                // Pausar timer
+                clearInterval(timerInterval);
+                
+                // Mostrar opción de adivinar
+                impostorArea.classList.remove('hidden');
+                continueBtn.classList.add('hidden');
+
+            } else {
+                // INOCENTE PILLADO
+                title.innerText = "ERROR...";
+                title.style.color = "#e74c3c";
+                icon.innerText = "💀";
+                msg.innerText = `${player.name} NO era impostor. Era inocente.`;
+                
+                impostorArea.classList.add('hidden');
+                continueBtn.classList.remove('hidden');
+            }
+        }
+
+        function continueGame() {
+            // Verificar si quedan suficientes jugadores
+            const living = gameData.assignments.filter(p => p.alive).length;
+            const livingImpostors = gameData.assignments.filter(p => p.alive && p.isImpostor).length;
+
+            if(livingImpostors === 0) {
+                 revealSolution(); // Ganaron ciudadanos
+            } else if (living <= 2 && livingImpostors > 0) {
+                 // Final técnico (1 vs 1 suele ganar impostor) pero dejamos seguir
+                 showScreen('screen-active');
+                 renderVotingList();
+            } else {
+                showScreen('screen-active');
+                renderVotingList();
+            }
+        }
+
+        function revealSolution() {
+            clearInterval(timerInterval);
+            document.getElementById('final-word').innerText = gameData.secretWord;
+            showScreen('screen-solution');
+        }
+
+        // --- UTILIDADES --- (Mismas de antes: renderPlayers, fetchThemes, setupCardInteractions...)
+        // He resumido las repetidas para ahorrar espacio, PERO PEGA AQUÍ las funciones 
+        // renderPlayers, addPlayer, removePlayer, fetchThemes, updateConfigDisplay, 
+        // goToThemeSelection, renderThemeGrid, toggleTheme, showScreen 
+        // del código anterior o usa las de abajo completas:
+        
+        async function fetchThemes() {
+            const res = await fetch('/api/themes');
+            themes = await res.json();
+        }
+        function renderPlayers() {
+            document.getElementById('players-list').innerHTML = players.map((p,i) => 
+                `<span class="tag" onclick="removePlayer(${i})">${p} ✕</span>`).join('');
+            document.getElementById('impostor-count').max = Math.floor(players.length / 2) || 1;
+            document.getElementById('impostor-val').innerText = document.getElementById('impostor-count').value;
+        }
+        function addPlayer() {
+            const val = document.getElementById('new-player').value;
+            if(val) { players.push(val); document.getElementById('new-player').value=''; renderPlayers(); }
+        }
+        function removePlayer(i) { players.splice(i,1); renderPlayers(); }
+        function updateConfigDisplay() { document.getElementById('impostor-val').innerText = document.getElementById('impostor-count').value; }
+        
+        function goToThemeSelection() {
+            if(players.length < 3) return alert("Mínimo 3 jugadores");
+            renderThemeGrid();
+            showScreen('screen-themes');
+        }
+        function renderThemeGrid() {
+            document.getElementById('themes-grid').innerHTML = themes.map(t => `
+                <div class="theme-box ${selectedThemesIds.includes(t.id) ? 'selected' : ''}" onclick="toggleTheme(${t.id})">
+                    <strong>${t.name}</strong><br><small>${t.words.length} palabras</small>
+                </div>
+            `).join('');
+        }
+        function toggleTheme(id) {
+            selectedThemesIds.includes(id) ? selectedThemesIds = selectedThemesIds.filter(x => x !== id) : selectedThemesIds.push(id);
+            renderThemeGrid();
+        }
+        function showScreen(id) {
+            document.querySelectorAll('.container').forEach(d => d.classList.add('hidden'));
+            document.getElementById(id).classList.remove('hidden');
+        }
+        function setupCardInteractions() {
+            const card = document.getElementById('magic-card');
+            const show = (e) => { if(e.cancelable) e.preventDefault(); card.classList.add('revealed'); };
+            const hide = (e) => { if(e.cancelable) e.preventDefault(); card.classList.remove('revealed'); };
+            card.addEventListener('mousedown', show); card.addEventListener('mouseup', hide); card.addEventListener('mouseleave', hide);
+            card.addEventListener('touchstart', show, {passive: false}); card.addEventListener('touchend', hide); card.addEventListener('touchcancel', hide);
+        }
+    </script>
+</body>
+</html>
