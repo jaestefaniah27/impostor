@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>El Impostor - Modo Solo</title>
+    <style>
+        body { font-family: sans-serif; background: #2c3e50; color: white; text-align: center; padding: 20px; margin: 0; }
+        h1 { color: #e74c3c; }
+        .card { background: #34495e; padding: 20px; border-radius: 10px; margin-bottom: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.3); }
+        button { background: #e67e22; border: none; padding: 15px 30px; color: white; font-size: 1.1em; border-radius: 5px; cursor: pointer; width: 100%; margin: 5px 0; }
+        button.secondary { background: #7f8c8d; }
+        button.danger { background: #c0392b; }
+        input, select, textarea { width: 90%; padding: 10px; margin: 5px 0; border-radius: 5px; border: none; font-size: 1em; }
+        textarea { height: 100px; }
+        .hidden { display: none; }
+        .role-text { font-size: 1.5em; font-weight: bold; margin: 20px 0; color: #f1c40f; }
+        .player-list-item { display: flex; justify-content: space-between; background: #2c3e50; padding: 10px; margin: 5px 0; border-radius: 5px; }
+        .tag { display: inline-block; background: #16a085; padding: 5px 10px; border-radius: 15px; font-size: 0.8em; margin: 2px; }
+    </style>
+</head>
+<body>
+
+    <div id="screen-setup" class="card">
+        <h1>🕵️ El Impostor</h1>
+        
+        <h3>1. Jugadores</h3>
+        <div id="players-container"></div>
+        <div style="display:flex; gap:5px;">
+            <input type="text" id="new-player-name" placeholder="Nombre del jugador">
+            <button onclick="addPlayer()" style="width:auto;">+</button>
+        </div>
+
+        <h3>2. Configuración</h3>
+        <label>Impostores: <span id="impostor-count-display">1</span></label>
+        <input type="range" id="impostor-count" min="1" max="3" value="1" oninput="updateSettings()">
+        
+        <br><br>
+        <label><input type="checkbox" id="use-hints"> Habilitar Pistas (Rol secundario)</label>
+
+        <h3>3. Temáticas</h3>
+        <select id="topic-select"></select>
+        <button class="secondary" onclick="toggleCustomTopic()">Creating/Editar Temática</button>
+        
+        <div id="custom-topic-area" class="hidden" style="margin-top:10px; border-top:1px solid #7f8c8d; padding-top:10px;">
+            <input type="text" id="custom-topic-name" placeholder="Nombre del lugar (Ej: Hospital)">
+            <textarea id="custom-topic-roles" placeholder="Roles separados por coma (Ej: Doctor, Enfermero, Paciente, Cirujano)"></textarea>
+            <button onclick="saveCustomTopic()">Guardar Temática</button>
+        </div>
+
+        <br><br>
+        <button onclick="startGame()">¡COMENZAR PARTIDA!</button>
+    </div>
+
+    <div id="screen-pass" class="card hidden">
+        <h2>Pasa el móvil a:</h2>
+        <h1 id="current-player-name" style="font-size: 3em;">PLAYER</h1>
+        <br>
+        <button onclick="revealRole()">VER MI ROL</button>
+    </div>
+
+    <div id="screen-reveal" class="card hidden">
+        <h2>Tu identidad secreta:</h2>
+        <div id="role-display" class="role-text">...</div>
+        <p id="location-display" style="font-size: 1.2em;">...</p>
+        <p id="hint-display" style="color:#bdc3c7; font-style:italic;"></p>
+        <br>
+        <button class="danger" onclick="hideRole()">ENTENDIDO (OCULTAR)</button>
+    </div>
+
+    <div id="screen-game" class="card hidden">
+        <h1>¡A JUGAR!</h1>
+        <div class="role-text" id="game-location">?</div>
+        <p>Inicien el cronómetro y háganse preguntas.</p>
+        <button class="secondary" onclick="resetGame()">Nueva Partida</button>
+    </div>
+
+<script>
+    // --- DATOS INICIALES ---
+    let players = ['Ana', 'Juan', 'Pedro', 'Maria'];
+    let topics = [
+        { name: 'Avión', roles: ['Piloto', 'Azafata', 'Pasajero Primera Clase', 'Polizón', 'Copiloto', 'Mecánico'] },
+        { name: 'Banco', roles: ['Cajero', 'Ladrón', 'Gerente', 'Guardia', 'Cliente Rico', 'Conductor de Camión Blindado'] },
+        { name: 'Escuela', roles: ['Profesor', 'Alumno', 'Director', 'Conserje', 'Cocinera', 'Padre molesto'] },
+        { name: 'Barco Pirata', roles: ['Capitán', 'Loro', 'Prisionero', 'Cocinero', 'Vigía', 'Cañonero'] }
+    ];
+
+    let gameData = {
+        currentPlayerIndex: 0,
+        assignments: [],
+        currentLocation: '',
+        impostorsCount: 1,
+        useHints: false
+    };
+
+    // --- FUNCIONES DE INTERFAZ ---
+    function init() {
+        renderPlayerList();
+        renderTopics();
+        updateSettings();
+    }
+
+    function renderPlayerList() {
+        const container = document.getElementById('players-container');
+        container.innerHTML = '';
+        players.forEach((p, index) => {
+            container.innerHTML += `
+                <div class="player-list-item">
+                    <span>${p}</span>
+                    <button class="danger" style="width:auto; padding:5px 10px; font-size:0.8em;" onclick="removePlayer(${index})">X</button>
+                </div>`;
+        });
+    }
+
+    function renderTopics() {
+        const select = document.getElementById('topic-select');
+        select.innerHTML = '<option value="random">🎲 Aleatorio</option>';
+        topics.forEach((t, index) => {
+            select.innerHTML += `<option value="${index}">${t.name}</option>`;
+        });
+    }
+
+    function addPlayer() {
+        const input = document.getElementById('new-player-name');
+        if(input.value.trim()) {
+            players.push(input.value.trim());
+            input.value = '';
+            renderPlayerList();
+        }
+    }
+
+    function removePlayer(index) {
+        players.splice(index, 1);
+        renderPlayerList();
+    }
+
+    function updateSettings() {
+        const count = document.getElementById('impostor-count').value;
+        document.getElementById('impostor-count-display').innerText = count;
+    }
+
+    function toggleCustomTopic() {
+        const area = document.getElementById('custom-topic-area');
+        area.classList.toggle('hidden');
+    }
+
+    function saveCustomTopic() {
+        const name = document.getElementById('custom-topic-name').value;
+        const rolesRaw = document.getElementById('custom-topic-roles').value;
+        if(name && rolesRaw) {
+            const roles = rolesRaw.split(',').map(r => r.trim());
+            topics.push({ name, roles });
+            renderTopics();
+            document.getElementById('topic-select').value = topics.length - 1;
+            toggleCustomTopic();
+            alert('Temática guardada');
+        }
+    }
+
+    // --- LÓGICA DEL JUEGO ---
+    function startGame() {
+        if(players.length < 3) return alert("Mínimo 3 jugadores.");
+        
+        // Configurar partida
+        gameData.impostorsCount = parseInt(document.getElementById('impostor-count').value);
+        gameData.useHints = document.getElementById('use-hints').checked;
+        
+        if(gameData.impostorsCount >= players.length) return alert("Demasiados impostores.");
+
+        // Elegir temática
+        const topicIndex = document.getElementById('topic-select').value;
+        let selectedTopic;
+        if(topicIndex === 'random') {
+            selectedTopic = topics[Math.floor(Math.random() * topics.length)];
+        } else {
+            selectedTopic = topics[topicIndex];
+        }
+        gameData.currentLocation = selectedTopic.name;
+
+        // Asignar roles
+        let assignments = new Array(players.length).fill(null);
+        let availableRoles = [...selectedTopic.roles];
+        
+        // Poner Impostores
+        let impostorsPlaced = 0;
+        while(impostorsPlaced < gameData.impostorsCount) {
+            let idx = Math.floor(Math.random() * players.length);
+            if(assignments[idx] === null) {
+                assignments[idx] = { role: 'IMPOSTOR', location: '???', isImpostor: true };
+                impostorsPlaced++;
+            }
+        }
+
+        // Poner Jugadores normales
+        for(let i=0; i<players.length; i++) {
+            if(assignments[i] === null) {
+                let roleName = "Ciudadano";
+                if(gameData.useHints && availableRoles.length > 0) {
+                    // Asignar rol específico aleatorio
+                    const rIdx = Math.floor(Math.random() * availableRoles.length);
+                    roleName = availableRoles[rIdx];
+                }
+                assignments[i] = { role: roleName, location: gameData.currentLocation, isImpostor: false };
+            }
+        }
+
+        gameData.assignments = assignments;
+        gameData.currentPlayerIndex = 0;
+
+        showScreen('screen-pass');
+        updatePassScreen();
+    }
+
+    function updatePassScreen() {
+        document.getElementById('current-player-name').innerText = players[gameData.currentPlayerIndex];
+    }
+
+    function revealRole() {
+        const data = gameData.assignments[gameData.currentPlayerIndex];
+        const roleDisplay = document.getElementById('role-display');
+        const locDisplay = document.getElementById('location-display');
+        const hintDisplay = document.getElementById('hint-display');
+
+        showScreen('screen-reveal');
+
+        if(data.isImpostor) {
+            roleDisplay.innerText = "👹 ERES EL IMPOSTOR";
+            roleDisplay.style.color = "#e74c3c";
+            locDisplay.innerText = "Engaña a todos. Adivina el lugar.";
+            hintDisplay.innerText = "";
+        } else {
+            roleDisplay.innerText = "📍 LUGAR: " + data.location.toUpperCase();
+            roleDisplay.style.color = "#2ecc71";
+            locDisplay.innerText = "Eres inocente.";
+            if(gameData.useHints) {
+                hintDisplay.innerText = "Tu rol secreto: " + data.role;
+            } else {
+                hintDisplay.innerText = "";
+            }
+        }
+    }
+
+    function hideRole() {
+        gameData.currentPlayerIndex++;
+        if(gameData.currentPlayerIndex < players.length) {
+            showScreen('screen-pass');
+            updatePassScreen();
+        } else {
+            showScreen('screen-game');
+            document.getElementById('game-location').innerText = "Todos saben su rol (o eso creen)";
+        }
+    }
+
+    function resetGame() {
+        showScreen('screen-setup');
+    }
+
+    function showScreen(id) {
+        document.querySelectorAll('.card').forEach(el => el.classList.add('hidden'));
+        document.getElementById(id).classList.remove('hidden');
+    }
+
+    // Arrancar
+    init();
+
+</script>
+</body>
+</html>
