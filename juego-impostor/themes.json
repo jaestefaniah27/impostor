@@ -5,23 +5,43 @@
         "words": [
             {
                 "text": "Sartén",
-                "hint": "Para freír"
+                "hints": [
+                    "Para freír",
+                    "Mango largo",
+                    "Se usa con aceite"
+                ]
             },
             {
                 "text": "Microondas",
-                "hint": "Calienta rápido"
+                "hints": [
+                    "Calienta rápido",
+                    "Tiene plato giratorio",
+                    "Funciona con ondas"
+                ]
             },
             {
                 "text": "Nevera",
-                "hint": "Enfría"
+                "hints": [
+                    "Enfría",
+                    "Conserva alimentos",
+                    "Tiene congelador"
+                ]
             },
             {
                 "text": "Tenedor",
-                "hint": "Cubierto con pinchos"
+                "hints": [
+                    "Cubierto con pinchos",
+                    "Para pinchar comida",
+                    "No sirve para sopa"
+                ]
             },
             {
                 "text": "Chef",
-                "hint": "Persona que cocina"
+                "hints": [
+                    "Persona que cocina",
+                    "Usa gorro alto",
+                    "Jefe de cocina"
+                ]
             }
         ]
     },
@@ -31,24 +51,75 @@
         "words": [
             {
                 "text": "Avión",
-                "hint": "Vuela alto"
+                "hints": [
+                    "Vuela alto",
+                    "Tiene alas",
+                    "Va al aeropuerto"
+                ]
             },
             {
                 "text": "Submarino",
-                "hint": "Bajo el agua"
+                "hints": [
+                    "Bajo el agua",
+                    "Tiene periscopio",
+                    "Vehículo militar o científico"
+                ]
             },
             {
                 "text": "Caballo",
-                "hint": "Animal"
+                "hints": [
+                    "Animal que se monta",
+                    "Relincha",
+                    "Tiene crines"
+                ]
             },
             {
                 "text": "Patinete",
-                "hint": "Dos ruedas y manillar"
+                "hints": [
+                    "Dos ruedas y manillar",
+                    "Hay eléctricos",
+                    "Pie en el suelo"
+                ]
             },
             {
                 "text": "Cohete",
-                "hint": "Espacial"
+                "hints": [
+                    "Viaje espacial",
+                    "Despega vertical",
+                    "Astronautas"
+                ]
             }
         ]
+    },
+    {
+        "name": "Lol",
+        "words": [
+            {
+                "text": "Cachimba",
+                "hints": [
+                    "Humo",
+                    "Vapor"
+                ]
+            },
+            {
+                "text": "España",
+                "hints": [
+                    "Arriba"
+                ]
+            },
+            {
+                "text": "Racismo",
+                "hints": [
+                    "Negro"
+                ]
+            },
+            {
+                "text": "Mantel",
+                "hints": [
+                    "Para comer"
+                ]
+            }
+        ],
+        "id": 1766519124626
     }
 ]

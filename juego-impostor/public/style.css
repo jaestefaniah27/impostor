@@ -28,6 +28,16 @@ button:active { transform: scale(0.98); }
 .btn-text { background: none; color: #7f8fa6; text-decoration: underline; margin-top: 15px; }
 .bottom-btn { margin-top: 30px; }
 
+/* SWITCH / TOGGLE */
+.switch { position: relative; display: inline-block; width: 50px; height: 28px; }
+.switch input { opacity: 0; width: 0; height: 0; }
+.slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #7f8fa6; transition: .4s; }
+.slider:before { position: absolute; content: ""; height: 20px; width: 20px; left: 4px; bottom: 4px; background-color: white; transition: .4s; }
+input:checked + .slider { background-color: var(--accent); }
+input:checked + .slider:before { transform: translateX(22px); }
+.slider.round { border-radius: 34px; }
+.slider.round:before { border-radius: 50%; }
+
 /* GRID TEMAS */
 .grid-container { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
 .theme-box { background: var(--card); padding: 15px; border-radius: 8px; border: 2px solid transparent; cursor: pointer; }
@@ -50,12 +60,40 @@ button:active { transform: scale(0.98); }
 }
 .magic-card-container.revealed .card-cover { transform: translateY(-100%); }
 
-/* --- NUEVO: FASE DE JUEGO ACTIVO --- */
+/* FASE ACTIVA */
 .timer-big { font-size: 5em; font-weight: bold; color: var(--accent); margin: 20px 0; font-family: monospace; text-shadow: 0 0 10px rgba(0,168,255,0.3); }
 .voting-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 10px; width: 100%; }
 .vote-card {
     background: var(--danger); color: white; padding: 20px; border-radius: 10px; cursor: pointer;
     box-shadow: 0 4px 0 #c0392b; text-align: center;
+}
+
+/* ESTILOS PARA LA PANTALLA DE CREAR TEMA */
+.word-row {
+    position: relative;
+    border-left: 5px solid var(--accent);
+    padding: 10px;
+    margin-bottom: 10px;
+}
+.word-row input {
+    background: #1e272e;
+    margin-bottom: 2px;
+}
+.word-row small {
+    color: #bdc3c7;
+    font-size: 0.8em;
+}
+
+/* Ajustes adicionales para que los botones nuevos se vean bien */
+#screen-create-theme .card {
+    text-align: left;
+}
+#screen-create-theme input {
+    border: 1px solid #455a64;
+}
+#screen-create-theme input:focus {
+    border-color: var(--accent);
+    outline: none;
 }
 .vote-card:active { transform: translateY(4px); box-shadow: none; }
 .instruction { color: #bdc3c7; font-style: italic; opacity: 0.8; }
