@@ -1,5 +1,3 @@
-¡Claro que sí! Aquí tienes un README.md profesional y completo. Está diseñado para que, si el día de mañana cambias de servidor o formateas la máquina, solo tengas que seguir estos pasos para tenerlo todo funcionando igual.
-Copia el siguiente bloque de código y guárdalo como README.md en la raíz de tu repositorio.
 # 🕵️ El Impostor - Guía de Despliegue
 
 Este repositorio contiene el código fuente del juego "El Impostor". A continuación se detallan los pasos para desplegar la aplicación en un servidor Linux (Ubuntu/Debian) desde cero, configurando Node.js, PM2, Nginx y SSL.
