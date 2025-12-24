@@ -20,23 +20,42 @@ let tournamentGames = [];
 const emojis = ["🦁","🐯","🐻","🐨","🐼","🐸","🐙","🦄","🐝","🐞","🦖","👽","🤖","👻","🤡","🤠","🎃","💀","🍄","🍔","🍕","⚽","🚀","💡","🔥","💎","🎸","🎮"];
 const defaultSuggestions = ["¿Es grande?", "¿Está vivo?", "¿Tecnología?", "¿Uso diario?", "¿Color?", "¿Supermercado?", "¿Ruido?", "¿Electricidad?", "¿Comida?", "¿Peligroso?", "¿Bolsillo?", "¿Caro?"];
 
-// --- INICIALIZACIÓN (AQUÍ ESTÁ LA CLAVE DE LA PERSISTENCIA) ---
+// --- INICIALIZACIÓN CON PANTALLA DE CARGA SUAVE ---
 window.onload = async () => {
     loadGameData();      
     await fetchThemes();       
+    // updateTimeDisplay(); // (Recuerda que esta la quitamos)
 
-    // 1. PRIMERO: Recuperar estado del torneo (si existe)
     restoreTournamentState();
-
-    // 2. SEGUNDO: Recuperar estado de la partida (si existe)
     restoreGameState();
 
-    // 3. Renderizados iniciales
     if(typeof renderPlayers === 'function') renderPlayers();
     if(typeof setupCardInteractions === 'function') setupCardInteractions();
-    
-    // 4. Asegurar que la UI del torneo se actualiza
     if(typeof checkTournamentState === 'function') checkTournamentState();
+
+    // SECUENCIA DE APERTURA SUAVE
+    setTimeout(() => {
+        const loader = document.getElementById('screen-loading');
+        if (loader) {
+            // 1. Primero hacemos desaparecer el círculo y el texto
+            loader.classList.add('fade-out-items');
+            
+            // 2. Esperamos 300ms y desvanecemos el fondo negro
+            setTimeout(() => {
+                loader.style.opacity = '0'; 
+                
+                // 3. Finalmente quitamos el div para que no moleste
+                setTimeout(() => {
+                    loader.classList.add('hidden'); 
+                    
+                    // Comprobación de seguridad
+                    const anyVisible = document.querySelector('.container:not(.hidden):not(#screen-loading)');
+                    if (!anyVisible) showScreen('screen-home');
+                    
+                }, 500); // Tiempo que tarda el fondo en irse
+            }, 300); // Tiempo que tardan los items en irse
+        }
+    }, 800); // Tiempo mínimo de carga inicial
 };
 
 function loadGameData() {

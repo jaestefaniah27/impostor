@@ -187,3 +187,45 @@ input:checked + .slider:before { transform: translateX(22px); }
     align-items: center;
     gap: 4px;
 }
+
+/* --- PANTALLA DE CARGA --- */
+#screen-loading {
+    background-color: var(--bg-color);
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 9999; /* Por encima de todo */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    transition: opacity 0.5s ease;
+}
+
+.loader {
+    border: 5px solid rgba(0, 175, 38, 0.849);
+    border-top: 5px solid var(--success); /* Verde */
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: spin 1s linear infinite;
+    margin-bottom: 20px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* --- MEJORA PANTALLA DE CARGA --- */
+/* Esto hace que el círculo y el texto se borren suavemente */
+#screen-loading > * {
+    transition: opacity 0.3s ease;
+}
+
+/* Clase para ocultar solo el contenido interno */
+#screen-loading.fade-out-items > * {
+    opacity: 0;
+}
