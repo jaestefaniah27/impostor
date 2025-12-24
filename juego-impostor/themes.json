@@ -50,6 +50,246 @@
                     "Usa gorro alto",
                     "Jefe de cocina"
                 ]
+            },
+            {
+                "text": "Cuchillo",
+                "hints": [
+                    "Corta",
+                    "Afilado",
+                    "Peligroso"
+                ]
+            },
+            {
+                "text": "Cuchara",
+                "hints": [
+                    "Sopa",
+                    "Redonda",
+                    "Metal"
+                ]
+            },
+            {
+                "text": "Plato",
+                "hints": [
+                    "Redondo",
+                    "Cerámica",
+                    "Se pone la comida"
+                ]
+            },
+            {
+                "text": "Vaso",
+                "hints": [
+                    "Beber",
+                    "Cristal",
+                    "Agua"
+                ]
+            },
+            {
+                "text": "Horno",
+                "hints": [
+                    "Asar",
+                    "Calor",
+                    "Pizza"
+                ]
+            },
+            {
+                "text": "Batidora",
+                "hints": [
+                    "Triturar",
+                    "Hacer puré",
+                    "Ruido"
+                ]
+            },
+            {
+                "text": "Tostadora",
+                "hints": [
+                    "Pan",
+                    "Desayuno",
+                    "Caliente"
+                ]
+            },
+            {
+                "text": "Lavavajillas",
+                "hints": [
+                    "Lavar",
+                    "Máquina",
+                    "Platos sucios"
+                ]
+            },
+            {
+                "text": "Cafetera",
+                "hints": [
+                    "Café",
+                    "Desayuno",
+                    "Goteo"
+                ]
+            },
+            {
+                "text": "Olla",
+                "hints": [
+                    "Hervir",
+                    "Tapa",
+                    "Guiso"
+                ]
+            },
+            {
+                "text": "Cazuela",
+                "hints": [
+                    "Barro",
+                    "Guisar",
+                    "Asas"
+                ]
+            },
+            {
+                "text": "Grifo",
+                "hints": [
+                    "Agua",
+                    "Fregadero",
+                    "Abrir y cerrar"
+                ]
+            },
+            {
+                "text": "Fregadero",
+                "hints": [
+                    "Lavar platos",
+                    "Agua",
+                    "Cocina"
+                ]
+            },
+            {
+                "text": "Vitrocerámica",
+                "hints": [
+                    "Cocinar",
+                    "Calor",
+                    "Placa"
+                ]
+            },
+            {
+                "text": "Exprimidor",
+                "hints": [
+                    "Zumo",
+                    "Naranjas",
+                    "Desayuno"
+                ]
+            },
+            {
+                "text": "Rallador",
+                "hints": [
+                    "Queso",
+                    "Metal",
+                    "Agujeritos"
+                ]
+            },
+            {
+                "text": "Tabla de cortar",
+                "hints": [
+                    "Madera",
+                    "Apoyo",
+                    "Cuchillo"
+                ]
+            },
+            {
+                "text": "Cucharón",
+                "hints": [
+                    "Servir sopa",
+                    "Grande",
+                    "Hondo"
+                ]
+            },
+            {
+                "text": "Espumadera",
+                "hints": [
+                    "Fritos",
+                    "Agujeros",
+                    "Sacar comida"
+                ]
+            },
+            {
+                "text": "Delantal",
+                "hints": [
+                    "Ropa",
+                    "Manchas",
+                    "Cocinero"
+                ]
+            },
+            {
+                "text": "Servilleta",
+                "hints": [
+                    "Limpiar boca",
+                    "Papel",
+                    "Mesa"
+                ]
+            },
+            {
+                "text": "Mantel",
+                "hints": [
+                    "Cubrir mesa",
+                    "Tela",
+                    "Comedor"
+                ]
+            },
+            {
+                "text": "Despensa",
+                "hints": [
+                    "Guardar comida",
+                    "Armario",
+                    "Latas"
+                ]
+            },
+            {
+                "text": "Congelador",
+                "hints": [
+                    "Hielo",
+                    "Muy frío",
+                    "Helados"
+                ]
+            },
+            {
+                "text": "Salero",
+                "hints": [
+                    "Sal",
+                    "Agujeritos",
+                    "Sazonar"
+                ]
+            },
+            {
+                "text": "Azucarero",
+                "hints": [
+                    "Dulce",
+                    "Café",
+                    "Postres"
+                ]
+            },
+            {
+                "text": "Aceitera",
+                "hints": [
+                    "Aliñar",
+                    "Grasa",
+                    "Ensalada"
+                ]
+            },
+            {
+                "text": "Tupper",
+                "hints": [
+                    "Guardar sobras",
+                    "Plástico",
+                    "Tapa"
+                ]
+            },
+            {
+                "text": "Abrelatas",
+                "hints": [
+                    "Conservas",
+                    "Metal",
+                    "Abrir"
+                ]
+            },
+            {
+                "text": "Escurridor",
+                "hints": [
+                    "Pasta",
+                    "Agujeros",
+                    "Quitar agua"
+                ]
             }
         ]
     },
@@ -103,6 +343,246 @@
                     "Viaje espacial",
                     "Despega vertical",
                     "Astronautas"
+                ]
+            },
+            {
+                "text": "Coche",
+                "hints": [
+                    "Cuatro ruedas",
+                    "Volante",
+                    "Carretera"
+                ]
+            },
+            {
+                "text": "Moto",
+                "hints": [
+                    "Dos ruedas",
+                    "Casco",
+                    "Rápida"
+                ]
+            },
+            {
+                "text": "Bicicleta",
+                "hints": [
+                    "Pedales",
+                    "Sin motor",
+                    "Deporte"
+                ]
+            },
+            {
+                "text": "Autobús",
+                "hints": [
+                    "Muchos pasajeros",
+                    "Paradas",
+                    "Grande"
+                ]
+            },
+            {
+                "text": "Tren",
+                "hints": [
+                    "Vías",
+                    "Estación",
+                    "Vagones"
+                ]
+            },
+            {
+                "text": "Metro",
+                "hints": [
+                    "Subterráneo",
+                    "Ciudad",
+                    "Túnel"
+                ]
+            },
+            {
+                "text": "Tranvía",
+                "hints": [
+                    "Ciudad",
+                    "Raíles",
+                    "Eléctrico"
+                ]
+            },
+            {
+                "text": "Taxi",
+                "hints": [
+                    "Coche",
+                    "Pagado",
+                    "Ciudad"
+                ]
+            },
+            {
+                "text": "Camión",
+                "hints": [
+                    "Carga",
+                    "Grande",
+                    "Carretera"
+                ]
+            },
+            {
+                "text": "Furgoneta",
+                "hints": [
+                    "Reparto",
+                    "Espacio",
+                    "Paquetes"
+                ]
+            },
+            {
+                "text": "Barco",
+                "hints": [
+                    "Mar",
+                    "Navegar",
+                    "Puerto"
+                ]
+            },
+            {
+                "text": "Velero",
+                "hints": [
+                    "Viento",
+                    "Mar",
+                    "Velas"
+                ]
+            },
+            {
+                "text": "Canoa",
+                "hints": [
+                    "Remo",
+                    "Río",
+                    "Pequeña"
+                ]
+            },
+            {
+                "text": "Crucero",
+                "hints": [
+                    "Vacaciones",
+                    "Enorme",
+                    "Lujo"
+                ]
+            },
+            {
+                "text": "Lancha",
+                "hints": [
+                    "Rápida",
+                    "Motor",
+                    "Mar"
+                ]
+            },
+            {
+                "text": "Helicóptero",
+                "hints": [
+                    "Hélices",
+                    "Vertical",
+                    "Ruido"
+                ]
+            },
+            {
+                "text": "Globo aerostático",
+                "hints": [
+                    "Cesta",
+                    "Fuego",
+                    "Volar"
+                ]
+            },
+            {
+                "text": "Dirigible",
+                "hints": [
+                    "Gas",
+                    "Grande",
+                    "Cielo"
+                ]
+            },
+            {
+                "text": "Teleférico",
+                "hints": [
+                    "Cable",
+                    "Altura",
+                    "Montaña"
+                ]
+            },
+            {
+                "text": "Funicular",
+                "hints": [
+                    "Tren",
+                    "Pendiente",
+                    "Cuesta"
+                ]
+            },
+            {
+                "text": "Tractor",
+                "hints": [
+                    "Campo",
+                    "Granja",
+                    "Ruedas grandes"
+                ]
+            },
+            {
+                "text": "Grúa",
+                "hints": [
+                    "Levantar",
+                    "Obras",
+                    "Gancho"
+                ]
+            },
+            {
+                "text": "Ambulancia",
+                "hints": [
+                    "Sirena",
+                    "Hospital",
+                    "Urgencia"
+                ]
+            },
+            {
+                "text": "Patines",
+                "hints": [
+                    "Pies",
+                    "Ruedas",
+                    "Deslizar"
+                ]
+            },
+            {
+                "text": "Monopatín",
+                "hints": [
+                    "Tabla",
+                    "Skate",
+                    "Trucos"
+                ]
+            },
+            {
+                "text": "Trineo",
+                "hints": [
+                    "Nieve",
+                    "Deslizar",
+                    "Bajada"
+                ]
+            },
+            {
+                "text": "Caravana",
+                "hints": [
+                    "Casa",
+                    "Viaje",
+                    "Remolque"
+                ]
+            },
+            {
+                "text": "Limusina",
+                "hints": [
+                    "Larga",
+                    "Lujo",
+                    "Chófer"
+                ]
+            },
+            {
+                "text": "Quad",
+                "hints": [
+                    "Cuatro ruedas",
+                    "Campo",
+                    "Moto"
+                ]
+            },
+            {
+                "text": "Yate",
+                "hints": [
+                    "Lujo",
+                    "Barco",
+                    "Rico"
                 ]
             }
         ]

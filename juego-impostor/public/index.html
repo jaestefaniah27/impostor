@@ -111,11 +111,14 @@
         </div>
     </div>
 
-    <div id="screen-themes" class="container hidden">
+    <div id="screen-themes" class="container hidden" style="padding-bottom: 130px;">
         <h2>Elige Temas</h2>
         <div id="themes-grid" class="grid-container"></div>
-        <button class="btn-main" onclick="startGameSetup()">¡EMPEZAR!</button>
-        <button class="btn-text" onclick="showScreen('screen-home')">Volver</button>
+        
+        <div class="fixed-bottom-bar" style="flex-direction: column; gap: 5px;">
+            <button class="btn-main" style="margin:0;" onclick="startGameSetup()">¡EMPEZAR!</button>
+            <button class="btn-text" style="margin:0;" onclick="showScreen('screen-home')">Volver</button>
+        </div>
     </div>
 
     <div id="screen-reveal" class="container hidden full-height">

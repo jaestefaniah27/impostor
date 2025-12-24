@@ -2,6 +2,9 @@
 function showScreen(id) {
     document.querySelectorAll('.container').forEach(d => d.classList.add('hidden'));
     document.getElementById(id).classList.remove('hidden');
+    
+    // NUEVO: Esto fuerza a que la pantalla empiece siempre desde arriba
+    window.scrollTo(0, 0); 
 }
 function goToHome() { showScreen('screen-home'); }
 
