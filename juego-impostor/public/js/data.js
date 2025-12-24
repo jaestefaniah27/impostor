@@ -113,7 +113,11 @@ async function saveThemeFromUI() {
     
     alert(editingThemeId ? "Tema actualizado" : "Tema creado");
     await fetchThemes(); // Recargar lista
-    showScreen('screen-themes'); // Volver a la lista
+    if (typeof goToThemeManager === 'function') {
+        goToThemeManager();
+    } else {
+        showScreen('screen-home'); // Fallback por si acaso
+    }
 }
 
 async function saveGameRecordToHistory(record) {

@@ -82,7 +82,7 @@
         </div>
 
         <div style="margin-top: 20px;">
-            <button class="btn-secondary" onclick="openThemeCreator()">🎨 CREADOR DE TEMAS</button>
+            <button class="btn-secondary" onclick="goToThemeManager()">⚙️ GESTIÓN DE TEMAS</button>
         </div>
         
 
@@ -97,6 +97,17 @@
         <div id="history-list"></div>
         <div class="fixed-bottom-bar">
             <button class="btn-secondary" style="margin:0; width:100%; max-width:500px;" onclick="goToHome()">🏠 VOLVER AL INICIO</button>
+        </div>
+    </div>
+    <div id="screen-theme-manager" class="container hidden" style="padding-bottom: 100px;">
+        <h2>Gestor de Temas</h2>
+        <p style="font-size:0.9em; color:#bdc3c7; margin-bottom:20px;">Toca un tema para editarlo o crea uno nuevo.</p>
+        
+        <div id="manager-list" class="grid-container"></div>
+
+        <div class="fixed-bottom-bar" style="flex-direction: column; gap: 10px;">
+            <button class="btn-main" style="margin:0;" onclick="openThemeCreator()">➕ CREAR TEMA NUEVO</button>
+            <button class="btn-secondary" style="margin:0;" onclick="goToHome()">Volver al Menú</button>
         </div>
     </div>
 
@@ -114,7 +125,7 @@
         <div id="words-container"></div>
         <button class="btn-secondary" onclick="addWordRow()">+ Añadir Palabra</button>
         <div style="margin-top: 30px; display: flex; gap: 10px;">
-            <button class="btn-secondary" style="background: #e74c3c;" onclick="showScreen('screen-home')">Cancelar</button>
+            <button class="btn-secondary" style="background: #e74c3c;" onclick="goToThemeManager()">Cancelar</button>
             <button class="btn-main" onclick="saveThemeFromUI()">Guardar</button>
         </div>
     </div>

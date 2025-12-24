@@ -59,6 +59,7 @@ function goToThemeSelection() {
 let editingThemeId = null;
 
 // --- RENDERIZADO TEMAS ---
+// --- PANTALLA JUGAR (Modificada: SIN lápices ni edición) ---
 function renderThemeGrid() {
     const container = document.getElementById('themes-grid');
     if(!container) return;
@@ -68,27 +69,26 @@ function renderThemeGrid() {
         return;
     }
 
-    // ORDENAR: Primero las Custom (creadas por usuario), luego las normales
-    // Usamos [...themes] para no mutar el array original
     const sortedThemes = [...themes].sort((a, b) => {
-        if (a.isCustom && !b.isCustom) return -1; // a va antes
-        if (!a.isCustom && b.isCustom) return 1;  // b va antes
+        if (a.isCustom && !b.isCustom) return -1;
+        if (!a.isCustom && b.isCustom) return 1;
         return 0;
     });
 
     container.innerHTML = sortedThemes.map(t => {
         const isSelected = selectedThemesIds.includes(t.id);
         const customClass = t.isCustom ? 'custom-theme-box' : '';
-        const customBadge = t.isCustom ? '<span class="badge-custom">👤 PROPIA</span>' : '';
+        const badge = t.isCustom ? '<span class="badge-custom">👤 PROPIA</span>' : '';
         
+        // AQUÍ: Ya no hay botón de editar, solo selección
         return `
         <div class="theme-box ${isSelected ? 'selected' : ''} ${customClass}" onclick="toggleTheme(${t.id})">
             <div style="display:flex; justify-content:space-between; align-items:start;">
                 <strong>${t.name}</strong>
-                <button class="btn-icon-small" onclick="event.stopPropagation(); loadThemeForEdit(${t.id})">✏️</button>
+                ${isSelected ? '<span>✅</span>' : ''}
             </div>
             <small>${t.words.length} palabras</small>
-            ${customBadge}
+            ${badge}
         </div>
     `;
     }).join('');
@@ -102,7 +102,47 @@ function toggleTheme(id) {
 }
 
 // --- CREADOR DE TEMAS UI ---
+// --- NUEVO: GESTOR DE TEMAS ---
+function goToThemeManager() {
+    // Reutilizamos la carga de temas
+    if(!themes || themes.length === 0) {
+        fetch('/api/themes').then(r => r.json()).then(data => {
+            themes = data;
+            renderThemeManagerList();
+        });
+    } else {
+        renderThemeManagerList();
+    }
+    showScreen('screen-theme-manager');
+}
+function renderThemeManagerList() {
+    const container = document.getElementById('manager-list');
+    if(!container) return;
 
+    // Ordenar: Custom primero
+    const sortedThemes = [...themes].sort((a, b) => {
+        if (a.isCustom && !b.isCustom) return -1;
+        if (!a.isCustom && b.isCustom) return 1;
+        return 0;
+    });
+
+    container.innerHTML = sortedThemes.map(t => {
+        const customClass = t.isCustom ? 'custom-theme-box' : '';
+        const badge = t.isCustom ? '<span class="badge-custom">👤 PROPIA</span>' : '';
+        
+        // Al hacer clic, EDITAMOS directamente
+        return `
+        <div class="theme-box ${customClass}" onclick="loadThemeForEdit(${t.id})">
+            <div style="display:flex; justify-content:space-between; align-items:start;">
+                <strong>${t.name}</strong>
+                <span>✏️</span>
+            </div>
+            <small>${t.words.length} palabras</small>
+            ${badge}
+        </div>
+        `;
+    }).join('');
+}
 // Abre el creador LIMPIO (para crear nuevo)
 function openThemeCreator() {
     editingThemeId = null; // No estamos editando
