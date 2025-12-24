@@ -49,7 +49,7 @@ window.onload = () => {
 
 function loadGameData() {
     const pStored = localStorage.getItem('impostorPlayers');
-    if (pStored) players = JSON.parse(pStored); else players = ['Ana', 'Juan', 'Pedro'];
+    if (pStored) players = JSON.parse(pStored); else players = ['Mateo', 'Juan', 'Diego', 'Jorge', 'Poke'];
     const aStored = localStorage.getItem('impostorAvatars');
     if (aStored) playerAvatars = JSON.parse(aStored);
     players.forEach(p => { if(!playerAvatars[p]) playerAvatars[p] = getRandomAvatar(); });
