@@ -1,4 +1,4 @@
-// --- LÓGICA DE TORNEO ---
+// --- LÓGICA DE TORNEO (Igual) ---
 function startTournamentMode() {
     const name = document.getElementById('tournament-name-input').value.trim() || "Torneo Sin Nombre";
     if (confirm(`¿Empezar el torneo "${name}"? Los puntos empezarán desde 0.`)) {
@@ -42,19 +42,40 @@ async function finishTournament() {
     loadAndShowHistory();
 }
 
-// --- LÓGICA DE JUEGO ---
+// --- LÓGICA DE JUEGO (MODIFICADA PARA SUGERENCIAS CONTEXTUALES) ---
 function startGameSetup() {
     if(selectedThemesIds.length === 0) return alert("Elige tema");
     document.getElementById('suggestion-area').innerHTML = '';
     
-    // Palabras
-    let pool = []; 
-    themes.forEach(t => { if(selectedThemesIds.includes(t.id)) pool = pool.concat(t.words); });
-    if(pool.length === 0) return alert("Temas vacíos");
+    // 1. CREAR POOL CONTEXTUAL
+    // En lugar de guardar solo palabras, guardamos objetos: { wordData: ..., suggestions: ... }
+    let selectionPool = []; 
     
-    const sel = pool[Math.floor(Math.random() * pool.length)];
-    gameData.secretWord = sel.text;
+    themes.forEach(t => { 
+        if(selectedThemesIds.includes(t.id)) {
+            // Usar sugerencias del tema o fallback
+            const themeSuggs = (t.suggestions && t.suggestions.length > 0) ? t.suggestions : defaultSuggestions;
+            
+            t.words.forEach(w => {
+                selectionPool.push({
+                    wordData: w,
+                    suggestions: themeSuggs
+                });
+            });
+        } 
+    });
+
+    if(selectionPool.length === 0) return alert("Temas vacíos");
     
+    // 2. SELECCIONAR
+    const selection = selectionPool[Math.floor(Math.random() * selectionPool.length)];
+    
+    // Guardar en gameData
+    gameData.secretWord = selection.wordData.text;
+    gameData.currentSuggestions = selection.suggestions; // ¡AQUÍ ESTÁ LA MAGIA!
+    
+    const sel = selection.wordData; // Referencia corta para pistas
+
     // Pistas
     const hintsOn = document.getElementById('hints-toggle').checked;
     gameData.secretHint = hintsOn 
@@ -70,13 +91,13 @@ function startGameSetup() {
     let assign = new Array(players.length).fill(null); 
     let p = 0;
 
-    // Asignar Impostor(es)
+    // Impostores
     while(p < impC) { 
         let r = Math.floor(Math.random()*players.length); 
         if(!assign[r]) { assign[r]={isImpostor:true, isAccomplice:false, name:players[r], alive:true}; p++; } 
     }
 
-    // Asignar Cómplice
+    // Cómplice
     const accOn = document.getElementById('accomplice-toggle').checked;
     if(accOn && (players.length - impC) >= 2) {
         let assigned = false;
@@ -129,7 +150,6 @@ function startActiveGame() {
     showScreen('screen-active'); 
     renderVotingList();
     
-    // Quién empieza
     let pool=[]; 
     gameData.assignments.forEach(p=>{
         if(p.alive){
@@ -242,7 +262,7 @@ async function endGameWithWinner(winner) {
             if (winner === 'Impostor' && isBad) tournamentScores[p.name] += 5;
             else if (winner === 'Ciudadanos' && !isBad) tournamentScores[p.name] += 2;
         });
-        renderScoreboard();
+        renderScoreboard(true);
         document.getElementById('scoreboard-container').classList.remove('hidden');
     } else {
         await saveGameRecordToHistory(currentGameRecord);

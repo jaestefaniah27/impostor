@@ -68,6 +68,9 @@ function toggleTheme(id) {
 // --- CREADOR DE TEMAS UI ---
 function openThemeCreator() {
     document.getElementById('new-theme-title').value = '';
+    // LIMPIAR EL NUEVO INPUT DE SUGERENCIAS
+    document.getElementById('new-theme-suggestions').value = '';
+    
     document.getElementById('words-container').innerHTML = '';
     addWordRow(); addWordRow(); addWordRow();
     showScreen('screen-create-theme');
@@ -81,9 +84,15 @@ function addWordRow() {
     c.appendChild(d);
 }
 
-// --- SUGERENCIAS ---
+// --- SUGERENCIAS CONTEXTUALES ---
 function showSuggestion() {
-    document.getElementById('suggestion-area').innerHTML = `<div class="suggestion-card">💡 Pista: "${suggestions[Math.floor(Math.random()*suggestions.length)]}"</div>`;
+    // USAR LAS SUGERENCIAS DEL TEMA ACTUAL
+    const source = (gameData.currentSuggestions && gameData.currentSuggestions.length > 0) 
+        ? gameData.currentSuggestions 
+        : defaultSuggestions;
+
+    const randomQ = source[Math.floor(Math.random() * source.length)];
+    document.getElementById('suggestion-area').innerHTML = `<div class="suggestion-card">💡 Pista: "${randomQ}"</div>`;
 }
 
 // --- INTERACCIÓN CARTA ---

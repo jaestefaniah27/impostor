@@ -95,7 +95,14 @@
         <div class="card">
             <label>Título:</label>
             <input type="text" id="new-theme-title" placeholder="Ej: Superhéroes">
+            
+            <div style="margin-top:10px;">
+                <label>Preguntas Sugeridas (Opcional):</label>
+                <small style="color:#bdc3c7; display:block; margin-bottom:5px;">Sepáralas con una barra "/"</small>
+                <textarea id="new-theme-suggestions" placeholder="¿Tiene capa? / ¿Vuela? / ¿Es de Marvel?" rows="3"></textarea>
+            </div>
         </div>
+        
         <div id="words-container"></div>
         <button class="btn-secondary" onclick="addWordRow()">+ Añadir Palabra</button>
         <div style="margin-top: 30px; display: flex; gap: 10px;">

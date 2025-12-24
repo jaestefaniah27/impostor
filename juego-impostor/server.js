@@ -7,15 +7,23 @@ app.use(express.static('public'));
 app.use(express.json());
 
 const DB_FILE = 'themes.json';
-const HISTORY_FILE = 'history.json'; // Nuevo archivo para el historial
+const HISTORY_FILE = 'history.json';
 
-// --- INICIALIZACIÓN DE ARCHIVOS ---
-
-// 1. Temas (Código anterior...)
+// --- INICIALIZACIÓN CON SUGERENCIAS ---
 if (!fs.existsSync(DB_FILE)) {
     const initialData = [
         { 
-            id: 1, name: 'Cocina', 
+            id: 1, 
+            name: 'Cocina', 
+            // NUEVO: Sugerencias específicas del tema
+            suggestions: [
+                "¿Se come frío o caliente?", 
+                "¿Es un utensilio o un ingrediente?", 
+                "¿Se guarda en la nevera?", 
+                "¿Es dulce o salado?", 
+                "¿Se usa para cortar?",
+                "¿Es un electrodoméstico?"
+            ],
             words: [
                 { text: 'Sartén', hints: ['Para freír', 'Mango largo', 'Se usa con aceite'] },
                 { text: 'Microondas', hints: ['Calienta rápido', 'Tiene plato giratorio', 'Funciona con ondas'] },
@@ -25,7 +33,16 @@ if (!fs.existsSync(DB_FILE)) {
             ] 
         },
         { 
-            id: 2, name: 'Transporte', 
+            id: 2, 
+            name: 'Transporte', 
+            suggestions: [
+                "¿Tiene ruedas?", 
+                "¿Va por aire, mar o tierra?", 
+                "¿Necesita gasolina?", 
+                "¿Es transporte público?", 
+                "¿Tiene motor?",
+                "¿Caben muchas personas?"
+            ],
             words: [
                 { text: 'Avión', hints: ['Vuela alto', 'Tiene alas', 'Va al aeropuerto'] },
                 { text: 'Submarino', hints: ['Bajo el agua', 'Tiene periscopio', 'Vehículo militar o científico'] },
@@ -38,12 +55,12 @@ if (!fs.existsSync(DB_FILE)) {
     fs.writeFileSync(DB_FILE, JSON.stringify(initialData));
 }
 
-// 2. Historial (NUEVO)
 if (!fs.existsSync(HISTORY_FILE)) {
     fs.writeFileSync(HISTORY_FILE, JSON.stringify([]));
 }
 
-// --- API TEMAS ---
+// ... (Resto de endpoints API igual que antes) ...
+
 app.get('/api/themes', (req, res) => {
     const data = fs.readFileSync(DB_FILE);
     res.json(JSON.parse(data));
@@ -58,26 +75,19 @@ app.post('/api/themes', (req, res) => {
     res.json({ success: true });
 });
 
-// --- API HISTORIAL (NUEVO) ---
-
-// Obtener historial
 app.get('/api/history', (req, res) => {
     const data = fs.readFileSync(HISTORY_FILE);
     res.json(JSON.parse(data));
 });
 
-// Guardar partida terminada
 app.post('/api/history', (req, res) => {
     const record = req.body;
-    // Añadimos fecha y ID
     record.id = Date.now();
-    record.date = new Date().toISOString();
+    // record.date ya viene del cliente o se pone aquí
+    if(!record.date) record.date = new Date().toISOString();
 
     let history = JSON.parse(fs.readFileSync(HISTORY_FILE));
-    // Guardamos al principio (unshift) para que salgan primero las recientes
     history.unshift(record);
-    
-    // Opcional: Limitar a las últimas 50 partidas para no llenar el disco infinito
     if (history.length > 50) history = history.slice(0, 50);
 
     fs.writeFileSync(HISTORY_FILE, JSON.stringify(history));
