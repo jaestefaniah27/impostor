@@ -6,7 +6,6 @@
     <title>El Impostor Pro</title>
     <link rel="stylesheet" href="style.css">
     <style>
-        /* Estilos extra para el historial */
         .history-item {
             background: #2f3640;
             border-left: 5px solid #7f8fa6;
@@ -15,21 +14,14 @@
             text-align: left;
             border-radius: 5px;
         }
-        .history-item.win-impostor { border-left-color: #e74c3c; } /* Rojo si gana impostor */
-        .history-item.win-citizens { border-left-color: #2ecc71; } /* Verde si ganan ciudadanos */
+        .history-item.win-impostor { border-left-color: #e74c3c; } 
+        .history-item.win-citizens { border-left-color: #2ecc71; } 
         
-        .history-details {
-            font-size: 0.9em;
-            color: #bdc3c7;
-            margin-top: 5px;
-        }
-        .badge {
-            padding: 2px 6px;
-            border-radius: 4px;
-            font-size: 0.8em;
-            font-weight: bold;
-        }
-        .badge-imp { background: #e74c3c; color: white; }
+        .history-details { font-size: 0.9em; color: #bdc3c7; margin-top: 5px; }
+        .badge { padding: 2px 6px; border-radius: 4px; font-size: 0.8em; font-weight: bold; }
+        
+        /* Estilos para el rol de Cómplice */
+        .accomplice-text { color: #9b59b6; font-weight: bold; }
     </style>
 </head>
 <body>
@@ -38,7 +30,7 @@
         <h1>🕵️ El Impostor</h1>
         
         <div style="text-align: right; margin-bottom: 10px;">
-            <button class="btn-text" onclick="loadAndShowHistory()">📜 Ver Historial de Partidas</button>
+            <button class="btn-text" onclick="loadAndShowHistory()">📜 Ver Historial</button>
         </div>
 
         <div class="card">
@@ -57,6 +49,17 @@
             </div>
             <label class="switch">
                 <input type="checkbox" id="hints-toggle" checked>
+                <span class="slider round"></span>
+            </label>
+        </div>
+
+        <div class="card" style="display: flex; justify-content: space-between; align-items: center;">
+            <div>
+                <h3 style="margin-bottom: 5px; border: none;">🤝 Cómplice</h3>
+                <small style="color: #bdc3c7;">Ayuda al impostor (Mín 4 jug.)</small>
+            </div>
+            <label class="switch">
+                <input type="checkbox" id="accomplice-toggle">
                 <span class="slider round"></span>
             </label>
         </div>
@@ -85,8 +88,7 @@
 
     <div id="screen-history" class="container hidden">
         <h2>📜 Historial de Partidas</h2>
-        <div id="history-list">
-            </div>
+        <div id="history-list"></div>
         <button class="btn-secondary" onclick="goToHome()">🏠 Volver al Inicio</button>
     </div>
 
@@ -156,18 +158,22 @@
 
     <div id="screen-solution" class="container hidden full-height">
         <h1 id="final-result-title">PARTIDA FINALIZADA</h1>
+        
         <div class="card">
             <h3>Palabra Secreta:</h3>
             <h1 style="color:var(--accent); font-size:3em; margin:10px 0;" id="final-word">???</h1>
         </div>
+
         <p id="winner-display" style="font-size: 1.5em; font-weight: bold;"></p>
+
+        <div id="roles-reveal" class="card" style="text-align: left; background: rgba(0,0,0,0.2);"></div>
         
         <button class="btn-main" onclick="restartGame()">🔄 REINICIAR (MISMOS AJUSTES)</button>
         <button class="btn-secondary" onclick="goToHome()">🏠 MENÚ PRINCIPAL</button>
     </div>
 
     <script>
-        let players = ['Juan', 'Mateo', 'Diego']; 
+        let players = ['Ana', 'Juan', 'Pedro']; 
         let themes = [];
         let selectedThemesIds = [];
         let gameData = { assignments: [], currentIndex: 0, secretWord: '', secretHint: '', impostorsCaught: 0, totalImpostors: 0 };
@@ -181,7 +187,7 @@
             updateTimeDisplay();
         };
 
-        // --- HISTORIAL DE PARTIDAS ---
+        // --- HISTORIAL ---
         async function loadAndShowHistory() {
             try {
                 const res = await fetch('/api/history');
@@ -196,6 +202,11 @@
                         const winClass = game.winner === 'Impostor' ? 'win-impostor' : 'win-citizens';
                         const winnerText = game.winner === 'Impostor' ? '👑 Ganó Impostor' : '🛡️ Ganaron Ciudadanos';
                         
+                        // Si hay cómplice, lo mostramos
+                        const accompliceHtml = game.accomplice 
+                            ? `<p style="margin:5px 0;">🤝 Cómplice: <span style="color:#9b59b6">${game.accomplice}</span></p>` 
+                            : '';
+
                         return `
                         <div class="history-item ${winClass}">
                             <div style="display:flex; justify-content:space-between; align-items:center;">
@@ -205,7 +216,7 @@
                             <div class="history-details">
                                 <p style="margin:5px 0;"><strong>${winnerText}</strong></p>
                                 <p style="margin:5px 0;">😈 Impostor: <span style="color:#e74c3c">${game.impostor}</span></p>
-                                <p style="margin:5px 0;">💡 Pista recibida: <em>"${game.hint || 'Ninguna'}"</em></p>
+                                ${accompliceHtml}
                                 <p style="margin:5px 0; font-size:0.85em;">👥 Jugadores: ${game.players.join(', ')}</p>
                             </div>
                         </div>
@@ -213,22 +224,21 @@
                     }).join('');
                 }
                 showScreen('screen-history');
-            } catch (e) {
-                alert("Error cargando historial");
-            }
+            } catch (e) { console.error(e); }
         }
 
         async function saveGameRecord(winner) {
-            // Recopilar datos
             const impostorObj = gameData.assignments.find(p => p.isImpostor);
+            const accompliceObj = gameData.assignments.find(p => p.isAccomplice); // Buscar cómplice
             const playerNames = gameData.assignments.map(p => p.name);
             
             const record = {
                 players: playerNames,
                 impostor: impostorObj ? impostorObj.name : "Desconocido",
+                accomplice: accompliceObj ? accompliceObj.name : null, // Guardar
                 word: gameData.secretWord,
                 hint: gameData.secretHint,
-                winner: winner // 'Impostor' o 'Ciudadanos'
+                winner: winner
             };
 
             await fetch('/api/history', {
@@ -238,11 +248,110 @@
             });
         }
 
-        // --- FLUJO DE JUEGO & GANADORES ---
+        // --- LÓGICA DE JUEGO ---
 
-        function citizensGiveUp() {
-            if(confirm("¿Rendirse? Ganará el Impostor.")) {
-                endGameWithWinner('Impostor');
+        function startGameSetup() {
+            if(selectedThemesIds.length === 0) return alert("Elige tema");
+            
+            // 1. Palabras
+            let pool = []; 
+            themes.forEach(t => { if(selectedThemesIds.includes(t.id)) pool = pool.concat(t.words); });
+            if(pool.length === 0) return alert("Temas vacíos");
+            const sel = pool[Math.floor(Math.random() * pool.length)];
+            gameData.secretWord = sel.text;
+
+            // 2. Pistas
+            const hintsOn = document.getElementById('hints-toggle').checked;
+            if(hintsOn) {
+                let ha = []; if(Array.isArray(sel.hints)) ha=sel.hints; else if(sel.hint) ha=[sel.hint]; else ha=["Sin pista"];
+                gameData.secretHint = ha[Math.floor(Math.random()*ha.length)];
+            } else { gameData.secretHint = null; }
+
+            // 3. Roles
+            let impC = parseInt(document.getElementById('impostor-count').value); 
+            if(impC>=players.length) impC=players.length-1;
+            gameData.totalImpostors = impC; 
+            gameData.impostorsCaught = 0;
+            
+            let assign = new Array(players.length).fill(null); 
+            let p=0;
+
+            // Asignar Impostores
+            while(p<impC) { 
+                let r=Math.floor(Math.random()*players.length); 
+                if(!assign[r]) { assign[r]={isImpostor:true, isAccomplice:false, name:players[r], alive:true}; p++; } 
+            }
+
+            // Asignar Cómplice (si activado y hay gente suficiente)
+            const accompliceOn = document.getElementById('accomplice-toggle').checked;
+            let accAssigned = false;
+            // Necesitamos al menos 4 jugadores para que haya gracia (1 imp, 1 complice, 2 ciudadanos)
+            if(accompliceOn && (players.length - impC) >= 2) {
+                while(!accAssigned) {
+                    let r=Math.floor(Math.random()*players.length);
+                    if(!assign[r]) {
+                        assign[r] = {isImpostor:false, isAccomplice:true, name:players[r], alive:true};
+                        accAssigned = true;
+                    }
+                }
+            }
+
+            // Resto ciudadanos
+            for(let i=0; i<players.length; i++) if(!assign[i]) assign[i]={isImpostor:false, isAccomplice:false, name:players[i], alive:true};
+            
+            gameData.assignments = assign; 
+            gameData.currentIndex = 0;
+            setupCardForPlayer(); 
+            showScreen('screen-reveal');
+        }
+
+        function setupCardForPlayer() {
+            const p = gameData.assignments[gameData.currentIndex];
+            document.getElementById('current-player-display').innerText = "Turno de: " + p.name;
+            const wd = document.getElementById('secret-word'); 
+            const rd = document.getElementById('secret-role');
+            
+            if(p.isImpostor) {
+                wd.innerText = "😈 IMPOSTOR"; wd.style.color = "#e74c3c";
+                rd.innerHTML = gameData.secretHint ? "Tu pista es:<br><strong style='color:#f1c40f'>"+gameData.secretHint+"</strong>" : "<span style='opacity:0.6'>Intenta pasar desapercibido...</span>";
+            
+            } else if (p.isAccomplice) {
+                // CARTA DE CÓMPLICE
+                wd.innerText = gameData.secretWord;
+                wd.style.color = "#9b59b6"; // Morado
+                
+                const imps = gameData.assignments.filter(x => x.isImpostor).map(x => x.name).join(", ");
+                rd.innerHTML = "🤫 ERES EL CÓMPLICE<br>Protege a: <strong style='color:#e74c3c'>" + imps + "</strong>";
+
+            } else {
+                wd.innerText = gameData.secretWord; wd.style.color = "#2ecc71"; rd.innerText = "Palabra Secreta";
+            }
+
+            const btn = document.getElementById('next-btn');
+            if(gameData.currentIndex >= players.length-1) { btn.innerText = "EMPEZAR CRONÓMETRO"; btn.onclick = startActiveGame; }
+            else { btn.innerText = "SIGUIENTE JUGADOR"; btn.onclick = () => { gameData.currentIndex++; setupCardForPlayer(); }; }
+        }
+
+        // --- GAMEPLAY ---
+
+        function startActiveGame() {
+            showScreen('screen-active'); renderVotingList();
+            
+            // Probabilidad ponderada para empezar (Impostores pesan menos)
+            let pool = [];
+            gameData.assignments.forEach(p => { 
+                if(p.alive) { 
+                    const w = p.isImpostor ? 6 : 10; // Impostores salen menos
+                    for(let i=0;i<w;i++) pool.push(p.name); 
+                } 
+            });
+            document.getElementById('starter-name').innerText = pool[Math.floor(Math.random()*pool.length)];
+            
+            const m = parseInt(document.getElementById('game-timer-input').value);
+            if(m > 20) document.getElementById('timer-display').innerText = "♾️";
+            else {
+                timeRemaining = m * 60; updateTimerUI();
+                timerInterval = setInterval(() => { timeRemaining--; updateTimerUI(); if(timeRemaining<=0) clearInterval(timerInterval); }, 1000);
             }
         }
 
@@ -257,60 +366,44 @@
             const msg = document.getElementById('result-msg');
             const impostorArea = document.getElementById('impostor-guess-area');
             const continueBtn = document.getElementById('continue-btn');
-
-            clearInterval(timerInterval); // Pausa
+            clearInterval(timerInterval); 
 
             if(player.isImpostor) {
-                // IMPOSTOR PILLADO -> FASE DE DECISIÓN
+                // IMPOSTOR
                 title.innerText = "¡IMPOSTOR PILLADO!";
                 title.style.color = "#2ecc71";
                 icon.innerText = "🎉";
                 msg.innerText = `${player.name} era el Impostor.`;
-                
-                // Mostrar botones de "Adivinó o no"
                 impostorArea.classList.remove('hidden');
                 continueBtn.classList.add('hidden');
+            
+            } else if (player.isAccomplice) {
+                // CÓMPLICE (Novedad)
+                title.innerText = "¡ERA EL CÓMPLICE!";
+                title.style.color = "#9b59b6"; // Morado
+                icon.innerText = "🎭";
+                msg.innerText = `${player.name} era el Cómplice. El Impostor sigue vivo.`;
+                impostorArea.classList.add('hidden');
+                continueBtn.classList.remove('hidden');
+
             } else {
-                // INOCENTE PILLADO -> SIGUE EL JUEGO
+                // INOCENTE
                 title.innerText = "ERROR...";
                 title.style.color = "#e74c3c";
                 icon.innerText = "💀";
                 msg.innerText = `${player.name} NO era impostor. Era inocente.`;
-                
                 impostorArea.classList.add('hidden');
                 continueBtn.classList.remove('hidden');
             }
         }
 
-        function continueGame() {
-            const living = gameData.assignments.filter(p => p.alive).length;
-            const livingImpostors = gameData.assignments.filter(p => p.alive && p.isImpostor).length;
-            
-            // Si quedan 2 personas y una es impostor -> Gana Impostor por superioridad
-            if(living <= 2 && livingImpostors > 0) {
-                alert("¡Quedan 2 personas! El impostor gana por empate técnico.");
-                endGameWithWinner('Impostor');
-            } 
-            // Si no quedan impostores vivos (esto no debería pasar por votePlayer, pero por seguridad)
-            else if (livingImpostors === 0) {
-                 endGameWithWinner('Ciudadanos');
-            } 
-            else {
-                showScreen('screen-active');
-                renderVotingList();
-                // Reanudar timer si quisieras, o dejarlo pausado/continuo
-            }
-        }
-
         function endGameWithWinner(winner) {
             clearInterval(timerInterval);
-            
-            // Guardar en servidor
             saveGameRecord(winner);
 
-            // Mostrar pantalla final
             document.getElementById('final-word').innerText = gameData.secretWord;
             const display = document.getElementById('winner-display');
+            
             if(winner === 'Impostor') {
                 display.innerText = "🏆 GANA EL IMPOSTOR 🏆";
                 display.style.color = "#e74c3c";
@@ -318,125 +411,68 @@
                 display.innerText = "🛡️ GANAN LOS CIUDADANOS 🛡️";
                 display.style.color = "#2ecc71";
             }
+
+            // MOSTRAR ROLES EN PANTALLA FINAL
+            const rolesDiv = document.getElementById('roles-reveal');
+            const impostorNames = gameData.assignments.filter(p => p.isImpostor).map(p => p.name).join(', ');
+            const accompliceNames = gameData.assignments.filter(p => p.isAccomplice).map(p => p.name).join(', ');
+
+            let rolesHtml = `<p>😈 <strong>Impostor:</strong> <span style="color:#e74c3c">${impostorNames}</span></p>`;
+            if(accompliceNames) {
+                rolesHtml += `<p>🤝 <strong>Cómplice:</strong> <span style="color:#9b59b6">${accompliceNames}</span></p>`;
+            } else {
+                rolesHtml += `<p style="font-size:0.8em; opacity:0.7;">(Sin cómplice en esta partida)</p>`;
+            }
+            rolesDiv.innerHTML = rolesHtml;
+
             showScreen('screen-solution');
         }
 
-        // --- RESTO DE FUNCIONES (Persistencia, Temas, UI) ---
-        // (Las funciones loadPlayers, savePlayers, renderPlayers, addPlayer, removePlayer, 
-        // showScreen, goToHome, restartGame, fetchThemes, updateTimeDisplay, etc. 
-        // SE MANTIENEN IGUAL QUE EN LA VERSIÓN ANTERIOR)
-        
-        function loadPlayers() {
-            const stored = localStorage.getItem('impostorPlayers');
-            if (stored) {
-                try { players = JSON.parse(stored); if (!Array.isArray(players) || players.length === 0) players = ['Ana', 'Juan', 'Pedro']; } 
-                catch (e) {}
-            }
-            renderPlayers();
-        }
+        // --- UTILIDADES VARIAS ---
+        function loadPlayers() { try { players = JSON.parse(localStorage.getItem('impostorPlayers')) || ['Ana', 'Juan', 'Pedro']; } catch(e){} renderPlayers(); }
         function savePlayers() { localStorage.setItem('impostorPlayers', JSON.stringify(players)); }
-        function renderPlayers() {
-            document.getElementById('players-list').innerHTML = players.map((p,i) => `<span class="tag" onclick="removePlayer(${i})">${p} ✕</span>`).join('');
-            const maxImp = Math.max(1, Math.floor(players.length / 2));
-            const impInput = document.getElementById('impostor-count'); impInput.max = maxImp; if (impInput.value > maxImp) impInput.value = maxImp;
-            updateConfigDisplay();
-        }
-        function addPlayer() { const v = document.getElementById('new-player').value.trim(); if(v) { players.push(v); document.getElementById('new-player').value=''; savePlayers(); renderPlayers(); } }
+        function renderPlayers() { document.getElementById('players-list').innerHTML=players.map((p,i)=>`<span class="tag" onclick="removePlayer(${i})">${p} ✕</span>`).join(''); updateConfigDisplay(); }
+        function addPlayer() { const v=document.getElementById('new-player').value.trim(); if(v){players.push(v); document.getElementById('new-player').value=''; savePlayers(); renderPlayers();} }
         function removePlayer(i) { players.splice(i,1); savePlayers(); renderPlayers(); }
+        
         function showScreen(id) { document.querySelectorAll('.container').forEach(d => d.classList.add('hidden')); document.getElementById(id).classList.remove('hidden'); }
         function goToHome() { showScreen('screen-home'); }
         function restartGame() { startGameSetup(); }
-        async function fetchThemes() { const res = await fetch('/api/themes'); themes = await res.json(); }
-        function updateTimeDisplay() { const v = parseInt(document.getElementById('game-timer-input').value); document.getElementById('time-display').innerText = (v > 20) ? "Infinito" : v + " min"; }
+        async function fetchThemes() { const r=await fetch('/api/themes'); themes=await r.json(); }
+        function updateTimeDisplay() { const v=parseInt(document.getElementById('game-timer-input').value); document.getElementById('time-display').innerText=(v>20)?"Infinito":v+" min"; }
         function updateConfigDisplay() { document.getElementById('impostor-val').innerText = document.getElementById('impostor-count').value; }
         
-        // Creador de Temas
-        function openThemeCreator() { document.getElementById('new-theme-title').value = ''; document.getElementById('words-container').innerHTML = ''; addWordRow(); addWordRow(); addWordRow(); showScreen('screen-create-theme'); }
-        function addWordRow() {
-            const c = document.getElementById('words-container'); const d = document.createElement('div'); d.className = 'word-row card';
-            d.innerHTML = `<div style="display:flex; justify-content:space-between;"><strong>Palabra</strong><span style="color:#e74c3c; cursor:pointer;" onclick="this.parentElement.parentElement.remove()">🗑️</span></div><input type="text" class="input-word" placeholder="Ej: Manzana"><div style="margin-top:5px;"><small>Pistas (separadas por /):</small><input type="text" class="input-hints" placeholder="Ej: Es roja / Fruta prohibida"></div>`; c.appendChild(d);
-        }
+        function openThemeCreator() { document.getElementById('new-theme-title').value=''; document.getElementById('words-container').innerHTML=''; addWordRow(); addWordRow(); addWordRow(); showScreen('screen-create-theme'); }
+        function addWordRow() { const c=document.getElementById('words-container'); const d=document.createElement('div'); d.className='word-row card'; d.innerHTML=`<div style="display:flex; justify-content:space-between;"><strong>Palabra</strong><span style="color:#e74c3c; cursor:pointer;" onclick="this.parentElement.parentElement.remove()">🗑️</span></div><input type="text" class="input-word" placeholder="Ej: Manzana"><div style="margin-top:5px;"><small>Pistas (separadas por /):</small><input type="text" class="input-hints" placeholder="Ej: Es roja / Fruta prohibida"></div>`; c.appendChild(d); }
         async function saveThemeFromUI() {
-            const name = document.getElementById('new-theme-title').value; if(!name) return alert("Pon título");
-            const rows = document.querySelectorAll('.word-row'); const words = [];
-            rows.forEach(r => { const t = r.querySelector('.input-word').value.trim(); const h = r.querySelector('.input-hints').value.trim(); if(t) { let ha=[]; if(h) ha=h.split('/').map(x=>x.trim()).filter(x=>x.length>0); if(ha.length===0) ha.push("Sin pista"); words.push({text:t, hints:ha}); } });
-            if(words.length<4) return alert("Mínimo 4 palabras");
-            await fetch('/api/themes', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ name, words }) });
+            const name=document.getElementById('new-theme-title').value; if(!name)return alert("Pon título");
+            const words=[]; document.querySelectorAll('.word-row').forEach(r=>{ const t=r.querySelector('.input-word').value.trim(); const h=r.querySelector('.input-hints').value.trim(); if(t){ let ha=h?h.split('/').map(x=>x.trim()).filter(x=>x):["Sin pista"]; words.push({text:t,hints:ha}); } });
+            if(words.length<4)return alert("Mínimo 4 palabras");
+            await fetch('/api/themes',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name,words})});
             alert("Tema guardado"); await fetchThemes(); showScreen('screen-home');
         }
 
-        // Selección
-        function goToThemeSelection() { if(players.length < 3) return alert("Mínimo 3 jugadores"); renderThemeGrid(); showScreen('screen-themes'); }
-        function renderThemeGrid() { document.getElementById('themes-grid').innerHTML = themes.map(t => `<div class="theme-box ${selectedThemesIds.includes(t.id)?'selected':''}" onclick="toggleTheme(${t.id})"><strong>${t.name}</strong><br><small>${t.words.length} palabras</small></div>`).join(''); }
-        function toggleTheme(id) { selectedThemesIds.includes(id) ? selectedThemesIds = selectedThemesIds.filter(x => x !== id) : selectedThemesIds.push(id); renderThemeGrid(); }
-
-        // Start Logic
-        function startGameSetup() {
-            if(selectedThemesIds.length === 0) return alert("Elige tema");
-            let pool = []; themes.forEach(t => { if(selectedThemesIds.includes(t.id)) pool = pool.concat(t.words); });
-            if(pool.length === 0) return alert("Temas vacíos");
-            const sel = pool[Math.floor(Math.random() * pool.length)];
-            gameData.secretWord = sel.text;
-            const hintsOn = document.getElementById('hints-toggle').checked;
-            if(hintsOn) {
-                let ha = []; if(Array.isArray(sel.hints)) ha=sel.hints; else if(sel.hint) ha=[sel.hint]; else ha=["Sin pista"];
-                gameData.secretHint = ha[Math.floor(Math.random()*ha.length)];
-            } else { gameData.secretHint = null; }
-
-            let impC = parseInt(document.getElementById('impostor-count').value); if(impC>=players.length) impC=players.length-1;
-            gameData.totalImpostors = impC; gameData.impostorsCaught = 0;
-            let assign = new Array(players.length).fill(null); let p=0;
-            while(p<impC) { let r=Math.floor(Math.random()*players.length); if(!assign[r]) { assign[r]={isImpostor:true, name:players[r], alive:true}; p++; } }
-            for(let i=0; i<players.length; i++) if(!assign[i]) assign[i]={isImpostor:false, name:players[i], alive:true};
-            gameData.assignments = assign; gameData.currentIndex = 0;
-            setupCardForPlayer(); showScreen('screen-reveal');
-        }
-
-        function setupCardInteractions() {
-            const c = document.getElementById('magic-card');
-            const show = (e) => { if(e.cancelable) e.preventDefault(); c.classList.add('revealed'); };
-            const hide = (e) => { if(e.cancelable) e.preventDefault(); c.classList.remove('revealed'); };
-            c.addEventListener('mousedown', show); c.addEventListener('mouseup', hide); c.addEventListener('mouseleave', hide);
-            c.addEventListener('touchstart', show, {passive:false}); c.addEventListener('touchend', hide); c.addEventListener('touchcancel', hide);
-        }
-        function setupCardForPlayer() {
-            const p = gameData.assignments[gameData.currentIndex];
-            document.getElementById('current-player-display').innerText = "Turno de: " + p.name;
-            const wd = document.getElementById('secret-word'); const rd = document.getElementById('secret-role');
-            if(p.isImpostor) {
-                wd.innerText = "😈 IMPOSTOR"; wd.style.color = "#e74c3c";
-                rd.innerHTML = gameData.secretHint ? "Tu pista es:<br><strong style='color:#f1c40f'>"+gameData.secretHint+"</strong>" : "<span style='opacity:0.6'>Intenta pasar desapercibido...</span>";
-            } else {
-                wd.innerText = gameData.secretWord; wd.style.color = "#2ecc71"; rd.innerText = "Palabra Secreta";
-            }
-            const btn = document.getElementById('next-btn');
-            if(gameData.currentIndex >= players.length-1) { btn.innerText = "EMPEZAR CRONÓMETRO"; btn.onclick = startActiveGame; }
-            else { btn.innerText = "SIGUIENTE JUGADOR"; btn.onclick = () => { gameData.currentIndex++; setupCardForPlayer(); }; }
-        }
-
-        function startActiveGame() {
-            showScreen('screen-active'); renderVotingList();
-            let pool = [];
-            gameData.assignments.forEach(p => { if(p.alive) { const w = p.isImpostor ? 6 : 10; for(let i=0;i<w;i++) pool.push(p.name); } });
-            document.getElementById('starter-name').innerText = pool[Math.floor(Math.random()*pool.length)];
-            
-            const m = parseInt(document.getElementById('game-timer-input').value);
-            if(m > 20) document.getElementById('timer-display').innerText = "♾️";
-            else {
-                timeRemaining = m * 60; updateTimerUI();
-                timerInterval = setInterval(() => { timeRemaining--; updateTimerUI(); if(timeRemaining<=0) clearInterval(timerInterval); }, 1000);
-            }
-        }
-        function updateTimerUI() { const m=Math.floor(timeRemaining/60).toString().padStart(2,'0'); const s=(timeRemaining%60).toString().padStart(2,'0'); document.getElementById('timer-display').innerText = `${m}:${s}`; }
+        function goToThemeSelection() { if(players.length<3)return alert("Mín 3 jugadores"); renderThemeGrid(); showScreen('screen-themes'); }
+        function renderThemeGrid() { document.getElementById('themes-grid').innerHTML=themes.map(t=>`<div class="theme-box ${selectedThemesIds.includes(t.id)?'selected':''}" onclick="toggleTheme(${t.id})"><strong>${t.name}</strong><br><small>${t.words.length} palabras</small></div>`).join(''); }
+        function toggleTheme(id) { selectedThemesIds.includes(id)?selectedThemesIds=selectedThemesIds.filter(x=>x!==id):selectedThemesIds.push(id); renderThemeGrid(); }
+        
+        function setupCardInteractions() { const c=document.getElementById('magic-card'); const s=(e)=>{if(e.cancelable)e.preventDefault();c.classList.add('revealed');}; const h=(e)=>{if(e.cancelable)e.preventDefault();c.classList.remove('revealed');}; c.addEventListener('mousedown',s); c.addEventListener('mouseup',h); c.addEventListener('mouseleave',h); c.addEventListener('touchstart',s,{passive:false}); c.addEventListener('touchend',h); c.addEventListener('touchcancel',h); }
+        
+        function citizensGiveUp() { if(confirm("¿Rendirse?")) endGameWithWinner('Impostor'); }
+        function updateTimerUI() { const m=Math.floor(timeRemaining/60).toString().padStart(2,'0'); const s=(timeRemaining%60).toString().padStart(2,'0'); document.getElementById('timer-display').innerText=`${m}:${s}`; }
         function renderVotingList() {
-            const c = document.getElementById('voting-list'); c.innerHTML = '';
-            gameData.assignments.forEach((p,i) => {
-                if(p.alive) {
-                    const b = document.createElement('div'); b.className = 'vote-card'; b.innerHTML = `<strong>${p.name}</strong><br><small>Expulsar</small>`;
-                    b.onclick = () => votePlayer(i); c.appendChild(b);
-                }
-            });
+            const c=document.getElementById('voting-list'); c.innerHTML='';
+            gameData.assignments.forEach((p,i)=>{ if(p.alive){ const b=document.createElement('div'); b.className='vote-card'; b.innerHTML=`<strong>${p.name}</strong><br><small>Expulsar</small>`; b.onclick=()=>votePlayer(i); c.appendChild(b); } });
         }
+        function continueGame() {
+            const living = gameData.assignments.filter(p => p.alive).length;
+            const livingImpostors = gameData.assignments.filter(p => p.alive && p.isImpostor).length;
+            if(living <= 2 && livingImpostors > 0) { alert("¡Empate técnico (quedan 2)! Gana Impostor."); endGameWithWinner('Impostor'); }
+            else if(livingImpostors === 0) endGameWithWinner('Ciudadanos');
+            else { showScreen('screen-active'); renderVotingList(); }
+        }
+        function nextPlayer() { gameData.currentIndex++; setupCardForPlayer(); }
+
     </script>
 </body>
 </html>
