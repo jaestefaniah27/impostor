@@ -128,14 +128,29 @@ function renderThemeManagerList() {
 
     container.innerHTML = sortedThemes.map(t => {
         const customClass = t.isCustom ? 'custom-theme-box' : '';
-        const badge = t.isCustom ? '<span class="badge-custom">👤 PROPIA</span>' : '';
         
-        // Al hacer clic, EDITAMOS directamente
+        // Configuración según si es custom o defecto
+        let badge, onClickAttr, icon, style;
+
+        if (t.isCustom) {
+            // TEMA PROPIO: Se puede editar
+            badge = '<span class="badge-custom">👤 PROPIA</span>';
+            onClickAttr = `onclick="loadThemeForEdit(${t.id})"`;
+            icon = '✏️';
+            style = 'cursor: pointer;';
+        } else {
+            // TEMA ORIGINAL: Bloqueado
+            badge = '<span style="display:block; margin-top:5px; font-size:0.7em; opacity:0.5;">🔒 ORIGINAL</span>';
+            onClickAttr = `onclick="alert('⚠️ Los temas originales no se pueden editar. Crea uno nuevo.')"`;
+            icon = '🔒';
+            style = 'opacity: 0.8; cursor: not-allowed; background: #2c3e50; border: 1px solid rgba(255,255,255,0.1);';
+        }
+        
         return `
-        <div class="theme-box ${customClass}" onclick="loadThemeForEdit(${t.id})">
+        <div class="theme-box ${customClass}" ${onClickAttr} style="${style}">
             <div style="display:flex; justify-content:space-between; align-items:start;">
                 <strong>${t.name}</strong>
-                <span>✏️</span>
+                <span>${icon}</span>
             </div>
             <small>${t.words.length} palabras</small>
             ${badge}
