@@ -11,13 +11,48 @@ const HISTORY_FILE = 'history.json';
 const ALIAS_FILE = 'aliases.json';
 
 // --- INICIALIZACIÓN ---
-if (!fs.existsSync(DB_FILE)) { /* ... tu código de temas ... */ }
+if (!fs.existsSync(DB_FILE)) { fs.writeFileSync(DB_FILE, JSON.stringify([])); }
 if (!fs.existsSync(HISTORY_FILE)) { fs.writeFileSync(HISTORY_FILE, JSON.stringify([])); }
 if (!fs.existsSync(ALIAS_FILE)) { fs.writeFileSync(ALIAS_FILE, JSON.stringify({})); }
 
-// ... (Endpoints de themes y history POST/DELETE se mantienen igual) ...
+// GET THEMES
+app.get('/api/themes', (req, res) => {
+    try {
+        const data = fs.readFileSync(DB_FILE, 'utf8');
+        const json = JSON.parse(data); 
+        res.json(json);
+    } catch (e) {
+        console.error("Error leyendo themes.json:", e.message);
+        res.json([]); 
+    }
+});
 
-// GET HISTORY
+// POST THEMES (Crear o Editar)
+app.post('/api/themes', (req, res) => {
+    const { id, name, words, suggestions } = req.body;
+    let themes = [];
+    try { themes = JSON.parse(fs.readFileSync(DB_FILE, 'utf8')); } catch(e){}
+
+    if (id) {
+        // --- MODO EDICIÓN ---
+        const index = themes.findIndex(t => t.id === id);
+        if (index !== -1) {
+            themes[index] = { ...themes[index], name, words, suggestions, isCustom: true };
+        } else {
+            // Si venía ID pero no existe, lo creamos
+            themes.push({ id, name, words, suggestions, isCustom: true });
+        }
+    } else {
+        // --- MODO CREACIÓN ---
+        const newId = Date.now(); 
+        themes.push({ id: newId, name, words, suggestions, isCustom: true });
+    }
+
+    fs.writeFileSync(DB_FILE, JSON.stringify(themes, null, 2));
+    res.json({ success: true });
+});
+
+// HISTORY & STATS API
 app.get('/api/history', (req, res) => {
     const data = fs.readFileSync(HISTORY_FILE);
     res.json(JSON.parse(data));
@@ -37,21 +72,15 @@ app.post('/api/history', (req, res) => {
     res.json({ success: true });
 });
 
-// NUEVO: ESTADÍSTICAS MEJORADAS (Con lista de alias)
 app.get('/api/stats', (req, res) => {
     const history = JSON.parse(fs.readFileSync(HISTORY_FILE));
     const aliases = JSON.parse(fs.readFileSync(ALIAS_FILE));
-
     const resolveName = (name) => aliases[name] || name;
 
-    const stats = {
-        global: { totalGames: 0, totalTime: 0 },
-        players: {}
-    };
+    const stats = { global: { totalGames: 0, totalTime: 0 }, players: {} };
 
     history.forEach(game => {
         const gamesToProcess = game.type === 'tournament' ? game.games : [game];
-
         gamesToProcess.forEach(g => {
             stats.global.totalGames++;
             const duration = g.duration || 0;
@@ -59,79 +88,45 @@ app.get('/api/stats', (req, res) => {
 
             if(g.players && Array.isArray(g.players)) {
                 g.players.forEach(rawName => {
-                    const mainName = resolveName(rawName);
-                    
-                    if (!stats.players[mainName]) {
-                        // Añadimos 'aka' (Also Known As) como un Set para evitar duplicados
-                        stats.players[mainName] = { 
-                            name: mainName, 
-                            games: 0, 
-                            time: 0, 
-                            impWins: 0, 
-                            impTotal: 0,
-                            aka: new Set() 
-                        };
+                    const name = resolveName(rawName);
+                    if (!stats.players[name]) {
+                        stats.players[name] = { name, games: 0, time: 0, impWins: 0, impTotal: 0, aka: new Set() };
                     }
-                    
-                    // Guardamos el nombre original usado en esa partida
-                    stats.players[mainName].aka.add(rawName);
-                    
-                    stats.players[mainName].games++;
-                    stats.players[mainName].time += duration;
+                    stats.players[name].aka.add(rawName);
+                    stats.players[name].games++;
+                    stats.players[name].time += duration;
 
-                    const isImpostor = (g.impostor && resolveName(g.impostor) === mainName);
+                    const isImpostor = (g.impostor && resolveName(g.impostor) === name);
                     if (isImpostor) {
-                        stats.players[mainName].impTotal++;
-                        if (g.winner === 'Impostor') {
-                            stats.players[mainName].impWins++;
-                        }
+                        stats.players[name].impTotal++;
+                        if (g.winner === 'Impostor') stats.players[name].impWins++;
                     }
                 });
             }
         });
     });
 
-    // Convertir los Sets a Arrays para enviarlos por JSON
-    Object.values(stats.players).forEach(p => {
-        p.aka = Array.from(p.aka);
-    });
-
+    Object.values(stats.players).forEach(p => { p.aka = Array.from(p.aka); });
     res.json(stats);
 });
 
-// FUSIONAR (Igual que antes)
+// ALIASES API
 app.post('/api/aliases', (req, res) => {
     const { mainName, aliasesToMerge } = req.body;
     let aliases = JSON.parse(fs.readFileSync(ALIAS_FILE));
-    
-    aliasesToMerge.forEach(alias => {
-        if (alias !== mainName) aliases[alias] = mainName;
-    });
-    
-    // Recursividad para cadenas de alias
-    for (let key in aliases) {
-        if (aliasesToMerge.includes(aliases[key])) aliases[key] = mainName;
-    }
-
+    aliasesToMerge.forEach(alias => { if (alias !== mainName) aliases[alias] = mainName; });
+    for (let key in aliases) { if (aliasesToMerge.includes(aliases[key])) aliases[key] = mainName; }
     fs.writeFileSync(ALIAS_FILE, JSON.stringify(aliases));
     res.json({ success: true });
 });
 
-// NUEVO: DESUNIFICAR (Borrar alias)
 app.post('/api/aliases/unmerge', (req, res) => {
-    const { namesToFree } = req.body; // Array de nombres a liberar
+    const { namesToFree } = req.body; 
     let aliases = JSON.parse(fs.readFileSync(ALIAS_FILE));
-
-    namesToFree.forEach(name => {
-        if (aliases[name]) {
-            delete aliases[name];
-        }
-    });
-
+    namesToFree.forEach(name => { if (aliases[name]) delete aliases[name]; });
     fs.writeFileSync(ALIAS_FILE, JSON.stringify(aliases));
     res.json({ success: true });
 });
-
 app.post('/api/themes', (req, res) => {
     const { id, name, words, suggestions } = req.body;
     let themes = [];
@@ -155,5 +150,4 @@ app.post('/api/themes', (req, res) => {
     fs.writeFileSync(DB_FILE, JSON.stringify(themes, null, 2));
     res.json({ success: true });
 });
-
 app.listen(PORT, () => { console.log(`Servidor listo en http://localhost:${PORT}`); });
