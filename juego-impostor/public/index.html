@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>El Impostor Pro</title>
+    <title>El Impostor - Jorge Estefanía</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
     <div id="screen-home" class="container">
         <h1>🕵️ El Impostor</h1>
-        
+  
         <div id="active-tournament-display" class="tournament-active-banner hidden">
             <div>
                 <strong>🏆 TORNEO EN CURSO</strong><br>
@@ -91,6 +91,107 @@
         </div>
     </div>
 
+    <div id="screen-create-theme" class="container hidden">
+        <h2>🎨 Nuevo Tema</h2>
+        <div class="card">
+            <label>Título:</label>
+            <input type="text" id="new-theme-title" placeholder="Ej: Superhéroes">
+            <div style="margin-top:10px;">
+                <label>Preguntas Sugeridas (Opcional):</label>
+                <small style="color:#bdc3c7; display:block; margin-bottom:5px;">Sepáralas con una barra "/"</small>
+                <textarea id="new-theme-suggestions" placeholder="¿Tiene capa? / ¿Vuela? / ¿Es de Marvel?" rows="3"></textarea>
+            </div>
+        </div>
+        <div id="words-container"></div>
+        <button class="btn-secondary" onclick="addWordRow()">+ Añadir Palabra</button>
+        <div style="margin-top: 30px; display: flex; gap: 10px;">
+            <button class="btn-secondary" style="background: #e74c3c;" onclick="showScreen('screen-home')">Cancelar</button>
+            <button class="btn-main" onclick="saveThemeFromUI()">Guardar</button>
+        </div>
+    </div>
+
+    <div id="screen-themes" class="container hidden" style="padding-bottom: 130px;">
+        <h2>Elige Temas</h2>
+        <div id="themes-grid" class="grid-container"></div>
+        <div class="fixed-bottom-bar" style="flex-direction: column; gap: 5px;">
+            <button class="btn-main" style="margin:0;" onclick="startGameSetup()">¡EMPEZAR!</button>
+            <button class="btn-text" style="margin:0;" onclick="showScreen('screen-home')">Volver</button>
+        </div>
+    </div>
+
+    <div id="screen-pass-device" class="container hidden full-height">
+        <div class="card" style="text-align: center; padding: 40px 20px;">
+            <div id="pass-player-avatar" style="font-size: 4em; margin-bottom: 10px;">👤</div>
+            <h3 style="color: #bdc3c7; margin: 0;">Pásale el móvil a:</h3>
+            <h1 id="pass-player-name" style="font-size: 2.5em; margin: 15px 0; color: var(--accent);">Nombre</h1>
+            <p style="margin-bottom: 30px; opacity: 0.7;">No mires si no eres tú</p>
+            <button class="btn-main" onclick="confirmIdentity()">¡SOY YO, VER MI CARTA!</button>
+        </div>
+    </div>
+
+    <div id="screen-reveal" class="container hidden full-height">
+        <h2 id="current-player-display">Nombre</h2>
+        <p class="instruction">Mantén pulsada la carta</p>
+        <div class="magic-card-container" id="magic-card">
+            <div class="card-content">
+                <div id="secret-word" class="secret-text">...</div>
+                <div id="secret-role" class="role-subtext"></div>
+            </div>
+            <div class="card-cover"><span>🤫 MANTENER</span></div>
+        </div>
+        <button id="next-btn" class="btn-main bottom-btn" onclick="nextPlayer()">SIGUIENTE</button>
+    </div>
+
+    <div id="screen-active" class="container hidden">
+        <div class="card" style="background: #233642; border: 1px solid var(--accent); text-align: center;">
+            <p style="margin:0; font-size: 0.9em; color: #bdc3c7;">DEBE EMPEZAR HABLANDO:</p>
+            <h2 id="starter-name" style="margin: 5px 0; font-size: 1.8em; color: #f1c40f;">...</h2>
+        </div>
+        <div id="timer-display" class="timer-big">10:00</div>
+        <div id="suggestion-area"></div>
+        <button class="btn-secondary" onclick="showSuggestion()" style="margin-bottom: 20px;">❓ ¿Qué pregunto? (Sugerencia)</button>
+        <h3>Votar Expulsión</h3>
+        <div id="voting-list" class="voting-grid"></div>
+        <button class="btn-secondary bottom-btn" onclick="citizensGiveUp()">RENDARSE (Gana Impostor)</button>
+    </div>
+
+    <div id="screen-result" class="container hidden full-height">
+        <h1 id="result-title">...</h1>
+        <div id="result-icon" style="font-size: 5em; margin: 20px;"></div>
+        <p id="result-msg" style="font-size: 1.2em;"></p>
+        <div id="impostor-guess-area" class="hidden">
+            <p style="color:var(--accent)">¡Oportunidad de robo! ¿Adivina la palabra?</p>
+            <div style="display: grid; gap: 10px;">
+                <button class="btn-main" style="background: #e74c3c;" onclick="endGameWithWinner('Impostor')">✅ SÍ (Gana Impostor)</button>
+                <button class="btn-secondary" onclick="endGameWithWinner('Ciudadanos')">❌ NO (Ganan Ciudadanos)</button>
+            </div>
+        </div>
+        <button id="continue-btn" class="btn-main hidden" onclick="continueGame()">SEGUIR JUGANDO</button>
+    </div>
+
+    <div id="screen-solution" class="container hidden full-height">
+        <h1 id="final-result-title">FIN DE RONDA</h1>
+        <div class="card">
+            <h3>Palabra Secreta:</h3>
+            <h1 style="color:var(--accent); font-size:3em; margin:10px 0;" id="final-word">???</h1>
+        </div>
+        <p id="winner-display" style="font-size: 1.5em; font-weight: bold; margin: 10px 0;"></p>
+        <div id="roles-reveal" style="margin-bottom: 20px;"></div>
+        <div id="scoreboard-container" class="card hidden">
+            <h3>🏆 Clasificación - <span id="score-tourney-name"></span></h3>
+            <table class="scoreboard-table" id="scoreboard-body"></table>
+        </div>
+        <button class="btn-main" onclick="restartGame()">🔄 SIGUIENTE RONDA</button>
+        <button class="btn-secondary" onclick="goToHome()">🏠 MENÚ PRINCIPAL</button>
+    </div>
+<div id="screen-history" class="container hidden">
+        <h2>📜 Historial</h2>
+        <div id="history-list"></div>
+        <div class="fixed-bottom-bar">
+            <button class="btn-secondary" style="margin:0; width:100%; max-width:500px;" onclick="goToHome()">🏠 VOLVER AL INICIO</button>
+        </div>
+    </div>
+
     <div id="screen-stats" class="container hidden" style="padding-bottom: 100px;">
         <h2>📊 Stats</h2>
         
@@ -132,112 +233,6 @@
         <div class="fixed-bottom-bar">
             <button class="btn-secondary" style="margin:0; width:100%; max-width:500px;" onclick="goToHome()">🏠 VOLVER AL INICIO</button>
         </div>
-    </div>
-
-    <div id="screen-create-theme" class="container hidden">
-        <h2>🎨 Nuevo Tema</h2>
-        <div class="card">
-            <label>Título:</label>
-            <input type="text" id="new-theme-title" placeholder="Ej: Superhéroes">
-            
-            <div style="margin-top:10px;">
-                <label>Preguntas Sugeridas (Opcional):</label>
-                <small style="color:#bdc3c7; display:block; margin-bottom:5px;">Sepáralas con una barra "/"</small>
-                <textarea id="new-theme-suggestions" placeholder="¿Tiene capa? / ¿Vuela? / ¿Es de Marvel?" rows="3"></textarea>
-            </div>
-        </div>
-        
-        <div id="words-container"></div>
-        <button class="btn-secondary" onclick="addWordRow()">+ Añadir Palabra</button>
-        <div style="margin-top: 30px; display: flex; gap: 10px;">
-            <button class="btn-secondary" style="background: #e74c3c;" onclick="showScreen('screen-home')">Cancelar</button>
-            <button class="btn-main" onclick="saveThemeFromUI()">Guardar</button>
-        </div>
-    </div>
-
-    <div id="screen-themes" class="container hidden" style="padding-bottom: 130px;">
-        <h2>Elige Temas</h2>
-        <div id="themes-grid" class="grid-container"></div>
-        
-        <div class="fixed-bottom-bar" style="flex-direction: column; gap: 5px;">
-            <button class="btn-main" style="margin:0;" onclick="startGameSetup()">¡EMPEZAR!</button>
-            <button class="btn-text" style="margin:0;" onclick="showScreen('screen-home')">Volver</button>
-        </div>
-    </div>
-
-    <div id="screen-pass-device" class="container hidden full-height">
-        <div class="card" style="text-align: center; padding: 40px 20px;">
-            <div id="pass-player-avatar" style="font-size: 4em; margin-bottom: 10px;">👤</div>
-            <h3 style="color: #bdc3c7; margin: 0;">Pásale el móvil a:</h3>
-            <h1 id="pass-player-name" style="font-size: 2.5em; margin: 15px 0; color: var(--accent);">Nombre</h1>
-            <p style="margin-bottom: 30px; opacity: 0.7;">No mires si no eres tú</p>
-            <button class="btn-main" onclick="confirmIdentity()">¡SOY YO, VER MI CARTA!</button>
-        </div>
-    </div>
-
-    <div id="screen-reveal" class="container hidden full-height">
-        <h2 id="current-player-display">Nombre</h2>
-        <p class="instruction">Mantén pulsada la carta</p>
-        <div class="magic-card-container" id="magic-card">
-            <div class="card-content">
-                <div id="secret-word" class="secret-text">...</div>
-                <div id="secret-role" class="role-subtext"></div>
-            </div>
-            <div class="card-cover"><span>🤫 MANTENER</span></div>
-        </div>
-        <button id="next-btn" class="btn-main bottom-btn" onclick="nextPlayer()">SIGUIENTE</button>
-    </div>
-
-    <div id="screen-active" class="container hidden">
-        <div class="card" style="background: #233642; border: 1px solid var(--accent); text-align: center;">
-            <p style="margin:0; font-size: 0.9em; color: #bdc3c7;">DEBE EMPEZAR HABLANDO:</p>
-            <h2 id="starter-name" style="margin: 5px 0; font-size: 1.8em; color: #f1c40f;">...</h2>
-        </div>
-        
-        <div id="timer-display" class="timer-big">10:00</div>
-        
-        <div id="suggestion-area"></div>
-        <button class="btn-secondary" onclick="showSuggestion()" style="margin-bottom: 20px;">❓ ¿Qué pregunto? (Sugerencia)</button>
-
-        <h3>Votar Expulsión</h3>
-        <div id="voting-list" class="voting-grid"></div>
-        
-        <button class="btn-secondary bottom-btn" onclick="citizensGiveUp()">RENDARSE (Gana Impostor)</button>
-    </div>
-
-    <div id="screen-result" class="container hidden full-height">
-        <h1 id="result-title">...</h1>
-        <div id="result-icon" style="font-size: 5em; margin: 20px;"></div>
-        <p id="result-msg" style="font-size: 1.2em;"></p>
-        
-        <div id="impostor-guess-area" class="hidden">
-            <p style="color:var(--accent)">¡Oportunidad de robo! ¿Adivina la palabra?</p>
-            <div style="display: grid; gap: 10px;">
-                <button class="btn-main" style="background: #e74c3c;" onclick="endGameWithWinner('Impostor')">✅ SÍ (Gana Impostor)</button>
-                <button class="btn-secondary" onclick="endGameWithWinner('Ciudadanos')">❌ NO (Ganan Ciudadanos)</button>
-            </div>
-        </div>
-        <button id="continue-btn" class="btn-main hidden" onclick="continueGame()">SEGUIR JUGANDO</button>
-    </div>
-
-    <div id="screen-solution" class="container hidden full-height">
-        <h1 id="final-result-title">FIN DE RONDA</h1>
-        
-        <div class="card">
-            <h3>Palabra Secreta:</h3>
-            <h1 style="color:var(--accent); font-size:3em; margin:10px 0;" id="final-word">???</h1>
-        </div>
-
-        <p id="winner-display" style="font-size: 1.5em; font-weight: bold; margin: 10px 0;"></p>
-        <div id="roles-reveal" style="margin-bottom: 20px;"></div>
-
-        <div id="scoreboard-container" class="card hidden">
-            <h3>🏆 Clasificación - <span id="score-tourney-name"></span></h3>
-            <table class="scoreboard-table" id="scoreboard-body"></table>
-        </div>
-        
-        <button class="btn-main" onclick="restartGame()">🔄 SIGUIENTE RONDA</button>
-        <button class="btn-secondary" onclick="goToHome()">🏠 MENÚ PRINCIPAL</button>
     </div>
 
     <script src="js/data.js"></script>
