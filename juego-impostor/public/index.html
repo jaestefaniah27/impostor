@@ -64,10 +64,6 @@
 
         <div class="card">
             <h3>⚙️ Configuración</h3>
-            <div style="margin-bottom:10px;">
-                <label>Tiempo: <span id="time-display" style="color:var(--accent)">10 min</span></label>
-                <input type="range" id="game-timer-input" min="5" max="21" value="10" step="1" oninput="updateTimeDisplay()">
-            </div>
             <div>
                 <label>Impostores: <span id="impostor-val">1</span></label>
                 <input type="range" id="impostor-count" min="1" max="3" value="1" oninput="updateConfigDisplay()">
@@ -213,7 +209,7 @@
             <table class="scoreboard-table" id="scoreboard-body"></table>
         </div>
         <button class="btn-main" onclick="restartGame()">🔄 SIGUIENTE RONDA</button>
-        <button class="btn-secondary" onclick="goToHome()">🏠 MENÚ PRINCIPAL</button>
+        <button class="btn-secondary" onclick="exitGameToHome()">VOLVER AL MENÚ</button>
     </div>
 <div id="screen-history" class="container hidden">
         <h2>📜 Historial</h2>

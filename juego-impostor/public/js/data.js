@@ -1,59 +1,50 @@
 // VARIABLES GLOBALES
 let players = []; 
 let playerAvatars = {}; 
-let playerScores = {}; 
 let themes = [];
 let selectedThemesIds = [];
 
-// ESTADO DE JUEGO
-// Añadimos 'currentSuggestions' al estado
-let gameData = { assignments: [], currentIndex: 0, secretWord: '', secretHint: '', currentSuggestions: [], impostorsCaught: 0, totalImpostors: 0 };
+// ESTADO DE JUEGO (Persistente)
+// Añadimos startTime para recuperar el tiempo real
+let gameData = { assignments: [], currentIndex: 0, secretWord: '', secretHint: '', currentSuggestions: [], impostorsCaught: 0, totalImpostors: 0, startTime: null };
 let timerInterval;
 let timeRemaining = 600;
+let editingThemeId = null; // Para el editor de temas
 
-// ESTADO DE TORNEO
+// ESTADO DE TORNEO (Persistente)
 let isTournamentActive = false;
 let currentTournamentName = "";
 let tournamentScores = {}; 
 let tournamentGames = []; 
 
 const emojis = ["🦁","🐯","🐻","🐨","🐼","🐸","🐙","🦄","🐝","🐞","🦖","👽","🤖","👻","🤡","🤠","🎃","💀","🍄","🍔","🍕","⚽","🚀","💡","🔥","💎","🎸","🎮"];
+const defaultSuggestions = ["¿Es grande?", "¿Está vivo?", "¿Tecnología?", "¿Uso diario?", "¿Color?", "¿Supermercado?", "¿Ruido?", "¿Electricidad?", "¿Comida?", "¿Peligroso?", "¿Bolsillo?", "¿Caro?"];
 
-// SUGERENCIAS POR DEFECTO (GENÉRICAS)
-// Se usan si el tema no tiene sugerencias específicas
-const defaultSuggestions = [
-    "¿Es más grande que una caja de zapatos?", 
-    "¿Se usa dentro de casa?", 
-    "¿Es un ser vivo?", 
-    "¿Tiene que ver con tecnología?", 
-    "¿Lo usamos todos los días?", 
-    "¿Es de algún color específico?", 
-    "¿Se puede comprar en el supermercado?", 
-    "¿Hace ruido?", 
-    "¿Funciona con electricidad?", 
-    "¿Es algo que se come?", 
-    "¿Es peligroso?", 
-    "¿Cabe en un bolsillo?", 
-    "¿Es caro?"
-];
+// --- INICIALIZACIÓN (AQUÍ ESTÁ LA CLAVE DE LA PERSISTENCIA) ---
+window.onload = async () => {
+    loadGameData();      
+    await fetchThemes();       
 
-// INICIALIZACIÓN
-window.onload = () => {
-    loadGameData();
-    fetchThemes();
-    updateTimeDisplay();
-    checkTournamentState();
+    // 1. PRIMERO: Recuperar estado del torneo (si existe)
+    restoreTournamentState();
+
+    // 2. SEGUNDO: Recuperar estado de la partida (si existe)
+    restoreGameState();
+
+    // 3. Renderizados iniciales
     if(typeof renderPlayers === 'function') renderPlayers();
     if(typeof setupCardInteractions === 'function') setupCardInteractions();
+    
+    // 4. Asegurar que la UI del torneo se actualiza
+    if(typeof checkTournamentState === 'function') checkTournamentState();
 };
 
 function loadGameData() {
     const pStored = localStorage.getItem('impostorPlayers');
-    if (pStored) players = JSON.parse(pStored); else players = ['Mateo', 'Juan', 'Diego', 'Jorge', 'Poke'];
+    if (pStored) players = JSON.parse(pStored); else players = ['Jugador 1', 'Jugador 2', 'Jugador 3'];
     const aStored = localStorage.getItem('impostorAvatars');
     if (aStored) playerAvatars = JSON.parse(aStored);
     players.forEach(p => { if(!playerAvatars[p]) playerAvatars[p] = getRandomAvatar(); });
-    saveAllData();
 }
 
 function saveAllData() {
@@ -63,19 +54,145 @@ function saveAllData() {
 
 function getRandomAvatar() { return emojis[Math.floor(Math.random() * emojis.length)]; }
 
+// --- PERSISTENCIA DE TORNEO ---
+function saveTournamentState() {
+    if (isTournamentActive) {
+        localStorage.setItem('tournamentName', currentTournamentName);
+        localStorage.setItem('tournamentScores', JSON.stringify(tournamentScores));
+        localStorage.setItem('tournamentGames', JSON.stringify(tournamentGames));
+    } else {
+        localStorage.removeItem('tournamentName');
+        localStorage.removeItem('tournamentScores');
+        localStorage.removeItem('tournamentGames');
+    }
+    // Actualizar visualmente si ui.js está cargado
+    if (typeof checkTournamentState === 'function') checkTournamentState();
+}
+
+function restoreTournamentState() {
+    const tName = localStorage.getItem('tournamentName');
+    const tScores = localStorage.getItem('tournamentScores');
+    const tGames = localStorage.getItem('tournamentGames');
+
+    if (tName && tScores) {
+        isTournamentActive = true;
+        currentTournamentName = tName;
+        tournamentScores = JSON.parse(tScores);
+        tournamentGames = tGames ? JSON.parse(tGames) : [];
+        // La UI se actualizará cuando se llame a checkTournamentState() en game.js/ui.js
+    }
+}
+
+// --- PERSISTENCIA DE PARTIDA EN CURSO ---
+function saveGameState(currentScreenId) {
+    if (!currentScreenId) {
+        const visible = document.querySelector('.container:not(.hidden)');
+        currentScreenId = visible ? visible.id : 'screen-home';
+    }
+
+    const relevantScreens = ['screen-pass-device', 'screen-reveal', 'screen-active', 'screen-result', 'screen-solution'];
+
+    if (!relevantScreens.includes(currentScreenId)) {
+        localStorage.removeItem('impostorGameState');
+        return;
+    }
+
+    const state = {
+        screen: currentScreenId,
+        gameData: gameData,
+        timeRemaining: timeRemaining,
+        selectedThemesIds: selectedThemesIds, // GUARDA LA CONFIGURACIÓN DE TEMAS
+        timestamp: Date.now()
+    };
+    
+    localStorage.setItem('impostorGameState', JSON.stringify(state));
+}
+
+function restoreGameState() {
+    const saved = localStorage.getItem('impostorGameState');
+    if (!saved) return;
+
+    try {
+        const state = JSON.parse(saved);
+        gameData = state.gameData;
+        timeRemaining = state.timeRemaining || 600;
+        
+        // RESTAURAR CONFIGURACIÓN DE TEMAS
+        if (state.selectedThemesIds) {
+            selectedThemesIds = state.selectedThemesIds;
+            // Refrescar visualmente la selección si estamos en la pantalla de temas
+            if (typeof renderThemeGrid === 'function') renderThemeGrid();
+        }
+
+        if (state.screen) {
+            if(typeof showScreen === 'function') {
+                showScreen(state.screen, false); 
+                
+                if (state.screen === 'screen-pass-device' && typeof showPassScreen === 'function') showPassScreen();
+                if (state.screen === 'screen-reveal' && typeof setupCardForPlayer === 'function') setupCardForPlayer();
+                if (state.screen === 'screen-active') {
+                    if(typeof renderVotingList === 'function') renderVotingList();
+                    if(typeof startTimer === 'function') startTimer();
+                    const st = document.getElementById('starter-name');
+                    if(st) st.innerText = "Continúa la partida...";
+                }
+                
+                // RESTAURAR PANTALLAS DE FIN DE JUEGO
+                if (state.screen === 'screen-solution' || state.screen === 'screen-result') {
+                    restoreEndGameUI(state.screen);
+                }
+            }
+        }
+    } catch (e) {
+        console.error("Error restaurando partida", e);
+        clearGameState();
+    }
+}
+
+// NUEVA: Restaura la UI de ganador al recargar
+function restoreEndGameUI(screen) {
+    const winner = gameData.lastWinner; // Recuperamos el ganador guardado
+    
+    // Restaurar palabra secreta
+    const finalWordEl = document.getElementById('final-word');
+    if(finalWordEl) finalWordEl.innerText = gameData.secretWord;
+
+    // Restaurar cartel de ganador
+    const display = document.getElementById('winner-display');
+    if (display && winner) {
+        display.innerText = (winner === 'Impostor') ? "🏆 GANA EL IMPOSTOR" : "🛡️ GANAN CIUDADANOS";
+        display.style.color = (winner === 'Impostor') ? "#e74c3c" : "#2ecc71";
+    } else if (display) {
+        display.innerText = "PARTIDA FINALIZADA"; // Fallback por si acaso
+    }
+
+    // Restaurar lista de roles
+    const rolesDiv = document.getElementById('roles-reveal');
+    if (rolesDiv && gameData.assignments) {
+        const imps = gameData.assignments.filter(p => p.isImpostor).map(p => `<strong>${p.name}</strong>`).join(', ');
+        const accs = gameData.assignments.filter(p => p.isAccomplice).map(p => `<strong>${p.name}</strong>`).join(', ');
+        rolesDiv.innerHTML = `<p style="color:#e74c3c">😈 Impostor: ${imps}</p>` + (accs ? `<p style="color:#9b59b6">🤝 Cómplice: ${accs}</p>` : '');
+    }
+
+    // Restaurar tabla de torneo si hace falta
+    if (isTournamentActive && typeof renderScoreboard === 'function') {
+        renderScoreboard();
+        const scoreContainer = document.getElementById('scoreboard-container');
+        if(scoreContainer) scoreContainer.classList.remove('hidden');
+    }
+}
+
+function clearGameState() {
+    localStorage.removeItem('impostorGameState');
+}
+
+// --- API FETCHES ---
 async function fetchThemes() {
     try {
         const r = await fetch('/api/themes');
         themes = await r.json();
-        
-        // CORRECCIÓN: Si ya estamos en la pantalla de temas (o para precargar), renderizamos
-        if (typeof renderThemeGrid === 'function') {
-            renderThemeGrid();
-        }
-    } catch(e) { 
-        console.error("Error cargando temas", e); 
-        alert("Error cargando temas. Revisa la consola.");
-    }
+        if (typeof renderThemeGrid === 'function') renderThemeGrid();
+    } catch(e) { console.error(e); }
 }
 
 async function saveThemeFromUI() {
@@ -84,9 +201,7 @@ async function saveThemeFromUI() {
     
     const suggestionsRaw = document.getElementById('new-theme-suggestions').value.trim();
     let themeSuggestions = [];
-    if (suggestionsRaw) {
-        themeSuggestions = suggestionsRaw.split('/').map(s => s.trim()).filter(s => s.length > 0);
-    }
+    if (suggestionsRaw) themeSuggestions = suggestionsRaw.split('/').map(s => s.trim()).filter(s => s.length > 0);
 
     const w = [];
     document.querySelectorAll('.word-row').forEach(r => {
@@ -113,10 +228,12 @@ async function saveThemeFromUI() {
     
     alert(editingThemeId ? "Tema actualizado" : "Tema creado");
     await fetchThemes(); // Recargar lista
+    
+    // Volver al gestor
     if (typeof goToThemeManager === 'function') {
         goToThemeManager();
     } else {
-        showScreen('screen-home'); // Fallback por si acaso
+        showScreen('screen-home');
     }
 }
 
@@ -124,7 +241,6 @@ async function saveGameRecordToHistory(record) {
     await fetch('/api/history', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(record)});
 }
 
-// --- ESTADÍSTICAS ---
 async function fetchStats() {
     try {
         const r = await fetch('/api/stats');
@@ -146,22 +262,4 @@ async function unmergeAliases(namesToFree) {
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({ namesToFree: namesToFree })
     });
-}
-
-// --- PERSISTENCIA DEL TORNEO ---
-function saveTournamentState() {
-    if (isTournamentActive) {
-        localStorage.setItem('tournamentName', currentTournamentName);
-        localStorage.setItem('tournamentScores', JSON.stringify(tournamentScores));
-        localStorage.setItem('tournamentGames', JSON.stringify(tournamentGames));
-    } else {
-        localStorage.removeItem('tournamentName');
-        localStorage.removeItem('tournamentScores');
-        localStorage.removeItem('tournamentGames');
-    }
-    
-    // Actualizar banner visual si existe la función (en ui.js)
-    if (typeof updateTournamentBanner === 'function') {
-        updateTournamentBanner();
-    }
 }

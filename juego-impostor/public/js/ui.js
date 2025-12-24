@@ -1,24 +1,36 @@
-// VARIABLES UI PARA FUSIÓN
+// VARIABLES UI PARA FUSIÓN DE ALIAS
 let isMergeMode = false;
 let selectedForMerge = [];
 
-// --- NAVEGACIÓN ---
-function showScreen(id) {
+// --- NAVEGACIÓN (CON PERSISTENCIA) ---
+function showScreen(id, shouldSave = true) {
     document.querySelectorAll('.container').forEach(d => d.classList.add('hidden'));
     document.getElementById(id).classList.remove('hidden');
     window.scrollTo(0, 0); 
+    
+    // Guardar estado solo si se pide (por defecto sí)
+    if (shouldSave && typeof saveGameState === 'function') {
+        saveGameState(id); 
+    }
 }
+
 function goToHome() { showScreen('screen-home'); }
 
-// --- RENDERIZADO JUGADORES ---
+// --- RENDERIZADO JUGADORES (HOME) ---
 function renderPlayers() {
-    document.getElementById('players-list').innerHTML = players.map((p,i) => 
+    const list = document.getElementById('players-list');
+    if(!list) return;
+
+    list.innerHTML = players.map((p,i) => 
         `<span class="tag" onclick="removePlayer(${i})"><span class="avatar">${playerAvatars[p]||'👤'}</span>${p} ✕</span>`).join('');
     
+    // Ajustar máximo de impostores según jugadores
     const max = Math.max(1, Math.floor(players.length/2));
     const el = document.getElementById('impostor-count');
-    el.max = max; 
-    if(el.value > max) el.value = max;
+    if(el) {
+        el.max = max; 
+        if(el.value > max) el.value = max;
+    }
     updateConfigDisplay();
 }
 
@@ -30,7 +42,7 @@ function addPlayer() {
         saveAllData(); 
         renderPlayers(); 
         document.getElementById('new-player').value=''; 
-    } else if(players.includes(v)) alert("Repetido");
+    } else if(players.includes(v)) alert("Ese nombre ya existe.");
 }
 
 function removePlayer(i) { 
@@ -40,26 +52,18 @@ function removePlayer(i) {
 }
 
 function updateConfigDisplay() {
-    document.getElementById('impostor-val').innerText = document.getElementById('impostor-count').value;
+    const el = document.getElementById('impostor-val');
+    const input = document.getElementById('impostor-count');
+    if(el && input) el.innerText = input.value;
 }
 
-function updateTimeDisplay() {
-    const v = parseInt(document.getElementById('game-timer-input').value);
-    document.getElementById('time-display').innerText = (v > 20) ? "Infinito" : v + " min";
-}
-
-// --- RENDERIZADO TEMAS ---
+// --- PANTALLA DE SELECCIÓN DE TEMAS (JUGAR) ---
 function goToThemeSelection() {
-    if(players.length < 3) return alert("Mín 3 jug.");
+    if(players.length < 3) return alert("Mínimo 3 jugadores para jugar.");
     renderThemeGrid();
     showScreen('screen-themes');
 }
 
-// Variable global para controlar qué estamos editando
-let editingThemeId = null;
-
-// --- RENDERIZADO TEMAS ---
-// --- PANTALLA JUGAR (Modificada: SIN lápices ni edición) ---
 function renderThemeGrid() {
     const container = document.getElementById('themes-grid');
     if(!container) return;
@@ -69,6 +73,7 @@ function renderThemeGrid() {
         return;
     }
 
+    // Ordenar: Temas propios primero
     const sortedThemes = [...themes].sort((a, b) => {
         if (a.isCustom && !b.isCustom) return -1;
         if (!a.isCustom && b.isCustom) return 1;
@@ -80,7 +85,7 @@ function renderThemeGrid() {
         const customClass = t.isCustom ? 'custom-theme-box' : '';
         const badge = t.isCustom ? '<span class="badge-custom">👤 PROPIA</span>' : '';
         
-        // AQUÍ: Ya no hay botón de editar, solo selección
+        // En esta pantalla NO se edita, solo se selecciona
         return `
         <div class="theme-box ${isSelected ? 'selected' : ''} ${customClass}" onclick="toggleTheme(${t.id})">
             <div style="display:flex; justify-content:space-between; align-items:start;">
@@ -101,25 +106,20 @@ function toggleTheme(id) {
     renderThemeGrid();
 }
 
-// --- CREADOR DE TEMAS UI ---
-// --- NUEVO: GESTOR DE TEMAS ---
+// --- PANTALLA GESTOR DE TEMAS (ADMINISTRACIÓN) ---
 function goToThemeManager() {
-    // Reutilizamos la carga de temas
     if(!themes || themes.length === 0) {
-        fetch('/api/themes').then(r => r.json()).then(data => {
-            themes = data;
-            renderThemeManagerList();
-        });
+        fetch('/api/themes').then(r => r.json()).then(data => { themes = data; renderThemeManagerList(); });
     } else {
         renderThemeManagerList();
     }
     showScreen('screen-theme-manager');
 }
+
 function renderThemeManagerList() {
     const container = document.getElementById('manager-list');
     if(!container) return;
 
-    // Ordenar: Custom primero
     const sortedThemes = [...themes].sort((a, b) => {
         if (a.isCustom && !b.isCustom) return -1;
         if (!a.isCustom && b.isCustom) return 1;
@@ -128,21 +128,19 @@ function renderThemeManagerList() {
 
     container.innerHTML = sortedThemes.map(t => {
         const customClass = t.isCustom ? 'custom-theme-box' : '';
-        
-        // Configuración según si es custom o defecto
         let badge, onClickAttr, icon, style;
 
         if (t.isCustom) {
-            // TEMA PROPIO: Se puede editar
-            badge = '<span class="badge-custom">👤 PROPIA</span>';
-            onClickAttr = `onclick="loadThemeForEdit(${t.id})"`;
-            icon = '✏️';
+            // TEMA PROPIO: Editable
+            badge = '<span class="badge-custom">👤 PROPIA</span>'; 
+            onClickAttr = `onclick="loadThemeForEdit(${t.id})"`; 
+            icon = '✏️'; 
             style = 'cursor: pointer;';
         } else {
             // TEMA ORIGINAL: Bloqueado
-            badge = '<span style="display:block; margin-top:5px; font-size:0.7em; opacity:0.5;">🔒 ORIGINAL</span>';
-            onClickAttr = `onclick="alert('⚠️ Los temas originales no se pueden editar. Crea uno nuevo.')"`;
-            icon = '🔒';
+            badge = '<span style="display:block; margin-top:5px; font-size:0.7em; opacity:0.5;">🔒 ORIGINAL</span>'; 
+            onClickAttr = `onclick="alert('⚠️ Los temas originales no se pueden editar. Crea uno nuevo.')"`; 
+            icon = '🔒'; 
             style = 'opacity: 0.8; cursor: not-allowed; background: #2c3e50; border: 1px solid rgba(255,255,255,0.1);';
         }
         
@@ -154,50 +152,43 @@ function renderThemeManagerList() {
             </div>
             <small>${t.words.length} palabras</small>
             ${badge}
-        </div>
-        `;
+        </div>`;
     }).join('');
 }
-// Abre el creador LIMPIO (para crear nuevo)
+
+// --- CREADOR / EDITOR DE TEMAS ---
 function openThemeCreator() {
-    editingThemeId = null; // No estamos editando
+    editingThemeId = null; // Nuevo tema
     document.getElementById('create-theme-title').innerText = "🎨 Nuevo Tema";
     document.getElementById('new-theme-title').value = '';
     document.getElementById('new-theme-suggestions').value = '';
     document.getElementById('words-container').innerHTML = '';
     
-    // Añadimos 3 filas vacías por defecto
+    // Añadir 3 filas vacías por defecto
     addWordRow(); addWordRow(); addWordRow();
-    
     showScreen('screen-create-theme');
 }
 
-// Abre el creador CON DATOS (para editar)
 function loadThemeForEdit(id) {
     const theme = themes.find(t => t.id === id);
     if (!theme) return;
 
-    editingThemeId = id; // Guardamos la ID que estamos editando
-    
+    editingThemeId = id; // Estamos editando
     document.getElementById('create-theme-title').innerText = "✏️ Editar Tema";
     document.getElementById('new-theme-title').value = theme.name;
     
-    // Cargar sugerencias
     const suggs = theme.suggestions ? theme.suggestions.join(' / ') : '';
     document.getElementById('new-theme-suggestions').value = suggs;
 
-    // Cargar palabras
     const container = document.getElementById('words-container');
-    container.innerHTML = ''; // Limpiar
+    container.innerHTML = ''; 
     theme.words.forEach(w => {
-        // Reusamos la lógica de añadir fila pero inyectando valores
         addWordRow(w.text, Array.isArray(w.hints) ? w.hints.join(' / ') : w.hints);
     });
 
     showScreen('screen-create-theme');
 }
 
-// Modificamos addWordRow para aceptar valores opcionales
 function addWordRow(textVal = '', hintVal = '') {
     const c = document.getElementById('words-container');
     const d = document.createElement('div');
@@ -215,23 +206,56 @@ function addWordRow(textVal = '', hintVal = '') {
     c.appendChild(d);
 }
 
-// --- SUGERENCIAS ---
+// --- JUEGO: SUGERENCIAS Y CARTAS ---
 function showSuggestion() {
-    const source = (gameData.currentSuggestions && gameData.currentSuggestions.length > 0) 
-        ? gameData.currentSuggestions 
-        : defaultSuggestions;
+    const source = (gameData.currentSuggestions && gameData.currentSuggestions.length > 0) ? gameData.currentSuggestions : defaultSuggestions;
     const randomQ = source[Math.floor(Math.random() * source.length)];
     document.getElementById('suggestion-area').innerHTML = `<div class="suggestion-card">💡 Pista: "${randomQ}"</div>`;
 }
 
-// --- INTERACCIÓN CARTA ---
 function setupCardInteractions() {
     const c = document.getElementById('magic-card');
     if(!c) return;
     const s = (e) => { if(e.cancelable) e.preventDefault(); c.classList.add('revealed'); };
     const h = (e) => { if(e.cancelable) e.preventDefault(); c.classList.remove('revealed'); };
+    // Eventos ratón y táctil
     c.addEventListener('mousedown',s); c.addEventListener('mouseup',h); c.addEventListener('mouseleave',h);
     c.addEventListener('touchstart',s,{passive:false}); c.addEventListener('touchend',h); c.addEventListener('touchcancel',h);
+}
+
+// --- ACTUALIZAR BANNER TORNEO (PUNTOS) ---
+function updateTournamentBanner() {
+    const container = document.getElementById('tournament-mini-scores');
+    if (!container) return;
+
+    if (!isTournamentActive || !tournamentScores) {
+        container.innerHTML = '';
+        return;
+    }
+
+    const sortedPlayers = Object.entries(tournamentScores).sort((a,b) => b[1] - a[1]);
+
+    if (sortedPlayers.length === 0) {
+        container.innerHTML = "<small style='opacity:0.6; padding:0 5px;'>Esperando resultados...</small>";
+        return;
+    }
+
+    container.innerHTML = sortedPlayers.map(([name, score], i) => {
+        let icon = '👤';
+        let colorStyle = '';
+        
+        // Medallas
+        if (i === 0 && score > 0) { icon = '🥇'; colorStyle = 'border-color: #f1c40f; color: #f1c40f;'; }
+        else if (i === 1 && score > 0) { icon = '🥈'; colorStyle = 'border-color: #bdc3c7;'; }
+        else if (i === 2 && score > 0) { icon = '🥉'; colorStyle = 'border-color: #cd7f32;'; }
+
+        return `
+            <div class="score-pill" style="${colorStyle}">
+                <span>${icon}</span>
+                <strong>${name}</strong>: ${score}
+            </div>
+        `;
+    }).join('');
 }
 
 // --- HISTORIAL UI ---
@@ -297,61 +321,43 @@ async function loadAndShowHistory() {
 }
 
 function toggleHistoryDetails(idx) {
-    const el = document.getElementById(`h-body-${idx}`);
-    el.classList.toggle('expanded');
+    document.getElementById(`h-body-${idx}`).classList.toggle('expanded');
 }
 
-// --- ESTADÍSTICAS UI ---
+// --- ESTADÍSTICAS UI Y FUSIÓN ---
 async function loadAndShowStats() {
     const stats = await fetchStats();
     if (!stats) return alert("Error cargando estadísticas");
 
-    // 1. Resumen Global
     const totalMin = Math.floor(stats.global.totalTime / 60);
-    const hours = Math.floor(totalMin / 60);
-    const mins = totalMin % 60;
     document.getElementById('stat-total-games').innerText = stats.global.totalGames;
-    document.getElementById('stat-total-time').innerText = `${hours}h ${mins}m`;
-
-    // 2. Procesar Jugadores
+    document.getElementById('stat-total-time').innerText = `${Math.floor(totalMin/60)}h ${totalMin%60}m`;
+    
     const playersArr = Object.values(stats.players);
     const bestImp = playersArr.sort((a,b) => b.impWins - a.impWins)[0];
     document.getElementById('stat-best-impostor').innerText = bestImp && bestImp.impWins > 0 ? `${bestImp.name} (${bestImp.impWins})` : "-";
-
     const mostPlayed = [...playersArr].sort((a,b) => b.time - a.time)[0];
     document.getElementById('stat-most-played').innerText = mostPlayed ? `${mostPlayed.name}` : "-";
 
-    // 3. CONTROL DEL BANNER (AQUÍ ESTABA EL ERROR ANTES)
-    // Solo reseteamos si la pantalla estaba oculta (venimos del menú)
     const screenStats = document.getElementById('screen-stats');
     if (screenStats.classList.contains('hidden')) {
         document.getElementById('merge-tool-bar').classList.add('hidden');
         isMergeMode = false;
         selectedForMerge = [];
     }
-
     renderStatsList(playersArr);
     showScreen('screen-stats');
 }
 
 function renderStatsList(playersArr) {
     playersArr.sort((a,b) => b.games - a.games);
-
-    const container = document.getElementById('stats-list');
-    container.innerHTML = playersArr.map(p => {
+    document.getElementById('stats-list').innerHTML = playersArr.map(p => {
         const winRate = p.impTotal > 0 ? Math.round((p.impWins / p.impTotal) * 100) : 0;
-        const timeMin = Math.round(p.time / 60);
-        
         let displayName = p.name;
-        if (p.aka && p.aka.length > 1) {
-            const others = p.aka.filter(n => n !== p.name);
-            displayName = `${p.name} | ${others.join(' | ')}`;
-        }
-
-        const checkHtml = isMergeMode 
-            ? `<input type="checkbox" class="merge-check" value="${p.name}" ${selectedForMerge.includes(p.name) ? 'checked' : ''} onchange="updateMergeSelection(this)" style="width:20px; height:20px; margin-right:10px;">` 
-            : '';
-
+        if (p.aka && p.aka.length > 1) displayName = `${p.name} | ${p.aka.filter(n=>n!==p.name).join(' | ')}`;
+        
+        const checkHtml = isMergeMode ? `<input type="checkbox" class="merge-check" value="${p.name}" ${selectedForMerge.includes(p.name)?'checked':''} onchange="updateMergeSelection(this)" style="width:20px; height:20px; margin-right:10px;">` : '';
+        
         return `
         <div class="card" style="display:flex; align-items:center; padding:10px;">
             ${checkHtml}
@@ -360,21 +366,18 @@ function renderStatsList(playersArr) {
                     <strong style="font-size:1.1em; color:var(--accent); word-break: break-word;">${displayName}</strong>
                     <span class="badge" style="background:#2f3640;">${p.games} partidas</span>
                 </div>
-                <div style="font-size:0.85em; color:#bdc3c7; margin-top:5px; display:flex; gap:15px;">
-                    <span>⏱️ ${timeMin} min</span>
-                    <span>😈 Wins: ${p.impWins}/${p.impTotal} (${winRate}%)</span>
+                <div style="font-size:0.85em; color:#bdc3c7; margin-top:5px;">
+                    <span>⏱️ ${Math.round(p.time/60)} min</span> • <span>😈 Wins: ${p.impWins}/${p.impTotal} (${winRate}%)</span>
                 </div>
             </div>
         </div>`;
     }).join('');
 }
 
-// --- LÓGICA DE FUSIÓN Y DESUNIFICACIÓN ---
 function toggleMergeMode() {
     isMergeMode = !isMergeMode;
     selectedForMerge = [];
     document.getElementById('merge-tool-bar').classList.toggle('hidden', !isMergeMode);
-    
     updateMergeToolbar(); 
     loadAndShowStats(); 
 }
@@ -382,72 +385,40 @@ function toggleMergeMode() {
 function updateMergeSelection(checkbox) {
     if (checkbox.checked) selectedForMerge.push(checkbox.value);
     else selectedForMerge = selectedForMerge.filter(n => n !== checkbox.value);
-    
     updateMergeToolbar(); 
 }
 
 function updateMergeToolbar() {
     const btn = document.getElementById('merge-action-btn');
     if(!btn) return;
-
     if (selectedForMerge.length === 0) {
-        btn.innerText = "Selecciona jugadores...";
-        btn.disabled = true;
-        btn.style.opacity = 0.5;
-        btn.onclick = null;
-        btn.style.background = "white";
-        btn.style.color = "#d35400";
-    } 
-    else if (selectedForMerge.length === 1) {
-        // MODO DESUNIFICAR
-        btn.innerText = "DESUNIFICAR (Separar Nombres)";
-        btn.disabled = false;
-        btn.style.opacity = 1;
-        btn.style.background = "#c0392b"; 
-        btn.style.color = "white";
-        btn.onclick = executeUnmerge;
-    } 
-    else {
-        // MODO UNIFICAR
-        btn.innerText = `UNIFICAR (${selectedForMerge.length})`;
-        btn.disabled = false;
-        btn.style.opacity = 1;
-        btn.style.background = "white"; 
-        btn.style.color = "#d35400";
-        btn.onclick = executeMerge;
+        btn.innerText = "Selecciona jugadores..."; btn.disabled = true; btn.style.opacity = 0.5; btn.style.background = "white"; btn.style.color = "#d35400"; btn.onclick = null;
+    } else if (selectedForMerge.length === 1) {
+        btn.innerText = "DESUNIFICAR"; btn.disabled = false; btn.style.opacity = 1; btn.style.background = "#c0392b"; btn.style.color = "white"; btn.onclick = executeUnmerge;
+    } else {
+        btn.innerText = `UNIFICAR (${selectedForMerge.length})`; btn.disabled = false; btn.style.opacity = 1; btn.style.background = "white"; btn.style.color = "#d35400"; btn.onclick = executeMerge;
     }
 }
 
 async function executeMerge() {
     if (selectedForMerge.length < 2) return;
-    
-    // SIMPLIFICADO: Tomamos el primero de la selección como principal
-    const mainName = selectedForMerge[0];
-
-    if (confirm(`¿Fusionar estadísticas de "${mainName}"?\n(Se unirán: ${selectedForMerge.join(', ')})`)) {
-        await mergeAliases(mainName, selectedForMerge);
-        alert("¡Fusión completada!");
-        toggleMergeMode();
+    if (confirm(`¿Fusionar estadísticas bajo "${selectedForMerge[0]}"?`)) { 
+        await mergeAliases(selectedForMerge[0], selectedForMerge); 
+        alert("¡Fusión completada!"); 
+        toggleMergeMode(); 
     }
 }
 
 async function executeUnmerge() {
     if (selectedForMerge.length !== 1) return;
     const target = selectedForMerge[0];
-
     const stats = await fetchStats();
-    const playerArr = Object.values(stats.players);
-    const player = playerArr.find(p => p.name === target);
-    
-    if (!player || !player.aka || player.aka.length <= 1) {
-        return alert("Este jugador no tiene nombres unificados para separar.");
-    }
-
-    if (confirm(`¿Quieres separar los nombres de "${target}"?\n\nNombres que se liberarán: ${player.aka.filter(n => n !== target).join(', ')}`)) {
-        const aliasesToFree = player.aka.filter(n => n !== target);
-        await unmergeAliases(aliasesToFree);
-        alert("¡Nombres separados correctamente!");
-        toggleMergeMode();
+    const player = Object.values(stats.players).find(p => p.name === target);
+    if (!player || !player.aka || player.aka.length <= 1) return alert("Este jugador no tiene alias para separar.");
+    if (confirm(`¿Separar los nombres de "${target}"?`)) { 
+        await unmergeAliases(player.aka.filter(n=>n!==target)); 
+        alert("¡Separados!"); 
+        toggleMergeMode(); 
     }
 }
 
@@ -458,23 +429,18 @@ function cancelMergeMode() {
     loadAndShowStats();
 }
 
-// --- MODO ADMIN SECRETO ---
+// --- MODO ADMIN SECRETO (5 CLICS) ---
 let secretClicks = 0;
 let secretTimer;
 
 function triggerSecretAdmin() {
-    // 1. Contar clics
     secretClicks++;
-    
-    // 2. Reiniciar contador si pasa 1 segundo sin clics
     clearTimeout(secretTimer);
     secretTimer = setTimeout(() => { secretClicks = 0; }, 1000);
 
-    // 3. Si llega a 5 clics... ¡BINGO!
     if (secretClicks === 5) {
         secretClicks = 0;
         const pwd = prompt("🕵️‍♂️ ACCESO ADMIN DETECTADO\n\nIntroduce la contraseña para BORRAR EL HISTORIAL:");
-        
         if (pwd) {
             deleteHistory(pwd);
         }
@@ -488,12 +454,10 @@ async function deleteHistory(password) {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ password: password })
         });
-        
         const data = await res.json();
-        
         if (data.success) {
             alert("✅ Historial borrado correctamente.");
-            location.reload(); // Recargar para ver los cambios
+            location.reload();
         } else {
             alert(data.error || "❌ Error desconocido");
         }
@@ -502,60 +466,11 @@ async function deleteHistory(password) {
         alert("❌ Error de conexión con el servidor");
     }
 }
-// --- ACTUALIZAR BANNER TORNEO ---
-function updateTournamentBanner() {
-    const container = document.getElementById('tournament-mini-scores');
-    if (!container) return;
 
-    if (!isTournamentActive || !tournamentScores) {
-        container.innerHTML = '';
-        return;
+// NUEVA FUNCIÓN PARA SALIR DE VERDAD
+function exitGameToHome() {
+    if (typeof clearGameState === 'function') {
+        clearGameState(); // Borrar partida activa
     }
-
-    const sortedPlayers = Object.entries(tournamentScores).sort((a,b) => b[1] - a[1]);
-
-    if (sortedPlayers.length === 0) {
-        container.innerHTML = "<small style='opacity:0.6; padding:0 5px;'>Esperando resultados...</small>";
-        return;
-    }
-
-    container.innerHTML = sortedPlayers.map(([name, score], i) => {
-        let icon = '👤';
-        let colorStyle = '';
-        
-        if (i === 0 && score > 0) { icon = '🥇'; colorStyle = 'border-color: #f1c40f; color: #f1c40f;'; }
-        else if (i === 1 && score > 0) { icon = '🥈'; colorStyle = 'border-color: #bdc3c7;'; }
-        else if (i === 2 && score > 0) { icon = '🥉'; colorStyle = 'border-color: #cd7f32;'; }
-
-        return `
-            <div class="score-pill" style="${colorStyle}">
-                <span>${icon}</span>
-                <strong>${name}</strong>: ${score}
-            </div>
-        `;
-    }).join('');
+    showScreen('screen-home');
 }
-
-// Sobreescribimos la comprobación para asegurarnos que actualiza la barra visual
-window.checkTournamentState = function() {
-    const tName = localStorage.getItem('tournamentName');
-    const tScores = localStorage.getItem('tournamentScores');
-    
-    if (tName && tScores) {
-        isTournamentActive = true;
-        currentTournamentName = tName;
-        tournamentScores = JSON.parse(tScores);
-        
-        const banner = document.getElementById('active-tournament-display');
-        const title = document.getElementById('active-tourney-name');
-        
-        if (banner) banner.classList.remove('hidden');
-        if (title) title.innerText = currentTournamentName;
-        
-        updateTournamentBanner(); // ESTO ES LO IMPORTANTE
-    } else {
-        isTournamentActive = false;
-        const banner = document.getElementById('active-tournament-display');
-        if (banner) banner.classList.add('hidden');
-    }
-};

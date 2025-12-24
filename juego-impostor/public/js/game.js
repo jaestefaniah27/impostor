@@ -1,40 +1,54 @@
-// --- LÓGICA DE TORNEO ---
+// --- LÓGICA DE TORNEO UNIFICADA ---
 function startTournamentMode() {
-    const name = document.getElementById('tournament-name-input').value.trim() || "Torneo Sin Nombre";
-    if (confirm(`¿Empezar el torneo "${name}"? Los puntos empezarán desde 0.`)) {
+    const nameInput = document.getElementById('tournament-name-input');
+    const name = nameInput ? nameInput.value.trim() : "Torneo";
+    
+    // Validaciones
+    if (!name) return alert("Por favor, ponle un nombre al torneo.");
+    if (players.length < 3) return alert("Necesitas al menos 3 jugadores para empezar.");
+
+    if (confirm(`¿Iniciar el torneo "${name}"?`)) {
+        // 1. Inicializar variables
         isTournamentActive = true;
         currentTournamentName = name;
-        tournamentScores = {};
         tournamentGames = [];
+        tournamentScores = {};
         players.forEach(p => tournamentScores[p] = 0);
-        checkTournamentState();
-        alert("¡Torneo Iniciado! Ahora dale a 'JUGAR RONDA'.");
+
+        // 2. GUARDAR EN MEMORIA (Clave para persistencia)
+        saveTournamentState();
+
+        alert(`🏆 ¡Torneo "${name}" iniciado!`);
+        
+        // 3. Actualizar interfaz
+        checkTournamentState(); 
+        
+        // 4. IR A JUGAR (La parte importante)
+        goToThemeSelection();
     }
 }
 
 function checkTournamentState() {
     const banner = document.getElementById('active-tournament-display');
     const box = document.getElementById('tournament-setup-box');
-    
+    const title = document.getElementById('active-tourney-name');
+
     if (isTournamentActive) {
-        banner.classList.remove('hidden');
-        document.getElementById('active-tourney-name').innerText = currentTournamentName;
-        box.classList.add('hidden');
+        if(banner) banner.classList.remove('hidden');
+        if(title) title.innerText = currentTournamentName;
+        if(box) box.classList.add('hidden');
         
-        // ESTA LÍNEA ES CLAVE: Actualiza los numeritos visuales
-        if (typeof updateTournamentBanner === 'function') {
-            updateTournamentBanner();
-        }
+        // Actualizar banner de puntos si existe la función UI
+        if (typeof updateTournamentBanner === 'function') updateTournamentBanner();
     } else {
-        banner.classList.add('hidden');
-        box.classList.remove('hidden');
+        if(banner) banner.classList.add('hidden');
+        if(box) box.classList.remove('hidden');
     }
 }
 
 async function finishTournament() {
     if (!confirm("¿Seguro que quieres terminar el torneo? Se guardará el historial y se borrarán los marcadores.")) return;
 
-    // 1. Crear registro del torneo para el historial
     const tournamentRecord = {
         type: 'tournament',
         name: currentTournamentName,
@@ -44,67 +58,67 @@ async function finishTournament() {
         players: Object.keys(tournamentScores)
     };
 
-    // 2. Guardar en el servidor
+    // Guardar en historial del servidor
     await saveGameRecordToHistory(tournamentRecord);
 
-    // 3. Limpiar estado local
+    // Limpiar y borrar persistencia
     isTournamentActive = false;
     currentTournamentName = "";
     tournamentScores = {};
     tournamentGames = [];
-    
-    saveTournamentState(); // Limpia localStorage
-    
-    // 4. ACTUALIZACIÓN VISUAL (ESTO FALTABA)
-    checkTournamentState(); // Oculta el banner inmediatamente
+    saveTournamentState(); // Esto borrará el localStorage
 
-    alert("🏆 Torneo finalizado y guardado en el historial.");
+    // Actualizar visual
+    checkTournamentState();
+
+    alert("🏆 Torneo finalizado y guardado.");
     goToHome();
 }
 
 // --- LÓGICA DE JUEGO ---
+
 function startGameSetup() {
-    if(selectedThemesIds.length === 0) return alert("Elige tema");
-    document.getElementById('suggestion-area').innerHTML = '';
+    if(selectedThemesIds.length === 0) return alert("Elige al menos un tema.");
     
-    // Selección contextual de palabras
+    // Preparar partida: mezclar palabras de los temas elegidos
     let selectionPool = []; 
     themes.forEach(t => { 
         if(selectedThemesIds.includes(t.id)) {
             const themeSuggs = (t.suggestions && t.suggestions.length > 0) ? t.suggestions : defaultSuggestions;
-            t.words.forEach(w => {
-                selectionPool.push({ wordData: w, suggestions: themeSuggs });
-            });
+            t.words.forEach(w => selectionPool.push({ wordData: w, suggestions: themeSuggs }));
         } 
     });
 
-    if(selectionPool.length === 0) return alert("Temas vacíos");
+    if(selectionPool.length === 0) return alert("Los temas seleccionados no tienen palabras.");
     
+    // Elegir palabra
     const selection = selectionPool[Math.floor(Math.random() * selectionPool.length)];
     gameData.secretWord = selection.wordData.text;
     gameData.currentSuggestions = selection.suggestions;
+    gameData.startTime = null; // Reset tiempo para nueva partida
+    
+    // Elegir pista
     const sel = selection.wordData;
-
     const hintsOn = document.getElementById('hints-toggle').checked;
     gameData.secretHint = hintsOn 
         ? (Array.isArray(sel.hints) ? sel.hints : (sel.hint ? [sel.hint] : ["Sin pista"]))[Math.floor(Math.random()*(Array.isArray(sel.hints)?sel.hints.length:1))] 
         : null;
     
+    // Asignar roles
     let impC = parseInt(document.getElementById('impostor-count').value); 
     if(impC >= players.length) impC = players.length - 1;
     gameData.totalImpostors = impC; 
-    gameData.impostorsCaught = 0;
     
     let assign = new Array(players.length).fill(null); 
     let p = 0;
-
-    // Impostores
+    
+    // Asignar Impostores
     while(p < impC) { 
         let r = Math.floor(Math.random()*players.length); 
         if(!assign[r]) { assign[r]={isImpostor:true, isAccomplice:false, name:players[r], alive:true}; p++; } 
     }
-
-    // Cómplice
+    
+    // Asignar Cómplice
     const accOn = document.getElementById('accomplice-toggle').checked;
     if(accOn && (players.length - impC) >= 2) {
         let assigned = false;
@@ -113,29 +127,26 @@ function startGameSetup() {
             if(!assign[r]) { assign[r]={isImpostor:false, isAccomplice:true, name:players[r], alive:true}; assigned=true; }
         }
     }
-
-    // Ciudadanos
+    
+    // Asignar Ciudadanos
     for(let i=0; i<players.length; i++) if(!assign[i]) assign[i]={isImpostor:false, isAccomplice:false, name:players[i], alive:true};
     
     gameData.assignments = assign; 
     gameData.currentIndex = 0; 
     
-    // CAMBIO: En lugar de setupCardForPlayer, vamos a la pantalla de pase
+    // Guardar estado inicial y mostrar
+    saveGameState('screen-pass-device');
     showPassScreen();
 }
 
-// NUEVA FUNCIÓN: Muestra la pantalla intermedia
 function showPassScreen() {
     const p = gameData.assignments[gameData.currentIndex];
     const av = playerAvatars[p.name] || '👤';
-    
     document.getElementById('pass-player-name').innerText = p.name;
     document.getElementById('pass-player-avatar').innerText = av;
-    
     showScreen('screen-pass-device');
 }
 
-// NUEVA FUNCIÓN: Se llama cuando el usuario confirma "Soy yo"
 function confirmIdentity() {
     setupCardForPlayer();
     showScreen('screen-reveal');
@@ -150,69 +161,72 @@ function setupCardForPlayer() {
     const rd = document.getElementById('secret-role');
     
     if(p.isImpostor) { 
-        wd.innerText="😈 IMPOSTOR"; 
-        wd.style.color="#e74c3c"; 
+        wd.innerText="😈 IMPOSTOR"; wd.style.color="#e74c3c"; 
         rd.innerHTML=gameData.secretHint?`Pista: <strong style='color:#f1c40f'>${gameData.secretHint}</strong>`:"Sin pista"; 
-    }
-    else if(p.isAccomplice) { 
-        wd.innerText=gameData.secretWord; 
-        wd.style.color="#9b59b6"; 
+    } else if(p.isAccomplice) { 
+        wd.innerText=gameData.secretWord; wd.style.color="#9b59b6"; 
         const imps=gameData.assignments.filter(x=>x.isImpostor).map(x=>x.name).join(", "); 
         rd.innerHTML=`🤫 CÓMPLICE<br>Protege a: <strong style='color:#e74c3c'>${imps}</strong>`; 
-    }
-    else { 
-        wd.innerText=gameData.secretWord; 
-        wd.style.color="#2ecc71"; 
-        rd.innerText="Ciudadano"; 
+    } else { 
+        wd.innerText=gameData.secretWord; wd.style.color="#2ecc71"; rd.innerText="Ciudadano"; 
     }
     
     const btn = document.getElementById('next-btn');
     if(gameData.currentIndex >= players.length-1) { 
-        btn.innerText="EMPEZAR PARTIDA"; 
-        btn.onclick=startActiveGame; 
+        btn.innerText="EMPEZAR PARTIDA"; btn.onclick=startActiveGame; 
     } else { 
-        btn.innerText="SIGUIENTE JUGADOR"; 
-        btn.onclick=nextPlayer; // Llama a la función que inicia el pase de móvil
+        btn.innerText="SIGUIENTE JUGADOR"; btn.onclick=nextPlayer; 
     }
 }
 
 function nextPlayer(){ 
     gameData.currentIndex++; 
-    showPassScreen(); // Ahora va a la pantalla intermedia
+    saveGameState('screen-pass-device'); // Guardar antes de pasar
+    showPassScreen(); 
 }
 
 function startActiveGame() {
     showScreen('screen-active'); 
     renderVotingList();
-    gameData.startTime = Date.now();
     
-    let pool=[]; 
-    gameData.assignments.forEach(p=>{
-        if(p.alive){
-            const w = p.isImpostor ? 6 : 10;
-            for(let i=0; i<w; i++) pool.push(p.name);
-        }
-    });
-    const st = pool[Math.floor(Math.random()*pool.length)]; 
-    document.getElementById('starter-name').innerText=`${playerAvatars[st]||''} ${st}`;
-    
-    const m = parseInt(document.getElementById('game-timer-input').value);
-    if(m > 20) document.getElementById('timer-display').innerText="♾️";
-    else { 
-        timeRemaining = m * 60; 
-        updateTimerUI(); 
-        timerInterval = setInterval(()=>{
-            timeRemaining--; 
-            updateTimerUI(); 
-            if(timeRemaining<=0) clearInterval(timerInterval);
-        }, 1000); 
+    if (!gameData.startTime) {
+        gameData.startTime = Date.now();
+        // Guardamos estado inmediatamente
+        saveGameState('screen-active');
+        let pool=[]; 
+        gameData.assignments.forEach(p=>{ if(p.alive){ const w = p.isImpostor ? 6 : 10; for(let i=0; i<w; i++) pool.push(p.name); } });
+        const st = pool[Math.floor(Math.random()*pool.length)]; 
+        document.getElementById('starter-name').innerText=`${playerAvatars[st]||''} ${st}`;        
     }
+    startTimer();
+    saveGameState('screen-active');
 }
 
+function startTimer() {
+    clearInterval(timerInterval);
+    
+    // Actualizar visualmente ya, para no esperar 1 segundo
+    updateTimerUI();
+
+    // Actualizar cada segundo
+    timerInterval = setInterval(()=>{
+        updateTimerUI();
+    }, 1000);
+}
+
+// 3. RENDERIZADO DEL TIEMPO (Matemáticas para persistencia real)
 function updateTimerUI() {
-    const m = Math.floor(timeRemaining/60).toString().padStart(2,'0');
-    const s = (timeRemaining%60).toString().padStart(2,'0');
-    document.getElementById('timer-display').innerText=`${m}:${s}`;
+    // Si no hay hora de inicio, no podemos calcular
+    if (!gameData.startTime) return;
+    
+    // TIEMPO TRANSCURRIDO = AHORA - HORA DE INICIO
+    const diff = Math.floor((Date.now() - gameData.startTime) / 1000);
+    
+    const m = Math.floor(diff / 60).toString().padStart(2,'0');
+    const s = (diff % 60).toString().padStart(2,'0');
+    
+    const el = document.getElementById('timer-display');
+    if(el) el.innerText = `${m}:${s}`;
 }
 
 function renderVotingList() {
@@ -236,7 +250,6 @@ function votePlayer(i) {
     const p = gameData.assignments[i];
     p.alive = false; 
     
-    showScreen('screen-result'); 
     clearInterval(timerInterval);
     
     const t=document.getElementById('result-title');
@@ -245,18 +258,20 @@ function votePlayer(i) {
     const ia=document.getElementById('impostor-guess-area');
     const cb=document.getElementById('continue-btn');
 
+    showScreen('screen-result'); 
+
     if(p.isImpostor) { 
         t.innerText="¡IMPOSTOR PILLADO!"; t.style.color="#2ecc71"; ic.innerText="🎉"; m.innerText=`${p.name} era Impostor.`; 
         ia.classList.remove('hidden'); cb.classList.add('hidden'); 
-    }
-    else if(p.isAccomplice) { 
+    } else if(p.isAccomplice) { 
         t.innerText="¡ERA EL CÓMPLICE!"; t.style.color="#9b59b6"; ic.innerText="🎭"; m.innerText=`${p.name} ayudaba al Impostor.`; 
         ia.classList.add('hidden'); cb.classList.remove('hidden'); 
-    }
-    else { 
+    } else { 
         t.innerText="ERROR..."; t.style.color="#e74c3c"; ic.innerText="💀"; m.innerText=`${p.name} era Inocente.`; 
         ia.classList.add('hidden'); cb.classList.remove('hidden'); 
     }
+    
+    saveGameState('screen-result');
 }
 
 function citizensGiveUp(){ if(confirm("¿Rendirse?")) endGameWithWinner('Impostor'); }
@@ -267,10 +282,11 @@ function continueGame() {
     
     if(l <= 2 && li > 0) { alert("¡Empate técnico! Gana Impostor."); endGameWithWinner('Impostor'); }
     else if(li === 0) endGameWithWinner('Ciudadanos');
-    else { showScreen('screen-active'); renderVotingList(); }
+    else { 
+        startActiveGame(); // Volver a jugar (reactiva timer y guarda)
+    }
 }
 
-// --- FINALIZAR RONDA ---
 async function endGameWithWinner(winner) {
     clearInterval(timerInterval);
     const durationSec = gameData.startTime ? Math.round((Date.now() - gameData.startTime) / 1000) : 0;    
@@ -291,21 +307,14 @@ async function endGameWithWinner(winner) {
 
     if (isTournamentActive) {
         tournamentGames.push(currentGameRecord);
-        
-        // CALCULAR PUNTOS
         gameData.assignments.forEach(p => {
             if (tournamentScores[p.name] === undefined) tournamentScores[p.name] = 0;
             const isBad = p.isImpostor || p.isAccomplice;
-            
-            // Impostor gana: +5 | Ciudadanos ganan: +2
             if (winner === 'Impostor' && isBad) tournamentScores[p.name] += 5;
             else if (winner === 'Ciudadanos' && !isBad) tournamentScores[p.name] += 2;
         });
-
-        // ¡¡AQUÍ ESTÁ LA SOLUCIÓN!!
-        // Guardamos y actualizamos la barra visual inmediatamente
+        
         saveTournamentState();
-
         renderScoreboard();
         document.getElementById('scoreboard-container').classList.remove('hidden');
     } else {
@@ -323,6 +332,10 @@ async function endGameWithWinner(winner) {
     const accs = gameData.assignments.filter(p => p.isAccomplice).map(p => `<strong>${p.name}</strong>`).join(', ');
     rolesDiv.innerHTML = `<p style="color:#e74c3c">😈 Impostor: ${imps}</p>` + (accs ? `<p style="color:#9b59b6">🤝 Cómplice: ${accs}</p>` : '');
 
+    // CAMBIO IMPORTANTE: Guardamos el ganador en gameData
+    gameData.lastWinner = winner;
+    
+    saveGameState('screen-solution');
     showScreen('screen-solution');
 }
 
@@ -335,37 +348,6 @@ function renderScoreboard() {
         const sc = tournamentScores[name];
         return `<tr style="${i===0?'background:rgba(241,196,15,0.2)':''}"><td>#${i+1} <span style="font-size:1.2em">${av}</span> ${name}</td><td class="score-val">${sc}</td></tr>`;
     }).join('');
-}
-function startTournament() {
-    const nameInput = document.getElementById('tournament-name-input');
-    const name = nameInput ? nameInput.value.trim() : "Torneo";
-    
-    if (!name) return alert("Por favor, ponle un nombre al torneo.");
-    if (players.length < 3) return alert("Necesitas al menos 3 jugadores para empezar.");
-
-    // 1. Activar estado
-    isTournamentActive = true;
-    currentTournamentName = name;
-    tournamentGames = []; // Resetear historial de partidas del torneo
-    tournamentScores = {}; 
-    
-    // 2. Inicializar marcadores a 0
-    players.forEach(p => {
-        tournamentScores[p] = 0;
-    });
-
-    // 3. Guardar en memoria
-    saveTournamentState();
-
-    // 4. Feedback y REDIRECCIÓN (¡Lo que faltaba!)
-    alert(`🏆 ¡Torneo "${name}" iniciado!`);
-    
-    // Ocultar pantalla de configuración de torneo si estuviera abierta
-    const setupScreen = document.getElementById('screen-tournament-setup');
-    if(setupScreen) setupScreen.classList.add('hidden');
-
-    // IR A SELECCIÓN DE TEMA PARA LA PRIMERA RONDA
-    goToThemeSelection();
 }
 
 function restartGame(){ startGameSetup(); }
