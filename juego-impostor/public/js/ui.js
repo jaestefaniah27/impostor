@@ -265,44 +265,51 @@ function renderStatsList(playersArr) {
         </div>`;
     }).join('');
 }
-
 // --- LÓGICA DE FUSIÓN Y DESUNIFICACIÓN ---
+
 function toggleMergeMode() {
     isMergeMode = !isMergeMode;
-    selectedForMerge = [];
+    selectedForMerge = []; // Reiniciar selección
     document.getElementById('merge-tool-bar').classList.toggle('hidden', !isMergeMode);
     
-    // Actualizar botones de la barra de herramientas
+    // Actualizar el estado del botón (se deshabilitará porque no hay selección)
     updateMergeToolbar();
     
-    // Recargar la vista actual (para pintar los checkboxes)
-    // Nota: Esto es un truco rápido, idealmente renderStatsList debería ser suficiente si tenemos 'playersArr' a mano.
-    // Para simplificar, llamamos a loadAndShowStats de nuevo.
+    // Recargar la lista para que aparezcan los checkboxes
     loadAndShowStats(); 
+}
+
+function updateMergeSelection(checkbox) {
+    if (checkbox.checked) selectedForMerge.push(checkbox.value);
+    else selectedForMerge = selectedForMerge.filter(n => n !== checkbox.value);
+    
+    // Cada vez que tocamos un checkbox, recalculamos qué hace el botón
+    updateMergeToolbar();
 }
 
 function updateMergeToolbar() {
     const btn = document.getElementById('merge-action-btn');
     
     if (selectedForMerge.length === 0) {
+        // NADA SELECCIONADO
         btn.innerText = "Selecciona jugadores...";
         btn.disabled = true;
         btn.style.opacity = 0.5;
         btn.onclick = null;
+        btn.style.background = "white";
+        btn.style.color = "#d35400";
     } 
     else if (selectedForMerge.length === 1) {
-        // CASO DESUNIFICAR: Si selecciono 1 y ese 1 tiene alias, permito romperlo
-        // Necesitamos saber si el seleccionado tiene alias. 
-        // Como no tenemos el objeto 'p' aquí fácil, asumimos que el botón cambia a "Desunificar"
-        // y en la función de ejecución comprobamos si se puede.
+        // 1 SELECCIONADO -> MODO DESUNIFICAR
         btn.innerText = "DESUNIFICAR (Separar Nombres)";
         btn.disabled = false;
         btn.style.opacity = 1;
-        btn.style.background = "#e74c3c"; // Rojo para acción destructiva
+        btn.style.background = "#c0392b"; // Rojo oscuro
+        btn.style.color = "white";
         btn.onclick = executeUnmerge;
     } 
     else {
-        // CASO UNIFICAR
+        // 2 O MÁS SELECCIONADOS -> MODO UNIFICAR
         btn.innerText = `UNIFICAR (${selectedForMerge.length})`;
         btn.disabled = false;
         btn.style.opacity = 1;
@@ -312,35 +319,23 @@ function updateMergeToolbar() {
     }
 }
 
-function cancelMergeMode() {
-    isMergeMode = false;
-    selectedForMerge = [];
-    document.getElementById('merge-tool-bar').classList.add('hidden');
-    loadAndShowStats();
-}
-
-function updateMergeSelection(checkbox) {
-    if (checkbox.checked) selectedForMerge.push(checkbox.value);
-    else selectedForMerge = selectedForMerge.filter(n => n !== checkbox.value);
-    
-    updateMergeToolbar();
-}
-
 async function executeMerge() {
     if (selectedForMerge.length < 2) return;
     
     // Preguntar cuál es el nombre principal
     const mainName = prompt(`Vas a fusionar: \n${selectedForMerge.join('\n')}\n\nEscribe el NOMBRE FINAL que se quedará (debe ser uno de la lista):`, selectedForMerge[0]);
     
-    // Normalizar para comparación (por si espacios)
-    if (!mainName || !selectedForMerge.includes(mainName.trim())) {
-        return alert("Debes escribir uno de los nombres seleccionados exactamente.");
+    if (!mainName) return; // Cancelado
+
+    // Validar que el nombre escrito esté en la selección
+    if (!selectedForMerge.includes(mainName.trim())) {
+        return alert("Error: Debes escribir exactamente uno de los nombres que has seleccionado.");
     }
 
-    if (confirm(`¿Seguro? Todas las stats se sumarán a "${mainName}".\nSe mostrará como: ${mainName} | ...`)) {
+    if (confirm(`¿Seguro? Todas las estadísticas se sumarán a "${mainName}".`)) {
         await mergeAliases(mainName.trim(), selectedForMerge);
         alert("¡Fusión completada!");
-        toggleMergeMode(); // Salir del modo
+        toggleMergeMode(); // Salir del modo y recargar
     }
 }
 
@@ -348,30 +343,31 @@ async function executeUnmerge() {
     if (selectedForMerge.length !== 1) return;
     const target = selectedForMerge[0];
 
-    // Necesitamos confirmar con el usuario qué nombres quiere liberar
-    // Como la API de alias no guarda "quien pertenece a quien" explícitamente en el frontend,
-    // simplemente le decimos al backend "Libera todo lo que apunte a este nombre".
-    // Pero espera, en 'data.js' stats tiene 'aka'. 
+    // Necesitamos saber qué alias tiene este jugador. 
+    // Como no los tenemos guardados en la variable global, los pedimos de nuevo o usamos un truco.
+    // Lo más seguro es recargar stats en segundo plano para obtener el objeto del jugador.
+    const stats = await fetchStats();
+    const playerArr = Object.values(stats.players);
+    const player = playerArr.find(p => p.name === target);
     
-    if (confirm(`¿Quieres separar los nombres agrupados bajo "${target}"?\n\nVolverán a aparecer como jugadores separados en la lista.`)) {
-        // Enviamos el nombre target. El backend debe buscar en aliases.json
-        // todas las claves cuyo valor sea 'target' y borrarlas.
-        // Mi implementación de backend anterior espera 'namesToFree', que son las CLAVES.
-        // Necesitamos obtener las claves (los alias) de ese jugador.
-        
-        // Pequeño hack: Volvemos a pedir las stats para obtener los 'aka' de este jugador
-        const stats = await fetchStats();
-        const player = stats.players[target];
-        
-        if (!player || !player.aka || player.aka.length <= 1) {
-            return alert("Este jugador no tiene nombres unificados para separar.");
-        }
+    // Verificamos si tiene alias reales (más de 1 nombre en 'aka')
+    if (!player || !player.aka || player.aka.length <= 1) {
+        return alert("Este jugador no tiene nombres unificados para separar.");
+    }
 
-        // Los nombres a liberar son todos los del array 'aka' EXCEPTO el principal
+    if (confirm(`¿Quieres separar los nombres de "${target}"?\n\nNombres que se liberarán: ${player.aka.filter(n => n !== target).join(', ')}`)) {
+        // Los nombres a liberar son todos EXCEPTO el principal
         const aliasesToFree = player.aka.filter(n => n !== target);
         
         await unmergeAliases(aliasesToFree);
-        alert("¡Nombres separados!");
-        toggleMergeMode();
+        alert("¡Nombres separados correctamente!");
+        toggleMergeMode(); // Salir del modo y recargar
     }
+}
+
+function cancelMergeMode() {
+    isMergeMode = false;
+    selectedForMerge = [];
+    document.getElementById('merge-tool-bar').classList.add('hidden');
+    loadAndShowStats();
 }
