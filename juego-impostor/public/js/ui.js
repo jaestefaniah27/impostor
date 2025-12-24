@@ -502,3 +502,60 @@ async function deleteHistory(password) {
         alert("❌ Error de conexión con el servidor");
     }
 }
+// --- ACTUALIZAR BANNER TORNEO ---
+function updateTournamentBanner() {
+    const container = document.getElementById('tournament-mini-scores');
+    if (!container) return;
+
+    if (!isTournamentActive || !tournamentScores) {
+        container.innerHTML = '';
+        return;
+    }
+
+    const sortedPlayers = Object.entries(tournamentScores).sort((a,b) => b[1] - a[1]);
+
+    if (sortedPlayers.length === 0) {
+        container.innerHTML = "<small style='opacity:0.6; padding:0 5px;'>Esperando resultados...</small>";
+        return;
+    }
+
+    container.innerHTML = sortedPlayers.map(([name, score], i) => {
+        let icon = '👤';
+        let colorStyle = '';
+        
+        if (i === 0 && score > 0) { icon = '🥇'; colorStyle = 'border-color: #f1c40f; color: #f1c40f;'; }
+        else if (i === 1 && score > 0) { icon = '🥈'; colorStyle = 'border-color: #bdc3c7;'; }
+        else if (i === 2 && score > 0) { icon = '🥉'; colorStyle = 'border-color: #cd7f32;'; }
+
+        return `
+            <div class="score-pill" style="${colorStyle}">
+                <span>${icon}</span>
+                <strong>${name}</strong>: ${score}
+            </div>
+        `;
+    }).join('');
+}
+
+// Sobreescribimos la comprobación para asegurarnos que actualiza la barra visual
+window.checkTournamentState = function() {
+    const tName = localStorage.getItem('tournamentName');
+    const tScores = localStorage.getItem('tournamentScores');
+    
+    if (tName && tScores) {
+        isTournamentActive = true;
+        currentTournamentName = tName;
+        tournamentScores = JSON.parse(tScores);
+        
+        const banner = document.getElementById('active-tournament-display');
+        const title = document.getElementById('active-tourney-name');
+        
+        if (banner) banner.classList.remove('hidden');
+        if (title) title.innerText = currentTournamentName;
+        
+        updateTournamentBanner(); // ESTO ES LO IMPORTANTE
+    } else {
+        isTournamentActive = false;
+        const banner = document.getElementById('active-tournament-display');
+        if (banner) banner.classList.add('hidden');
+    }
+};

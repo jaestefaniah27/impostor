@@ -14,12 +14,16 @@
     <div id="screen-home" class="container">
         <h1>🕵️ El Impostor</h1>
   
-        <div id="active-tournament-display" class="tournament-active-banner hidden">
-            <div>
-                <strong>🏆 TORNEO EN CURSO</strong><br>
-                <small id="active-tourney-name">Copa...</small>
+        <div id="active-tournament-display" class="tournament-active-banner hidden" style="flex-direction: column; align-items: stretch; gap: 0;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+                <div>
+                    <strong>🏆 TORNEO EN CURSO</strong><br>
+                    <small id="active-tourney-name">Copa...</small>
+                </div>
+                <button class="btn-secondary" style="background:rgba(0,0,0,0.3); width:auto; margin:0; font-size:0.8em; padding: 5px 12px;" onclick="finishTournament()">🏁 FINALIZAR</button>
             </div>
-            <button class="btn-secondary" style="background:rgba(0,0,0,0.3); width:auto; margin:0; font-size:0.8em;" onclick="finishTournament()">🏁 FINALIZAR Y GUARDAR</button>
+            <div id="tournament-mini-scores" class="mini-scores-scroll">
+                </div>
         </div>
 
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">

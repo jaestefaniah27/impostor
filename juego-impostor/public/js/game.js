@@ -15,10 +15,16 @@ function startTournamentMode() {
 function checkTournamentState() {
     const banner = document.getElementById('active-tournament-display');
     const box = document.getElementById('tournament-setup-box');
+    
     if (isTournamentActive) {
         banner.classList.remove('hidden');
         document.getElementById('active-tourney-name').innerText = currentTournamentName;
         box.classList.add('hidden');
+        
+        // ESTA LÍNEA ES CLAVE: Actualiza los numeritos visuales
+        if (typeof updateTournamentBanner === 'function') {
+            updateTournamentBanner();
+        }
     } else {
         banner.classList.add('hidden');
         box.classList.remove('hidden');
@@ -26,20 +32,34 @@ function checkTournamentState() {
 }
 
 async function finishTournament() {
-    if (!confirm("¿Terminar torneo y guardar en el historial?")) return;
+    if (!confirm("¿Seguro que quieres terminar el torneo? Se guardará el historial y se borrarán los marcadores.")) return;
+
+    // 1. Crear registro del torneo para el historial
     const tournamentRecord = {
         type: 'tournament',
         name: currentTournamentName,
         date: new Date().toISOString(),
         scores: tournamentScores,
-        games: tournamentGames
+        games: tournamentGames,
+        players: Object.keys(tournamentScores)
     };
+
+    // 2. Guardar en el servidor
     await saveGameRecordToHistory(tournamentRecord);
+
+    // 3. Limpiar estado local
     isTournamentActive = false;
     currentTournamentName = "";
-    checkTournamentState();
-    alert("Torneo guardado en el Historial.");
-    loadAndShowHistory();
+    tournamentScores = {};
+    tournamentGames = [];
+    
+    saveTournamentState(); // Limpia localStorage
+    
+    // 4. ACTUALIZACIÓN VISUAL (ESTO FALTABA)
+    checkTournamentState(); // Oculta el banner inmediatamente
+
+    alert("🏆 Torneo finalizado y guardado en el historial.");
+    goToHome();
 }
 
 // --- LÓGICA DE JUEGO ---
@@ -271,12 +291,21 @@ async function endGameWithWinner(winner) {
 
     if (isTournamentActive) {
         tournamentGames.push(currentGameRecord);
+        
+        // CALCULAR PUNTOS
         gameData.assignments.forEach(p => {
             if (tournamentScores[p.name] === undefined) tournamentScores[p.name] = 0;
             const isBad = p.isImpostor || p.isAccomplice;
+            
+            // Impostor gana: +5 | Ciudadanos ganan: +2
             if (winner === 'Impostor' && isBad) tournamentScores[p.name] += 5;
             else if (winner === 'Ciudadanos' && !isBad) tournamentScores[p.name] += 2;
         });
+
+        // ¡¡AQUÍ ESTÁ LA SOLUCIÓN!!
+        // Guardamos y actualizamos la barra visual inmediatamente
+        saveTournamentState();
+
         renderScoreboard();
         document.getElementById('scoreboard-container').classList.remove('hidden');
     } else {
@@ -306,6 +335,37 @@ function renderScoreboard() {
         const sc = tournamentScores[name];
         return `<tr style="${i===0?'background:rgba(241,196,15,0.2)':''}"><td>#${i+1} <span style="font-size:1.2em">${av}</span> ${name}</td><td class="score-val">${sc}</td></tr>`;
     }).join('');
+}
+function startTournament() {
+    const nameInput = document.getElementById('tournament-name-input');
+    const name = nameInput ? nameInput.value.trim() : "Torneo";
+    
+    if (!name) return alert("Por favor, ponle un nombre al torneo.");
+    if (players.length < 3) return alert("Necesitas al menos 3 jugadores para empezar.");
+
+    // 1. Activar estado
+    isTournamentActive = true;
+    currentTournamentName = name;
+    tournamentGames = []; // Resetear historial de partidas del torneo
+    tournamentScores = {}; 
+    
+    // 2. Inicializar marcadores a 0
+    players.forEach(p => {
+        tournamentScores[p] = 0;
+    });
+
+    // 3. Guardar en memoria
+    saveTournamentState();
+
+    // 4. Feedback y REDIRECCIÓN (¡Lo que faltaba!)
+    alert(`🏆 ¡Torneo "${name}" iniciado!`);
+    
+    // Ocultar pantalla de configuración de torneo si estuviera abierta
+    const setupScreen = document.getElementById('screen-tournament-setup');
+    if(setupScreen) setupScreen.classList.add('hidden');
+
+    // IR A SELECCIÓN DE TEMA PARA LA PRIMERA RONDA
+    goToThemeSelection();
 }
 
 function restartGame(){ startGameSetup(); }

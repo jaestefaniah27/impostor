@@ -169,24 +169,21 @@ input:checked + .slider:before { transform: translateX(22px); }
 /* --- MINI SCOREBOARD TORNEO --- */
 .mini-scores-scroll {
     display: flex;
-    gap: 8px;
-    overflow-x: auto;
+    flex-wrap: wrap;        /* <--- CLAVE: Permite que bajen a otra línea */
+    justify-content: center; /* Los centra para que quede equilibrado */
+    gap: 5px;
     margin-top: 8px;
-    padding-bottom: 2px;
-    scrollbar-width: none; /* Ocultar barra scroll Firefox */
-}
-.mini-scores-scroll::-webkit-scrollbar {
-    display: none; /* Ocultar barra scroll Chrome/Safari */
+    width: 100%;
 }
 
 .score-pill {
     background: rgba(0,0,0,0.25);
-    padding: 3px 10px;
+    padding: 3px 8px;       /* Un poco más compacto */
     border-radius: 12px;
-    font-size: 0.85em;
+    font-size: 0.8em;       /* Letra un pelín más pequeña para que quepan más */
     white-space: nowrap;
     border: 1px solid rgba(255,255,255,0.1);
     display: flex;
     align-items: center;
-    gap: 5px;
+    gap: 4px;
 }

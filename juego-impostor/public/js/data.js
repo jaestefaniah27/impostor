@@ -147,3 +147,21 @@ async function unmergeAliases(namesToFree) {
         body: JSON.stringify({ namesToFree: namesToFree })
     });
 }
+
+// --- PERSISTENCIA DEL TORNEO ---
+function saveTournamentState() {
+    if (isTournamentActive) {
+        localStorage.setItem('tournamentName', currentTournamentName);
+        localStorage.setItem('tournamentScores', JSON.stringify(tournamentScores));
+        localStorage.setItem('tournamentGames', JSON.stringify(tournamentGames));
+    } else {
+        localStorage.removeItem('tournamentName');
+        localStorage.removeItem('tournamentScores');
+        localStorage.removeItem('tournamentGames');
+    }
+    
+    // Actualizar banner visual si existe la función (en ui.js)
+    if (typeof updateTournamentBanner === 'function') {
+        updateTournamentBanner();
+    }
+}
