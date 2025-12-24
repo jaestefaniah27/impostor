@@ -6,22 +6,58 @@
     <title>El Impostor Pro</title>
     <link rel="stylesheet" href="style.css">
     <style>
-        .history-item {
-            background: #2f3640;
-            border-left: 5px solid #7f8fa6;
+        /* --- ESTILOS GENERALES Y AVATARES --- */
+        .avatar { font-size: 1.2em; margin-right: 5px; }
+        
+        /* --- ESTILOS TORNEO (UI) --- */
+        .tournament-box {
+            border: 2px solid #f1c40f;
+            background: rgba(241, 196, 15, 0.1);
             padding: 15px;
-            margin-bottom: 10px;
-            text-align: left;
-            border-radius: 5px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            margin-top: 20px; /* Añadido margen superior para separar del botón Jugar */
         }
-        .history-item.win-impostor { border-left-color: #e74c3c; } 
-        .history-item.win-citizens { border-left-color: #2ecc71; } 
+        .tournament-active-banner {
+            background: linear-gradient(45deg, #b71c1c, #f1c40f);
+            color: white;
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(241, 196, 15, 0.4); } 70% { box-shadow: 0 0 0 10px rgba(241, 196, 15, 0); } 100% { box-shadow: 0 0 0 0 rgba(241, 196, 15, 0); } }
+
+        /* --- SCOREBOARD --- */
+        .scoreboard-table { width: 100%; border-collapse: collapse; margin-top: 15px; background: rgba(0,0,0,0.2); border-radius: 8px; overflow: hidden; }
+        .scoreboard-table th, .scoreboard-table td { padding: 10px; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.1); }
+        .scoreboard-table th { background: rgba(0,0,0,0.3); color: var(--accent); }
+        .score-val { font-weight: bold; color: #f1c40f; text-align: right; }
         
-        .history-details { font-size: 0.9em; color: #bdc3c7; margin-top: 5px; }
-        .badge { padding: 2px 6px; border-radius: 4px; font-size: 0.8em; font-weight: bold; }
+        /* --- SUGERENCIAS --- */
+        .suggestion-card { background: #e67e22; color: white; padding: 15px; border-radius: 8px; margin: 15px 0; font-style: italic; position: relative; animation: popIn 0.3s ease-out; }
+        @keyframes popIn { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+        /* --- HISTORIAL (NUEVO DISEÑO GUAY) --- */
+        .history-card { background: #2f3640; border-radius: 8px; margin-bottom: 15px; overflow: hidden; border: 1px solid #455a64; }
         
-        /* Estilos para el rol de Cómplice */
-        .accomplice-text { color: #9b59b6; font-weight: bold; }
+        /* Tipo: Partida Simple */
+        .h-type-single { border-left: 5px solid #bdc3c7; }
+        /* Tipo: Torneo */
+        .h-type-tournament { border: 2px solid #f1c40f; box-shadow: 0 0 10px rgba(241, 196, 15, 0.2); }
+        
+        .h-header { padding: 10px 15px; background: rgba(0,0,0,0.2); display: flex; justify-content: space-between; align-items: center; cursor: pointer;}
+        .h-body { padding: 15px; display: none; border-top: 1px solid rgba(255,255,255,0.05); }
+        .h-body.expanded { display: block; }
+        
+        .tourney-badge { background: #f1c40f; color: #2c3e50; padding: 2px 8px; border-radius: 4px; font-weight: bold; font-size: 0.8em; text-transform: uppercase; }
+        .game-row { display: flex; justify-content: space-between; padding: 5px 0; border-bottom: 1px dotted rgba(255,255,255,0.1); font-size: 0.9em; }
+        .win-imp-text { color: #e74c3c; }
+        .win-cit-text { color: #2ecc71; }
     </style>
 </head>
 <body>
@@ -29,8 +65,16 @@
     <div id="screen-home" class="container">
         <h1>🕵️ El Impostor</h1>
         
+        <div id="active-tournament-display" class="tournament-active-banner hidden">
+            <div>
+                <strong>🏆 TORNEO EN CURSO</strong><br>
+                <small id="active-tourney-name">Copa...</small>
+            </div>
+            <button class="btn-secondary" style="background:rgba(0,0,0,0.3); width:auto; margin:0; font-size:0.8em;" onclick="finishTournament()">🏁 FINALIZAR Y GUARDAR</button>
+        </div>
+
         <div style="text-align: right; margin-bottom: 10px;">
-            <button class="btn-text" onclick="loadAndShowHistory()">📜 Ver Historial</button>
+            <button class="btn-text" onclick="loadAndShowHistory()">📜 Historial</button>
         </div>
 
         <div class="card">
@@ -65,44 +109,50 @@
         </div>
 
         <div class="card">
-            <h3>⏱️ Duración Partida</h3>
-            <div style="display:flex; justify-content:space-between; align-items:center;">
-                <input type="range" id="game-timer-input" min="5" max="21" value="10" step="1" oninput="updateTimeDisplay()" style="width:70%">
-                <span id="time-display" style="font-weight:bold; color:var(--accent)">10 min</span>
+            <h3>⚙️ Configuración</h3>
+            <div style="margin-bottom:10px;">
+                <label>Tiempo: <span id="time-display" style="color:var(--accent)">10 min</span></label>
+                <input type="range" id="game-timer-input" min="5" max="21" value="10" step="1" oninput="updateTimeDisplay()">
+            </div>
+            <div>
+                <label>Impostores: <span id="impostor-val">1</span></label>
+                <input type="range" id="impostor-count" min="1" max="3" value="1" oninput="updateConfigDisplay()">
             </div>
         </div>
 
-        <div class="card">
-            <h3>⚙️ Impostores</h3>
-            <label>Cantidad: <span id="impostor-val">1</span></label>
-            <input type="range" id="impostor-count" min="1" max="3" value="1" oninput="updateConfigDisplay()">
+        <button class="btn-main" onclick="goToThemeSelection()">JUGAR RONDA</button>
+        
+        <div class="tournament-box" id="tournament-setup-box">
+            <h3 style="margin-top:0; color:#f1c40f;">🏆 Modo Torneo</h3>
+            <p style="font-size:0.9em; color:#bdc3c7; margin-bottom:10px;">Acumula puntos y guarda el resultado agrupado.</p>
+            <div class="input-row">
+                <input type="text" id="tournament-name-input" placeholder="Nombre (Ej: Copa Viernes)">
+                <button class="btn-main" style="background:#f1c40f; color:#2c3e50; margin:0; width:auto;" onclick="startTournamentMode()">EMPEZAR</button>
+            </div>
         </div>
 
-        <button class="btn-main" onclick="goToThemeSelection()">JUGAR</button>
-        
         <div style="margin-top: 20px;">
-            <p class="instruction">¿Quieres jugar con tus propias palabras?</p>
             <button class="btn-secondary" onclick="openThemeCreator()">🎨 CREADOR DE TEMAS</button>
         </div>
     </div>
 
     <div id="screen-history" class="container hidden">
-        <h2>📜 Historial de Partidas</h2>
+        <h2>📜 Historial</h2>
         <div id="history-list"></div>
-        <button class="btn-secondary" onclick="goToHome()">🏠 Volver al Inicio</button>
+        <button class="btn-secondary" onclick="goToHome()">🏠 Volver</button>
     </div>
 
     <div id="screen-create-theme" class="container hidden">
         <h2>🎨 Nuevo Tema</h2>
         <div class="card">
-            <label>Título del Tema:</label>
+            <label>Título:</label>
             <input type="text" id="new-theme-title" placeholder="Ej: Superhéroes">
         </div>
         <div id="words-container"></div>
-        <button class="btn-secondary" onclick="addWordRow()">+ AÑADIR PALABRA</button>
+        <button class="btn-secondary" onclick="addWordRow()">+ Añadir Palabra</button>
         <div style="margin-top: 30px; display: flex; gap: 10px;">
             <button class="btn-secondary" style="background: #e74c3c;" onclick="showScreen('screen-home')">Cancelar</button>
-            <button class="btn-main" onclick="saveThemeFromUI()">GUARDAR TEMA</button>
+            <button class="btn-main" onclick="saveThemeFromUI()">Guardar</button>
         </div>
     </div>
 
@@ -115,15 +165,13 @@
 
     <div id="screen-reveal" class="container hidden full-height">
         <h2 id="current-player-display">Nombre</h2>
-        <p class="instruction">Mantén pulsada la carta para ver</p>
+        <p class="instruction">Mantén pulsada la carta</p>
         <div class="magic-card-container" id="magic-card">
             <div class="card-content">
                 <div id="secret-word" class="secret-text">...</div>
                 <div id="secret-role" class="role-subtext"></div>
             </div>
-            <div class="card-cover">
-                <span>🤫 MANTENER</span>
-            </div>
+            <div class="card-cover"><span>🤫 MANTENER</span></div>
         </div>
         <button id="next-btn" class="btn-main bottom-btn" onclick="nextPlayer()">SIGUIENTE</button>
     </div>
@@ -133,11 +181,16 @@
             <p style="margin:0; font-size: 0.9em; color: #bdc3c7;">DEBE EMPEZAR HABLANDO:</p>
             <h2 id="starter-name" style="margin: 5px 0; font-size: 1.8em; color: #f1c40f;">...</h2>
         </div>
+        
         <div id="timer-display" class="timer-big">10:00</div>
-        <h3>¿Quién es el impostor?</h3>
-        <p class="instruction">Pulsa en un jugador para expulsarlo</p>
+        
+        <div id="suggestion-area"></div>
+        <button class="btn-secondary" onclick="showSuggestion()" style="margin-bottom: 20px;">❓ ¿Qué pregunto? (Sugerencia)</button>
+
+        <h3>Votar Expulsión</h3>
         <div id="voting-list" class="voting-grid"></div>
-        <button class="btn-secondary bottom-btn" onclick="citizensGiveUp()">RENDARSE (GANA IMPOSTOR)</button>
+        
+        <button class="btn-secondary bottom-btn" onclick="citizensGiveUp()">RENDARSE (Gana Impostor)</button>
     </div>
 
     <div id="screen-result" class="container hidden full-height">
@@ -146,333 +199,370 @@
         <p id="result-msg" style="font-size: 1.2em;"></p>
         
         <div id="impostor-guess-area" class="hidden">
-            <p style="color:var(--accent)">¡Última oportunidad! Si adivinas la palabra, ganas.</p>
+            <p style="color:var(--accent)">¡Oportunidad de robo! ¿Adivina la palabra?</p>
             <div style="display: grid; gap: 10px;">
-                <button class="btn-main" style="background: #e74c3c;" onclick="endGameWithWinner('Impostor')">✅ SÍ, LA ADIVINÓ (Gana Impostor)</button>
-                <button class="btn-secondary" onclick="endGameWithWinner('Ciudadanos')">❌ NO LA SABE (Ganan Ciudadanos)</button>
+                <button class="btn-main" style="background: #e74c3c;" onclick="endGameWithWinner('Impostor')">✅ SÍ (Gana Impostor)</button>
+                <button class="btn-secondary" onclick="endGameWithWinner('Ciudadanos')">❌ NO (Ganan Ciudadanos)</button>
             </div>
         </div>
-
         <button id="continue-btn" class="btn-main hidden" onclick="continueGame()">SEGUIR JUGANDO</button>
     </div>
 
     <div id="screen-solution" class="container hidden full-height">
-        <h1 id="final-result-title">PARTIDA FINALIZADA</h1>
+        <h1 id="final-result-title">FIN DE RONDA</h1>
         
         <div class="card">
             <h3>Palabra Secreta:</h3>
             <h1 style="color:var(--accent); font-size:3em; margin:10px 0;" id="final-word">???</h1>
         </div>
 
-        <p id="winner-display" style="font-size: 1.5em; font-weight: bold;"></p>
+        <p id="winner-display" style="font-size: 1.5em; font-weight: bold; margin: 10px 0;"></p>
+        <div id="roles-reveal" style="margin-bottom: 20px;"></div>
 
-        <div id="roles-reveal" class="card" style="text-align: left; background: rgba(0,0,0,0.2);"></div>
+        <div id="scoreboard-container" class="card hidden">
+            <h3>🏆 Clasificación - <span id="score-tourney-name"></span></h3>
+            <table class="scoreboard-table" id="scoreboard-body"></table>
+        </div>
         
-        <button class="btn-main" onclick="restartGame()">🔄 REINICIAR (MISMOS AJUSTES)</button>
+        <button class="btn-main" onclick="restartGame()">🔄 SIGUIENTE RONDA</button>
         <button class="btn-secondary" onclick="goToHome()">🏠 MENÚ PRINCIPAL</button>
     </div>
 
     <script>
-        let players = ['Ana', 'Juan', 'Pedro']; 
+        // DATOS GLOBALES
+        let players = []; 
+        let playerAvatars = {}; 
         let themes = [];
         let selectedThemesIds = [];
+        
+        // ESTADO DE JUEGO
         let gameData = { assignments: [], currentIndex: 0, secretWord: '', secretHint: '', impostorsCaught: 0, totalImpostors: 0 };
         let timerInterval;
         let timeRemaining = 600;
 
+        // ESTADO DE TORNEO
+        let isTournamentActive = false;
+        let currentTournamentName = "";
+        let tournamentScores = {}; // Puntos solo de este torneo
+        let tournamentGames = [];  // Lista de partidas de este torneo
+
+        const suggestions = ["¿Es más grande que una caja de zapatos?", "¿Se usa dentro de casa?", "¿Es un ser vivo?", "¿Tiene que ver con tecnología?", "¿Lo usamos todos los días?", "¿Es de algún color específico?", "¿Se puede comprar en el supermercado?", "¿Hace ruido?", "¿Funciona con electricidad?", "¿Es algo que se come?", "¿Es peligroso?", "¿Cabe en un bolsillo?", "¿Es caro?", "¿Se usa para trabajar?", "¿Tiene ruedas?", "¿Huele a algo?"];
+        const emojis = ["🦁","🐯","🐻","🐨","🐼","🐸","🐙","🦄","🐝","🐞","🦖","👽","🤖","👻","🤡","🤠","🎃","💀","🍄","🍔","🍕","⚽","🚀","💡","🔥","💎","🎸","🎮"];
+
         window.onload = () => {
-            loadPlayers();
+            loadGameData();
             fetchThemes();
             setupCardInteractions();
             updateTimeDisplay();
+            checkTournamentState();
         };
 
-        // --- HISTORIAL ---
+        // --- GESTIÓN DE DATOS ---
+        function loadGameData() {
+            const pStored = localStorage.getItem('impostorPlayers');
+            if (pStored) players = JSON.parse(pStored); else players = ['Ana', 'Juan', 'Pedro'];
+            const aStored = localStorage.getItem('impostorAvatars');
+            if (aStored) playerAvatars = JSON.parse(aStored);
+            // Asegurar avatares
+            players.forEach(p => { if(!playerAvatars[p]) playerAvatars[p] = getRandomAvatar(); });
+            saveAllData();
+            renderPlayers();
+        }
+        function saveAllData() {
+            localStorage.setItem('impostorPlayers', JSON.stringify(players));
+            localStorage.setItem('impostorAvatars', JSON.stringify(playerAvatars));
+        }
+        function getRandomAvatar() { return emojis[Math.floor(Math.random() * emojis.length)]; }
+
+        // --- LÓGICA DE TORNEO ---
+        
+        function startTournamentMode() {
+            const name = document.getElementById('tournament-name-input').value.trim() || "Torneo Sin Nombre";
+            
+            if (confirm(`¿Empezar el torneo "${name}"? Los puntos empezarán desde 0.`)) {
+                isTournamentActive = true;
+                currentTournamentName = name;
+                tournamentScores = {};
+                tournamentGames = [];
+                players.forEach(p => tournamentScores[p] = 0);
+                
+                checkTournamentState();
+                alert("¡Torneo Iniciado! Ahora dale a 'JUGAR RONDA'.");
+            }
+        }
+
+        function checkTournamentState() {
+            const banner = document.getElementById('active-tournament-display');
+            const box = document.getElementById('tournament-setup-box');
+            
+            if (isTournamentActive) {
+                banner.classList.remove('hidden');
+                document.getElementById('active-tourney-name').innerText = currentTournamentName;
+                box.classList.add('hidden'); // Ocultar setup si ya hay uno
+            } else {
+                banner.classList.add('hidden');
+                box.classList.remove('hidden');
+            }
+        }
+
+        async function finishTournament() {
+            if (!confirm("¿Terminar torneo y guardar en el historial?")) return;
+
+            // Guardar el registro completo del torneo
+            const tournamentRecord = {
+                type: 'tournament',
+                name: currentTournamentName,
+                date: new Date().toISOString(),
+                scores: tournamentScores, // Clasificación final
+                games: tournamentGames // Lista de partidas
+            };
+
+            await fetch('/api/history', { 
+                method: 'POST', 
+                headers: {'Content-Type': 'application/json'}, 
+                body: JSON.stringify(tournamentRecord)
+            });
+
+            isTournamentActive = false;
+            currentTournamentName = "";
+            checkTournamentState();
+            alert("Torneo guardado en el Historial.");
+            loadAndShowHistory();
+        }
+
+        // --- HISTORIAL (VISUALIZACIÓN AVANZADA) ---
         async function loadAndShowHistory() {
             try {
                 const res = await fetch('/api/history');
                 const history = await res.json();
-                
                 const container = document.getElementById('history-list');
+                
                 if (history.length === 0) {
-                    container.innerHTML = "<p>Aún no hay partidas registradas.</p>";
+                    container.innerHTML = "<p>Vacío</p>";
                 } else {
-                    container.innerHTML = history.map(game => {
-                        const date = new Date(game.date).toLocaleDateString();
-                        const winClass = game.winner === 'Impostor' ? 'win-impostor' : 'win-citizens';
-                        const winnerText = game.winner === 'Impostor' ? '👑 Ganó Impostor' : '🛡️ Ganaron Ciudadanos';
+                    container.innerHTML = history.map((record, index) => {
+                        const date = new Date(record.date || Date.now()).toLocaleDateString();
                         
-                        // Si hay cómplice, lo mostramos
-                        const accompliceHtml = game.accomplice 
-                            ? `<p style="margin:5px 0;">🤝 Cómplice: <span style="color:#9b59b6">${game.accomplice}</span></p>` 
-                            : '';
+                        // OPCIÓN A: TORNEO COMPLETO
+                        if (record.type === 'tournament') {
+                            // Encontrar ganador (quien tiene más puntos)
+                            let winnerName = "Empate";
+                            let maxScore = -1;
+                            Object.entries(record.scores).forEach(([name, score]) => {
+                                if (score > maxScore) { maxScore = score; winnerName = name; }
+                            });
 
-                        return `
-                        <div class="history-item ${winClass}">
-                            <div style="display:flex; justify-content:space-between; align-items:center;">
-                                <strong style="font-size:1.1em; color: white;">${game.word}</strong>
-                                <span class="badge" style="background:rgba(255,255,255,0.2)">${date}</span>
-                            </div>
-                            <div class="history-details">
-                                <p style="margin:5px 0;"><strong>${winnerText}</strong></p>
-                                <p style="margin:5px 0;">😈 Impostor: <span style="color:#e74c3c">${game.impostor}</span></p>
-                                ${accompliceHtml}
-                                <p style="margin:5px 0; font-size:0.85em;">👥 Jugadores: ${game.players.join(', ')}</p>
-                            </div>
-                        </div>
-                        `;
+                            return `
+                            <div class="history-card h-type-tournament">
+                                <div class="h-header" onclick="toggleHistoryDetails(${index})">
+                                    <div>
+                                        <span class="tourney-badge">🏆 ${record.name}</span>
+                                        <div style="font-size:0.8em; color:#bdc3c7; margin-top:5px;">📅 ${date} • Ganador: <strong>${winnerName}</strong></div>
+                                    </div>
+                                    <span style="font-size:1.5em;">⌄</span>
+                                </div>
+                                <div class="h-body" id="h-body-${index}">
+                                    <p style="color:#f1c40f; border-bottom:1px solid #555;">Clasificación Final:</p>
+                                    ${Object.entries(record.scores).sort((a,b)=>b[1]-a[1]).map(([n,s]) => `
+                                        <div style="display:flex; justify-content:space-between; font-size:0.9em;">
+                                            <span>${n}</span> <span>${s} pts</span>
+                                        </div>
+                                    `).join('')}
+                                    
+                                    <p style="color:#bdc3c7; border-bottom:1px solid #555; margin-top:10px;">Partidas (${record.games.length}):</p>
+                                    ${record.games.map(g => `
+                                        <div class="game-row">
+                                            <span>${g.word}</span>
+                                            <span class="${g.winner==='Impostor'?'win-imp-text':'win-cit-text'}">${g.winner==='Impostor'?'Ganó Imp.':'Ganan Ciu.'}</span>
+                                        </div>
+                                    `).join('')}
+                                </div>
+                            </div>`;
+                        }
+                        
+                        // OPCIÓN B: PARTIDA SUELTA (LEGACY)
+                        else {
+                            const wTxt = record.winner === 'Impostor' ? '👑 Ganó Impostor' : '🛡️ Ganaron Ciudadanos';
+                            const wClass = record.winner === 'Impostor' ? 'win-imp-text' : 'win-cit-text';
+                            return `
+                            <div class="history-card h-type-single">
+                                <div class="h-header" onclick="toggleHistoryDetails(${index})">
+                                    <div>
+                                        <strong>${record.word}</strong> <span style="font-size:0.8em; opacity:0.7">(${date})</span>
+                                        <div class="${wClass}" style="font-size:0.9em;">${wTxt}</div>
+                                    </div>
+                                </div>
+                                <div class="h-body" id="h-body-${index}">
+                                    <p>😈 Impostor: ${record.impostor}</p>
+                                    ${record.accomplice ? `<p>🤝 Cómplice: ${record.accomplice}</p>` : ''}
+                                    <p style="font-size:0.8em">Jugadores: ${record.players ? record.players.join(', ') : '?'}</p>
+                                </div>
+                            </div>`;
+                        }
                     }).join('');
                 }
                 showScreen('screen-history');
             } catch (e) { console.error(e); }
         }
 
-        async function saveGameRecord(winner) {
-            const impostorObj = gameData.assignments.find(p => p.isImpostor);
-            const accompliceObj = gameData.assignments.find(p => p.isAccomplice); // Buscar cómplice
-            const playerNames = gameData.assignments.map(p => p.name);
+        function toggleHistoryDetails(idx) {
+            const el = document.getElementById(`h-body-${idx}`);
+            el.classList.toggle('expanded');
+        }
+
+        // --- FINALIZAR PARTIDA (Lógica de guardado) ---
+        async function endGameWithWinner(winner) {
+            clearInterval(timerInterval);
             
-            const record = {
-                players: playerNames,
-                impostor: impostorObj ? impostorObj.name : "Desconocido",
-                accomplice: accompliceObj ? accompliceObj.name : null, // Guardar
+            // 1. Objeto de la partida actual
+            const impostorObj = gameData.assignments.find(p => p.isImpostor);
+            const accompliceObj = gameData.assignments.find(p => p.isAccomplice);
+            
+            const currentGameRecord = {
+                type: 'single_game', // Por defecto
+                date: new Date().toISOString(),
+                players: gameData.assignments.map(p => p.name),
+                impostor: impostorObj ? impostorObj.name : "?",
+                accomplice: accompliceObj ? accompliceObj.name : null,
                 word: gameData.secretWord,
                 hint: gameData.secretHint,
                 winner: winner
             };
 
-            await fetch('/api/history', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify(record)
-            });
-        }
-
-        // --- LÓGICA DE JUEGO ---
-
-        function startGameSetup() {
-            if(selectedThemesIds.length === 0) return alert("Elige tema");
-            
-            // 1. Palabras
-            let pool = []; 
-            themes.forEach(t => { if(selectedThemesIds.includes(t.id)) pool = pool.concat(t.words); });
-            if(pool.length === 0) return alert("Temas vacíos");
-            const sel = pool[Math.floor(Math.random() * pool.length)];
-            gameData.secretWord = sel.text;
-
-            // 2. Pistas
-            const hintsOn = document.getElementById('hints-toggle').checked;
-            if(hintsOn) {
-                let ha = []; if(Array.isArray(sel.hints)) ha=sel.hints; else if(sel.hint) ha=[sel.hint]; else ha=["Sin pista"];
-                gameData.secretHint = ha[Math.floor(Math.random()*ha.length)];
-            } else { gameData.secretHint = null; }
-
-            // 3. Roles
-            let impC = parseInt(document.getElementById('impostor-count').value); 
-            if(impC>=players.length) impC=players.length-1;
-            gameData.totalImpostors = impC; 
-            gameData.impostorsCaught = 0;
-            
-            let assign = new Array(players.length).fill(null); 
-            let p=0;
-
-            // Asignar Impostores
-            while(p<impC) { 
-                let r=Math.floor(Math.random()*players.length); 
-                if(!assign[r]) { assign[r]={isImpostor:true, isAccomplice:false, name:players[r], alive:true}; p++; } 
-            }
-
-            // Asignar Cómplice (si activado y hay gente suficiente)
-            const accompliceOn = document.getElementById('accomplice-toggle').checked;
-            let accAssigned = false;
-            // Necesitamos al menos 4 jugadores para que haya gracia (1 imp, 1 complice, 2 ciudadanos)
-            if(accompliceOn && (players.length - impC) >= 2) {
-                while(!accAssigned) {
-                    let r=Math.floor(Math.random()*players.length);
-                    if(!assign[r]) {
-                        assign[r] = {isImpostor:false, isAccomplice:true, name:players[r], alive:true};
-                        accAssigned = true;
-                    }
-                }
-            }
-
-            // Resto ciudadanos
-            for(let i=0; i<players.length; i++) if(!assign[i]) assign[i]={isImpostor:false, isAccomplice:false, name:players[i], alive:true};
-            
-            gameData.assignments = assign; 
-            gameData.currentIndex = 0;
-            setupCardForPlayer(); 
-            showScreen('screen-reveal');
-        }
-
-        function setupCardForPlayer() {
-            const p = gameData.assignments[gameData.currentIndex];
-            document.getElementById('current-player-display').innerText = "Turno de: " + p.name;
-            const wd = document.getElementById('secret-word'); 
-            const rd = document.getElementById('secret-role');
-            
-            if(p.isImpostor) {
-                wd.innerText = "😈 IMPOSTOR"; wd.style.color = "#e74c3c";
-                rd.innerHTML = gameData.secretHint ? "Tu pista es:<br><strong style='color:#f1c40f'>"+gameData.secretHint+"</strong>" : "<span style='opacity:0.6'>Intenta pasar desapercibido...</span>";
-            
-            } else if (p.isAccomplice) {
-                // CARTA DE CÓMPLICE
-                wd.innerText = gameData.secretWord;
-                wd.style.color = "#9b59b6"; // Morado
+            // 2. ¿ESTAMOS EN TORNEO?
+            if (isTournamentActive) {
+                // A) Guardar en memoria local del torneo
+                tournamentGames.push(currentGameRecord);
                 
-                const imps = gameData.assignments.filter(x => x.isImpostor).map(x => x.name).join(", ");
-                rd.innerHTML = "🤫 ERES EL CÓMPLICE<br>Protege a: <strong style='color:#e74c3c'>" + imps + "</strong>";
+                // B) Actualizar puntos del torneo
+                gameData.assignments.forEach(p => {
+                    if (tournamentScores[p.name] === undefined) tournamentScores[p.name] = 0;
+                    
+                    const isBad = p.isImpostor || p.isAccomplice;
+                    if (winner === 'Impostor' && isBad) tournamentScores[p.name] += 5;
+                    else if (winner === 'Ciudadanos' && !isBad) tournamentScores[p.name] += 2;
+                });
+
+                // C) Mostrar tabla actualizada
+                renderScoreboard(true);
+                document.getElementById('scoreboard-container').classList.remove('hidden');
 
             } else {
-                wd.innerText = gameData.secretWord; wd.style.color = "#2ecc71"; rd.innerText = "Palabra Secreta";
+                // MODO PARTIDA SUELTA: Guardar directamente en servidor
+                await fetch('/api/history', { 
+                    method:'POST', 
+                    headers:{'Content-Type':'application/json'}, 
+                    body:JSON.stringify(currentGameRecord)
+                });
+                document.getElementById('scoreboard-container').classList.add('hidden');
             }
 
-            const btn = document.getElementById('next-btn');
-            if(gameData.currentIndex >= players.length-1) { btn.innerText = "EMPEZAR CRONÓMETRO"; btn.onclick = startActiveGame; }
-            else { btn.innerText = "SIGUIENTE JUGADOR"; btn.onclick = () => { gameData.currentIndex++; setupCardForPlayer(); }; }
-        }
-
-        // --- GAMEPLAY ---
-
-        function startActiveGame() {
-            showScreen('screen-active'); renderVotingList();
-            
-            // Probabilidad ponderada para empezar (Impostores pesan menos)
-            let pool = [];
-            gameData.assignments.forEach(p => { 
-                if(p.alive) { 
-                    const w = p.isImpostor ? 6 : 10; // Impostores salen menos
-                    for(let i=0;i<w;i++) pool.push(p.name); 
-                } 
-            });
-            document.getElementById('starter-name').innerText = pool[Math.floor(Math.random()*pool.length)];
-            
-            const m = parseInt(document.getElementById('game-timer-input').value);
-            if(m > 20) document.getElementById('timer-display').innerText = "♾️";
-            else {
-                timeRemaining = m * 60; updateTimerUI();
-                timerInterval = setInterval(() => { timeRemaining--; updateTimerUI(); if(timeRemaining<=0) clearInterval(timerInterval); }, 1000);
-            }
-        }
-
-        function votePlayer(index) {
-            if(!confirm(`¿Seguro que queréis expulsar a ${gameData.assignments[index].name}?`)) return;
-            const player = gameData.assignments[index];
-            player.alive = false; 
-            
-            showScreen('screen-result');
-            const title = document.getElementById('result-title');
-            const icon = document.getElementById('result-icon');
-            const msg = document.getElementById('result-msg');
-            const impostorArea = document.getElementById('impostor-guess-area');
-            const continueBtn = document.getElementById('continue-btn');
-            clearInterval(timerInterval); 
-
-            if(player.isImpostor) {
-                // IMPOSTOR
-                title.innerText = "¡IMPOSTOR PILLADO!";
-                title.style.color = "#2ecc71";
-                icon.innerText = "🎉";
-                msg.innerText = `${player.name} era el Impostor.`;
-                impostorArea.classList.remove('hidden');
-                continueBtn.classList.add('hidden');
-            
-            } else if (player.isAccomplice) {
-                // CÓMPLICE (Novedad)
-                title.innerText = "¡ERA EL CÓMPLICE!";
-                title.style.color = "#9b59b6"; // Morado
-                icon.innerText = "🎭";
-                msg.innerText = `${player.name} era el Cómplice. El Impostor sigue vivo.`;
-                impostorArea.classList.add('hidden');
-                continueBtn.classList.remove('hidden');
-
-            } else {
-                // INOCENTE
-                title.innerText = "ERROR...";
-                title.style.color = "#e74c3c";
-                icon.innerText = "💀";
-                msg.innerText = `${player.name} NO era impostor. Era inocente.`;
-                impostorArea.classList.add('hidden');
-                continueBtn.classList.remove('hidden');
-            }
-        }
-
-        function endGameWithWinner(winner) {
-            clearInterval(timerInterval);
-            saveGameRecord(winner);
-
+            // 3. UI Final
             document.getElementById('final-word').innerText = gameData.secretWord;
             const display = document.getElementById('winner-display');
-            
-            if(winner === 'Impostor') {
-                display.innerText = "🏆 GANA EL IMPOSTOR 🏆";
-                display.style.color = "#e74c3c";
-            } else {
-                display.innerText = "🛡️ GANAN LOS CIUDADANOS 🛡️";
-                display.style.color = "#2ecc71";
-            }
+            display.innerText = (winner === 'Impostor') ? "🏆 GANA EL IMPOSTOR" : "🛡️ GANAN CIUDADANOS";
+            display.style.color = (winner === 'Impostor') ? "#e74c3c" : "#2ecc71";
 
-            // MOSTRAR ROLES EN PANTALLA FINAL
             const rolesDiv = document.getElementById('roles-reveal');
-            const impostorNames = gameData.assignments.filter(p => p.isImpostor).map(p => p.name).join(', ');
-            const accompliceNames = gameData.assignments.filter(p => p.isAccomplice).map(p => p.name).join(', ');
-
-            let rolesHtml = `<p>😈 <strong>Impostor:</strong> <span style="color:#e74c3c">${impostorNames}</span></p>`;
-            if(accompliceNames) {
-                rolesHtml += `<p>🤝 <strong>Cómplice:</strong> <span style="color:#9b59b6">${accompliceNames}</span></p>`;
-            } else {
-                rolesHtml += `<p style="font-size:0.8em; opacity:0.7;">(Sin cómplice en esta partida)</p>`;
-            }
-            rolesDiv.innerHTML = rolesHtml;
+            const imps = gameData.assignments.filter(p => p.isImpostor).map(p => `<strong>${p.name}</strong>`).join(', ');
+            const accs = gameData.assignments.filter(p => p.isAccomplice).map(p => `<strong>${p.name}</strong>`).join(', ');
+            rolesDiv.innerHTML = `<p style="color:#e74c3c">😈 Impostor: ${imps}</p>` + (accs ? `<p style="color:#9b59b6">🤝 Cómplice: ${accs}</p>` : '');
 
             showScreen('screen-solution');
         }
 
-        // --- UTILIDADES VARIAS ---
-        function loadPlayers() { try { players = JSON.parse(localStorage.getItem('impostorPlayers')) || ['Ana', 'Juan', 'Pedro']; } catch(e){} renderPlayers(); }
-        function savePlayers() { localStorage.setItem('impostorPlayers', JSON.stringify(players)); }
-        function renderPlayers() { document.getElementById('players-list').innerHTML=players.map((p,i)=>`<span class="tag" onclick="removePlayer(${i})">${p} ✕</span>`).join(''); updateConfigDisplay(); }
-        function addPlayer() { const v=document.getElementById('new-player').value.trim(); if(v){players.push(v); document.getElementById('new-player').value=''; savePlayers(); renderPlayers();} }
-        function removePlayer(i) { players.splice(i,1); savePlayers(); renderPlayers(); }
-        
-        function showScreen(id) { document.querySelectorAll('.container').forEach(d => d.classList.add('hidden')); document.getElementById(id).classList.remove('hidden'); }
-        function goToHome() { showScreen('screen-home'); }
-        function restartGame() { startGameSetup(); }
-        async function fetchThemes() { const r=await fetch('/api/themes'); themes=await r.json(); }
-        function updateTimeDisplay() { const v=parseInt(document.getElementById('game-timer-input').value); document.getElementById('time-display').innerText=(v>20)?"Infinito":v+" min"; }
-        function updateConfigDisplay() { document.getElementById('impostor-val').innerText = document.getElementById('impostor-count').value; }
-        
-        function openThemeCreator() { document.getElementById('new-theme-title').value=''; document.getElementById('words-container').innerHTML=''; addWordRow(); addWordRow(); addWordRow(); showScreen('screen-create-theme'); }
-        function addWordRow() { const c=document.getElementById('words-container'); const d=document.createElement('div'); d.className='word-row card'; d.innerHTML=`<div style="display:flex; justify-content:space-between;"><strong>Palabra</strong><span style="color:#e74c3c; cursor:pointer;" onclick="this.parentElement.parentElement.remove()">🗑️</span></div><input type="text" class="input-word" placeholder="Ej: Manzana"><div style="margin-top:5px;"><small>Pistas (separadas por /):</small><input type="text" class="input-hints" placeholder="Ej: Es roja / Fruta prohibida"></div>`; c.appendChild(d); }
-        async function saveThemeFromUI() {
-            const name=document.getElementById('new-theme-title').value; if(!name)return alert("Pon título");
-            const words=[]; document.querySelectorAll('.word-row').forEach(r=>{ const t=r.querySelector('.input-word').value.trim(); const h=r.querySelector('.input-hints').value.trim(); if(t){ let ha=h?h.split('/').map(x=>x.trim()).filter(x=>x):["Sin pista"]; words.push({text:t,hints:ha}); } });
-            if(words.length<4)return alert("Mínimo 4 palabras");
-            await fetch('/api/themes',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name,words})});
-            alert("Tema guardado"); await fetchThemes(); showScreen('screen-home');
+        function renderScoreboard(show) {
+            document.getElementById('score-tourney-name').innerText = currentTournamentName;
+            const table = document.getElementById('scoreboard-body');
+            const sortedPlayers = Object.keys(tournamentScores).sort((a,b) => tournamentScores[b] - tournamentScores[a]);
+            
+            table.innerHTML = sortedPlayers.map((name, i) => {
+                const av = playerAvatars[name] || '👤';
+                const sc = tournamentScores[name];
+                return `<tr style="${i===0?'background:rgba(241,196,15,0.2)':''}"><td>#${i+1} <span style="font-size:1.2em">${av}</span> ${name}</td><td class="score-val">${sc}</td></tr>`;
+            }).join('');
         }
 
-        function goToThemeSelection() { if(players.length<3)return alert("Mín 3 jugadores"); renderThemeGrid(); showScreen('screen-themes'); }
-        function renderThemeGrid() { document.getElementById('themes-grid').innerHTML=themes.map(t=>`<div class="theme-box ${selectedThemesIds.includes(t.id)?'selected':''}" onclick="toggleTheme(${t.id})"><strong>${t.name}</strong><br><small>${t.words.length} palabras</small></div>`).join(''); }
-        function toggleTheme(id) { selectedThemesIds.includes(id)?selectedThemesIds=selectedThemesIds.filter(x=>x!==id):selectedThemesIds.push(id); renderThemeGrid(); }
-        
-        function setupCardInteractions() { const c=document.getElementById('magic-card'); const s=(e)=>{if(e.cancelable)e.preventDefault();c.classList.add('revealed');}; const h=(e)=>{if(e.cancelable)e.preventDefault();c.classList.remove('revealed');}; c.addEventListener('mousedown',s); c.addEventListener('mouseup',h); c.addEventListener('mouseleave',h); c.addEventListener('touchstart',s,{passive:false}); c.addEventListener('touchend',h); c.addEventListener('touchcancel',h); }
-        
-        function citizensGiveUp() { if(confirm("¿Rendirse?")) endGameWithWinner('Impostor'); }
-        function updateTimerUI() { const m=Math.floor(timeRemaining/60).toString().padStart(2,'0'); const s=(timeRemaining%60).toString().padStart(2,'0'); document.getElementById('timer-display').innerText=`${m}:${s}`; }
-        function renderVotingList() {
-            const c=document.getElementById('voting-list'); c.innerHTML='';
-            gameData.assignments.forEach((p,i)=>{ if(p.alive){ const b=document.createElement('div'); b.className='vote-card'; b.innerHTML=`<strong>${p.name}</strong><br><small>Expulsar</small>`; b.onclick=()=>votePlayer(i); c.appendChild(b); } });
+        // --- UI & HELPERS ---
+        function renderPlayers() {
+            document.getElementById('players-list').innerHTML = players.map((p,i) => 
+                `<span class="tag" onclick="removePlayer(${i})"><span class="avatar">${playerAvatars[p]||'👤'}</span>${p} ✕</span>`).join('');
+            const max = Math.max(1, Math.floor(players.length/2));
+            const el = document.getElementById('impostor-count'); el.max = max; if(el.value>max) el.value=max;
+            updateConfigDisplay();
         }
-        function continueGame() {
-            const living = gameData.assignments.filter(p => p.alive).length;
-            const livingImpostors = gameData.assignments.filter(p => p.alive && p.isImpostor).length;
-            if(living <= 2 && livingImpostors > 0) { alert("¡Empate técnico (quedan 2)! Gana Impostor."); endGameWithWinner('Impostor'); }
-            else if(livingImpostors === 0) endGameWithWinner('Ciudadanos');
-            else { showScreen('screen-active'); renderVotingList(); }
-        }
-        function nextPlayer() { gameData.currentIndex++; setupCardForPlayer(); }
+        function addPlayer() { const v=document.getElementById('new-player').value.trim(); if(v && !players.includes(v)){ players.push(v); playerAvatars[v]=getRandomAvatar(); saveAllData(); renderPlayers(); document.getElementById('new-player').value=''; } else if(players.includes(v)) alert("Repetido"); }
+        function removePlayer(i) { players.splice(i,1); saveAllData(); renderPlayers(); }
+        
+        function showSuggestion() { document.getElementById('suggestion-area').innerHTML = `<div class="suggestion-card">💡 Pista: "${suggestions[Math.floor(Math.random()*suggestions.length)]}"</div>`; }
 
+        // Resto de lógica de juego (sin cambios mayores)
+        function startGameSetup() {
+            if(selectedThemesIds.length === 0) return alert("Elige tema");
+            document.getElementById('suggestion-area').innerHTML = '';
+            let pool = []; themes.forEach(t => { if(selectedThemesIds.includes(t.id)) pool = pool.concat(t.words); });
+            if(pool.length === 0) return alert("Temas vacíos");
+            const sel = pool[Math.floor(Math.random() * pool.length)];
+            gameData.secretWord = sel.text;
+            const hintsOn = document.getElementById('hints-toggle').checked;
+            gameData.secretHint = hintsOn ? (Array.isArray(sel.hints)?sel.hints:(sel.hint?[sel.hint]:["Sin pista"]))[Math.floor(Math.random()*(Array.isArray(sel.hints)?sel.hints.length:1))] : null;
+            
+            let impC = parseInt(document.getElementById('impostor-count').value); if(impC>=players.length) impC=players.length-1;
+            gameData.totalImpostors = impC; gameData.impostorsCaught=0;
+            let assign = new Array(players.length).fill(null); let p=0;
+            while(p<impC) { let r=Math.floor(Math.random()*players.length); if(!assign[r]) { assign[r]={isImpostor:true, isAccomplice:false, name:players[r], alive:true}; p++; } }
+            const accOn = document.getElementById('accomplice-toggle').checked;
+            if(accOn && (players.length-impC)>=2) { let as=false; while(!as) { let r=Math.floor(Math.random()*players.length); if(!assign[r]) { assign[r]={isImpostor:false, isAccomplice:true, name:players[r], alive:true}; as=true; } } }
+            for(let i=0; i<players.length; i++) if(!assign[i]) assign[i]={isImpostor:false, isAccomplice:false, name:players[i], alive:true};
+            gameData.assignments = assign; gameData.currentIndex = 0; setupCardForPlayer(); showScreen('screen-reveal');
+        }
+        function setupCardForPlayer() {
+            const p = gameData.assignments[gameData.currentIndex];
+            const av = playerAvatars[p.name]||'👤';
+            document.getElementById('current-player-display').innerHTML = `<span style="font-size:2em">${av}</span><br>Turno de: ${p.name}`;
+            const wd=document.getElementById('secret-word'), rd=document.getElementById('secret-role');
+            if(p.isImpostor) { wd.innerText="😈 IMPOSTOR"; wd.style.color="#e74c3c"; rd.innerHTML=gameData.secretHint?`Pista: <strong style='color:#f1c40f'>${gameData.secretHint}</strong>`:"Sin pista"; }
+            else if(p.isAccomplice) { wd.innerText=gameData.secretWord; wd.style.color="#9b59b6"; const imps=gameData.assignments.filter(x=>x.isImpostor).map(x=>x.name).join(", "); rd.innerHTML=`🤫 CÓMPLICE<br>Protege a: <strong style='color:#e74c3c'>${imps}</strong>`; }
+            else { wd.innerText=gameData.secretWord; wd.style.color="#2ecc71"; rd.innerText="Ciudadano"; }
+            const btn=document.getElementById('next-btn');
+            if(gameData.currentIndex>=players.length-1) { btn.innerText="EMPEZAR"; btn.onclick=startActiveGame; }
+            else { btn.innerText="SIGUIENTE"; btn.onclick=()=>{gameData.currentIndex++; setupCardForPlayer();}; }
+        }
+        function startActiveGame() {
+            showScreen('screen-active'); renderVotingList();
+            let pool=[]; gameData.assignments.forEach(p=>{if(p.alive){const w=p.isImpostor?6:10;for(let i=0;i<w;i++)pool.push(p.name);}});
+            const st=pool[Math.floor(Math.random()*pool.length)]; document.getElementById('starter-name').innerText=`${playerAvatars[st]||''} ${st}`;
+            const m=parseInt(document.getElementById('game-timer-input').value);
+            if(m>20) document.getElementById('timer-display').innerText="♾️";
+            else { timeRemaining=m*60; updateTimerUI(); timerInterval=setInterval(()=>{timeRemaining--; updateTimerUI(); if(timeRemaining<=0)clearInterval(timerInterval);},1000); }
+        }
+        function votePlayer(i) {
+            if(!confirm(`¿Expulsar a ${gameData.assignments[i].name}?`))return;
+            const p=gameData.assignments[i]; p.alive=false; showScreen('screen-result'); clearInterval(timerInterval);
+            const t=document.getElementById('result-title'), ic=document.getElementById('result-icon'), m=document.getElementById('result-msg'), ia=document.getElementById('impostor-guess-area'), cb=document.getElementById('continue-btn');
+            if(p.isImpostor) { t.innerText="¡IMPOSTOR PILLADO!"; t.style.color="#2ecc71"; ic.innerText="🎉"; m.innerText=`${p.name} era Impostor.`; ia.classList.remove('hidden'); cb.classList.add('hidden'); }
+            else if(p.isAccomplice) { t.innerText="¡ERA EL CÓMPLICE!"; t.style.color="#9b59b6"; ic.innerText="🎭"; m.innerText=`${p.name} ayudaba al Impostor.`; ia.classList.add('hidden'); cb.classList.remove('hidden'); }
+            else { t.innerText="ERROR..."; t.style.color="#e74c3c"; ic.innerText="💀"; m.innerText=`${p.name} era Inocente.`; ia.classList.add('hidden'); cb.classList.remove('hidden'); }
+        }
+        // Navegación
+        function showScreen(id){document.querySelectorAll('.container').forEach(d=>d.classList.add('hidden'));document.getElementById(id).classList.remove('hidden');}
+        function goToHome(){showScreen('screen-home');}
+        function restartGame(){startGameSetup();}
+        async function fetchThemes(){const r=await fetch('/api/themes');themes=await r.json();}
+        function updateTimeDisplay(){const v=parseInt(document.getElementById('game-timer-input').value);document.getElementById('time-display').innerText=(v>20)?"Infinito":v+" min";}
+        function updateConfigDisplay(){document.getElementById('impostor-val').innerText=document.getElementById('impostor-count').value;}
+        function openThemeCreator(){document.getElementById('new-theme-title').value='';document.getElementById('words-container').innerHTML='';addWordRow();addWordRow();addWordRow();showScreen('screen-create-theme');}
+        function addWordRow(){const c=document.getElementById('words-container');const d=document.createElement('div');d.className='word-row card';d.innerHTML=`<div style="display:flex; justify-content:space-between;"><strong>Palabra</strong><span style="color:#e74c3c; cursor:pointer;" onclick="this.parentElement.parentElement.remove()">🗑️</span></div><input type="text" class="input-word" placeholder="Ej: Manzana"><div style="margin-top:5px;"><small>Pistas (separadas por /):</small><input type="text" class="input-hints" placeholder="Ej: Es roja / Fruta prohibida"></div>`;c.appendChild(d);}
+        async function saveThemeFromUI(){const n=document.getElementById('new-theme-title').value;if(!n)return alert("Pon título");const w=[];document.querySelectorAll('.word-row').forEach(r=>{const t=r.querySelector('.input-word').value.trim();const h=r.querySelector('.input-hints').value.trim();if(t){w.push({text:t,hints:h?h.split('/'):["Sin pista"]});}});if(w.length<4)return alert("Mín 4 palabras");await fetch('/api/themes',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name:n,words:w})});alert("Tema guardado");await fetchThemes();showScreen('screen-home');}
+        function goToThemeSelection(){if(players.length<3)return alert("Mín 3 jug.");renderThemeGrid();showScreen('screen-themes');}
+        function renderThemeGrid(){document.getElementById('themes-grid').innerHTML=themes.map(t=>`<div class="theme-box ${selectedThemesIds.includes(t.id)?'selected':''}" onclick="toggleTheme(${t.id})"><strong>${t.name}</strong><br><small>${t.words.length} palabras</small></div>`).join('');}
+        function toggleTheme(id){selectedThemesIds.includes(id)?selectedThemesIds=selectedThemesIds.filter(x=>x!==id):selectedThemesIds.push(id);renderThemeGrid();}
+        function setupCardInteractions(){const c=document.getElementById('magic-card');const s=(e)=>{if(e.cancelable)e.preventDefault();c.classList.add('revealed');};const h=(e)=>{if(e.cancelable)e.preventDefault();c.classList.remove('revealed');};c.addEventListener('mousedown',s);c.addEventListener('mouseup',h);c.addEventListener('mouseleave',h);c.addEventListener('touchstart',s,{passive:false});c.addEventListener('touchend',h);c.addEventListener('touchcancel',h);}
+        function citizensGiveUp(){if(confirm("¿Rendirse?"))endGameWithWinner('Impostor');}
+        function updateTimerUI(){const m=Math.floor(timeRemaining/60).toString().padStart(2,'0');const s=(timeRemaining%60).toString().padStart(2,'0');document.getElementById('timer-display').innerText=`${m}:${s}`;}
+        function renderVotingList(){const c=document.getElementById('voting-list');c.innerHTML='';gameData.assignments.forEach((p,i)=>{if(p.alive){const av=playerAvatars[p.name]||'👤';const b=document.createElement('div');b.className='vote-card';b.innerHTML=`<div style="font-size:1.5em">${av}</div><strong>${p.name}</strong><br><small>Expulsar</small>`;b.onclick=()=>votePlayer(i);c.appendChild(b);}});}
+        function continueGame(){const l=gameData.assignments.filter(p=>p.alive).length;const li=gameData.assignments.filter(p=>p.alive&&p.isImpostor).length;if(l<=2&&li>0){alert("¡Empate técnico! Gana Impostor.");endGameWithWinner('Impostor');}else if(li===0)endGameWithWinner('Ciudadanos');else{showScreen('screen-active');renderVotingList();}}
+        function nextPlayer(){gameData.currentIndex++;setupCardForPlayer();}
     </script>
 </body>
 </html>
