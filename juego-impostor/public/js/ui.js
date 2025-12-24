@@ -55,6 +55,10 @@ function goToThemeSelection() {
     showScreen('screen-themes');
 }
 
+// Variable global para controlar qué estamos editando
+let editingThemeId = null;
+
+// --- RENDERIZADO TEMAS ---
 function renderThemeGrid() {
     const container = document.getElementById('themes-grid');
     if(!container) return;
@@ -64,11 +68,30 @@ function renderThemeGrid() {
         return;
     }
 
-    container.innerHTML = themes.map(t => `
-        <div class="theme-box ${selectedThemesIds.includes(t.id)?'selected':''}" onclick="toggleTheme(${t.id})">
-            <strong>${t.name}</strong><br><small>${t.words.length} palabras</small>
+    // ORDENAR: Primero las Custom (creadas por usuario), luego las normales
+    // Usamos [...themes] para no mutar el array original
+    const sortedThemes = [...themes].sort((a, b) => {
+        if (a.isCustom && !b.isCustom) return -1; // a va antes
+        if (!a.isCustom && b.isCustom) return 1;  // b va antes
+        return 0;
+    });
+
+    container.innerHTML = sortedThemes.map(t => {
+        const isSelected = selectedThemesIds.includes(t.id);
+        const customClass = t.isCustom ? 'custom-theme-box' : '';
+        const customBadge = t.isCustom ? '<span class="badge-custom">👤 PROPIA</span>' : '';
+        
+        return `
+        <div class="theme-box ${isSelected ? 'selected' : ''} ${customClass}" onclick="toggleTheme(${t.id})">
+            <div style="display:flex; justify-content:space-between; align-items:start;">
+                <strong>${t.name}</strong>
+                <button class="btn-icon-small" onclick="event.stopPropagation(); loadThemeForEdit(${t.id})">✏️</button>
+            </div>
+            <small>${t.words.length} palabras</small>
+            ${customBadge}
         </div>
-    `).join('');
+    `;
+    }).join('');
 }
 
 function toggleTheme(id) {
@@ -79,19 +102,61 @@ function toggleTheme(id) {
 }
 
 // --- CREADOR DE TEMAS UI ---
+
+// Abre el creador LIMPIO (para crear nuevo)
 function openThemeCreator() {
+    editingThemeId = null; // No estamos editando
+    document.getElementById('create-theme-title').innerText = "🎨 Nuevo Tema";
     document.getElementById('new-theme-title').value = '';
     document.getElementById('new-theme-suggestions').value = '';
     document.getElementById('words-container').innerHTML = '';
+    
+    // Añadimos 3 filas vacías por defecto
     addWordRow(); addWordRow(); addWordRow();
+    
     showScreen('screen-create-theme');
 }
 
-function addWordRow() {
+// Abre el creador CON DATOS (para editar)
+function loadThemeForEdit(id) {
+    const theme = themes.find(t => t.id === id);
+    if (!theme) return;
+
+    editingThemeId = id; // Guardamos la ID que estamos editando
+    
+    document.getElementById('create-theme-title').innerText = "✏️ Editar Tema";
+    document.getElementById('new-theme-title').value = theme.name;
+    
+    // Cargar sugerencias
+    const suggs = theme.suggestions ? theme.suggestions.join(' / ') : '';
+    document.getElementById('new-theme-suggestions').value = suggs;
+
+    // Cargar palabras
+    const container = document.getElementById('words-container');
+    container.innerHTML = ''; // Limpiar
+    theme.words.forEach(w => {
+        // Reusamos la lógica de añadir fila pero inyectando valores
+        addWordRow(w.text, Array.isArray(w.hints) ? w.hints.join(' / ') : w.hints);
+    });
+
+    showScreen('screen-create-theme');
+}
+
+// Modificamos addWordRow para aceptar valores opcionales
+function addWordRow(textVal = '', hintVal = '') {
     const c = document.getElementById('words-container');
     const d = document.createElement('div');
     d.className = 'word-row card';
-    d.innerHTML = `<div style="display:flex; justify-content:space-between;"><strong>Palabra</strong><span style="color:#e74c3c; cursor:pointer;" onclick="this.parentElement.parentElement.remove()">🗑️</span></div><input type="text" class="input-word" placeholder="Ej: Manzana"><div style="margin-top:5px;"><small>Pistas (separadas por /):</small><input type="text" class="input-hints" placeholder="Ej: Es roja / Fruta prohibida"></div>`;
+    d.innerHTML = `
+        <div style="display:flex; justify-content:space-between;">
+            <strong>Palabra</strong>
+            <span style="color:#e74c3c; cursor:pointer;" onclick="this.parentElement.parentElement.remove()">🗑️</span>
+        </div>
+        <input type="text" class="input-word" value="${textVal}" placeholder="Ej: Manzana">
+        <div style="margin-top:5px;">
+            <small>Pistas (separadas por /):</small>
+            <input type="text" class="input-hints" value="${hintVal}" placeholder="Ej: Es roja / Fruta prohibida">
+        </div>`;
     c.appendChild(d);
 }
 

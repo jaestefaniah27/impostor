@@ -132,17 +132,28 @@ app.post('/api/aliases/unmerge', (req, res) => {
     res.json({ success: true });
 });
 
-app.get('/api/themes', (req, res) => {
-    try {
-        const data = fs.readFileSync(DB_FILE, 'utf8');
-        // Intentamos parsear para ver si explota
-        const json = JSON.parse(data); 
-        res.json(json);
-    } catch (e) {
-        console.error("❌ ERROR CRÍTICO EN THEMES.JSON:", e.message);
-        // Si hay error, devolvemos un array vacío para que la web no se cuelgue
-        res.json([]); 
+app.post('/api/themes', (req, res) => {
+    const { id, name, words, suggestions } = req.body;
+    let themes = [];
+    try { themes = JSON.parse(fs.readFileSync(DB_FILE, 'utf8')); } catch(e){}
+
+    if (id) {
+        // --- MODO EDICIÓN ---
+        const index = themes.findIndex(t => t.id === id);
+        if (index !== -1) {
+            themes[index] = { ...themes[index], name, words, suggestions, isCustom: true };
+        } else {
+            // Si venía ID pero no existe, lo creamos (raro, pero por si acaso)
+            themes.push({ id, name, words, suggestions, isCustom: true });
+        }
+    } else {
+        // --- MODO CREACIÓN ---
+        const newId = Date.now(); // ID único basado en tiempo
+        themes.push({ id: newId, name, words, suggestions, isCustom: true });
     }
+
+    fs.writeFileSync(DB_FILE, JSON.stringify(themes, null, 2));
+    res.json({ success: true });
 });
 
 app.listen(PORT, () => { console.log(`Servidor listo en http://localhost:${PORT}`); });

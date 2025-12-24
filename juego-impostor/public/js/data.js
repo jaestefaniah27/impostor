@@ -82,7 +82,6 @@ async function saveThemeFromUI() {
     const n = document.getElementById('new-theme-title').value;
     if(!n) return alert("Pon título");
     
-    // CAPTURAR SUGERENCIAS DEL TEXTAREA
     const suggestionsRaw = document.getElementById('new-theme-suggestions').value.trim();
     let themeSuggestions = [];
     if (suggestionsRaw) {
@@ -98,15 +97,23 @@ async function saveThemeFromUI() {
     
     if(w.length < 4) return alert("Mín 4 palabras");
     
-    // ENVIAR SUGGESTIONS AL SERVIDOR
+    // Objeto a enviar (incluye id si estamos editando)
+    const payload = {
+        id: editingThemeId, // Global definida en ui.js
+        name: n, 
+        words: w, 
+        suggestions: themeSuggestions
+    };
+    
     await fetch('/api/themes', {
         method:'POST',
         headers:{'Content-Type':'application/json'},
-        body:JSON.stringify({name:n, words:w, suggestions: themeSuggestions})
+        body:JSON.stringify(payload)
     });
-    alert("Tema guardado");
-    await fetchThemes();
-    showScreen('screen-home');
+    
+    alert(editingThemeId ? "Tema actualizado" : "Tema creado");
+    await fetchThemes(); // Recargar lista
+    showScreen('screen-themes'); // Volver a la lista
 }
 
 async function saveGameRecordToHistory(record) {
