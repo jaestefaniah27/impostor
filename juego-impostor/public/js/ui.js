@@ -1,9 +1,11 @@
+// VARIABLES UI PARA FUSIÓN
+let isMergeMode = false;
+let selectedForMerge = [];
+
 // --- NAVEGACIÓN ---
 function showScreen(id) {
     document.querySelectorAll('.container').forEach(d => d.classList.add('hidden'));
     document.getElementById(id).classList.remove('hidden');
-    
-    // NUEVO: Esto fuerza a que la pantalla empiece siempre desde arriba
     window.scrollTo(0, 0); 
 }
 function goToHome() { showScreen('screen-home'); }
@@ -55,10 +57,10 @@ function goToThemeSelection() {
 
 function renderThemeGrid() {
     const container = document.getElementById('themes-grid');
-    if (!container) return; // Si no estamos en esa pantalla, salir
-
-    if (!themes || themes.length === 0) {
-        container.innerHTML = '<p style="text-align:center; opacity:0.5;">No hay temas cargados.</p>';
+    if(!container) return;
+    
+    if(!themes || themes.length === 0) {
+        container.innerHTML = "<p>No hay temas cargados.</p>";
         return;
     }
 
@@ -79,9 +81,7 @@ function toggleTheme(id) {
 // --- CREADOR DE TEMAS UI ---
 function openThemeCreator() {
     document.getElementById('new-theme-title').value = '';
-    // LIMPIAR EL NUEVO INPUT DE SUGERENCIAS
     document.getElementById('new-theme-suggestions').value = '';
-    
     document.getElementById('words-container').innerHTML = '';
     addWordRow(); addWordRow(); addWordRow();
     showScreen('screen-create-theme');
@@ -95,13 +95,11 @@ function addWordRow() {
     c.appendChild(d);
 }
 
-// --- SUGERENCIAS CONTEXTUALES ---
+// --- SUGERENCIAS ---
 function showSuggestion() {
-    // USAR LAS SUGERENCIAS DEL TEMA ACTUAL
     const source = (gameData.currentSuggestions && gameData.currentSuggestions.length > 0) 
         ? gameData.currentSuggestions 
         : defaultSuggestions;
-
     const randomQ = source[Math.floor(Math.random() * source.length)];
     document.getElementById('suggestion-area').innerHTML = `<div class="suggestion-card">💡 Pista: "${randomQ}"</div>`;
 }
@@ -109,6 +107,7 @@ function showSuggestion() {
 // --- INTERACCIÓN CARTA ---
 function setupCardInteractions() {
     const c = document.getElementById('magic-card');
+    if(!c) return;
     const s = (e) => { if(e.cancelable) e.preventDefault(); c.classList.add('revealed'); };
     const h = (e) => { if(e.cancelable) e.preventDefault(); c.classList.remove('revealed'); };
     c.addEventListener('mousedown',s); c.addEventListener('mouseup',h); c.addEventListener('mouseleave',h);
@@ -128,7 +127,6 @@ async function loadAndShowHistory() {
             container.innerHTML = history.map((record, index) => {
                 const date = new Date(record.date || Date.now()).toLocaleDateString();
                 
-                // TORNEO
                 if (record.type === 'tournament') {
                     let winnerName = "Empate";
                     let maxScore = -1;
@@ -154,10 +152,7 @@ async function loadAndShowHistory() {
                             `).join('')}
                         </div>
                     </div>`;
-                }
-                
-                // PARTIDA SIMPLE
-                else {
+                } else {
                     const wTxt = record.winner === 'Impostor' ? '👑 Ganó Impostor' : '🛡️ Ganaron Ciudadanos';
                     const wClass = record.winner === 'Impostor' ? 'win-imp-text' : 'win-cit-text';
                     return `
@@ -186,10 +181,6 @@ function toggleHistoryDetails(idx) {
     el.classList.toggle('expanded');
 }
 
-// VARIABLES UI PARA FUSIÓN
-let isMergeMode = false;
-let selectedForMerge = [];
-
 // --- ESTADÍSTICAS UI ---
 async function loadAndShowStats() {
     const stats = await fetchStats();
@@ -204,29 +195,26 @@ async function loadAndShowStats() {
 
     // 2. Procesar Jugadores
     const playersArr = Object.values(stats.players);
-    
-    // Mejor Impostor (Más victorias)
     const bestImp = playersArr.sort((a,b) => b.impWins - a.impWins)[0];
     document.getElementById('stat-best-impostor').innerText = bestImp && bestImp.impWins > 0 ? `${bestImp.name} (${bestImp.impWins})` : "-";
 
-    // Más Viciado (Más tiempo)
-    // Nota: Reordenamos por tiempo, pero usamos el array original 'playersArr' que se reordena in-place,
-    // así que cuidado. Mejor hacer copia si se necesita el orden anterior.
     const mostPlayed = [...playersArr].sort((a,b) => b.time - a.time)[0];
     document.getElementById('stat-most-played').innerText = mostPlayed ? `${mostPlayed.name}` : "-";
 
-    renderStatsList(playersArr);
-    
-    // Ocultar barra de fusión al entrar
-    document.getElementById('merge-tool-bar').classList.add('hidden');
-    isMergeMode = false;
-    selectedForMerge = [];
+    // 3. CONTROL DEL BANNER (AQUÍ ESTABA EL ERROR ANTES)
+    // Solo reseteamos si la pantalla estaba oculta (venimos del menú)
+    const screenStats = document.getElementById('screen-stats');
+    if (screenStats.classList.contains('hidden')) {
+        document.getElementById('merge-tool-bar').classList.add('hidden');
+        isMergeMode = false;
+        selectedForMerge = [];
+    }
 
+    renderStatsList(playersArr);
     showScreen('screen-stats');
 }
 
 function renderStatsList(playersArr) {
-    // Orden por defecto: Partidas jugadas
     playersArr.sort((a,b) => b.games - a.games);
 
     const container = document.getElementById('stats-list');
@@ -234,19 +222,14 @@ function renderStatsList(playersArr) {
         const winRate = p.impTotal > 0 ? Math.round((p.impWins / p.impTotal) * 100) : 0;
         const timeMin = Math.round(p.time / 60);
         
-        // VISUALIZACIÓN DE NOMBRES CONCATENADOS
-        // Si 'p.aka' tiene más de 1 nombre, los unimos con " | "
         let displayName = p.name;
         if (p.aka && p.aka.length > 1) {
-            // Ponemos el nombre principal primero si está en la lista, luego el resto
             const others = p.aka.filter(n => n !== p.name);
             displayName = `${p.name} | ${others.join(' | ')}`;
         }
 
-        // Checkbox para modo fusión
-        // Usamos p.name (ID principal) como valor
         const checkHtml = isMergeMode 
-            ? `<input type="checkbox" class="merge-check" value="${p.name}" onchange="updateMergeSelection(this)" style="width:20px; height:20px; margin-right:10px;">` 
+            ? `<input type="checkbox" class="merge-check" value="${p.name}" ${selectedForMerge.includes(p.name) ? 'checked' : ''} onchange="updateMergeSelection(this)" style="width:20px; height:20px; margin-right:10px;">` 
             : '';
 
         return `
@@ -265,17 +248,14 @@ function renderStatsList(playersArr) {
         </div>`;
     }).join('');
 }
-// --- LÓGICA DE FUSIÓN Y DESUNIFICACIÓN ---
 
+// --- LÓGICA DE FUSIÓN Y DESUNIFICACIÓN ---
 function toggleMergeMode() {
     isMergeMode = !isMergeMode;
-    selectedForMerge = []; // Reiniciar selección
+    selectedForMerge = [];
     document.getElementById('merge-tool-bar').classList.toggle('hidden', !isMergeMode);
     
-    // Actualizar el estado del botón (se deshabilitará porque no hay selección)
-    updateMergeToolbar();
-    
-    // Recargar la lista para que aparezcan los checkboxes
+    updateMergeToolbar(); 
     loadAndShowStats(); 
 }
 
@@ -283,15 +263,14 @@ function updateMergeSelection(checkbox) {
     if (checkbox.checked) selectedForMerge.push(checkbox.value);
     else selectedForMerge = selectedForMerge.filter(n => n !== checkbox.value);
     
-    // Cada vez que tocamos un checkbox, recalculamos qué hace el botón
-    updateMergeToolbar();
+    updateMergeToolbar(); 
 }
 
 function updateMergeToolbar() {
     const btn = document.getElementById('merge-action-btn');
-    
+    if(!btn) return;
+
     if (selectedForMerge.length === 0) {
-        // NADA SELECCIONADO
         btn.innerText = "Selecciona jugadores...";
         btn.disabled = true;
         btn.style.opacity = 0.5;
@@ -300,16 +279,16 @@ function updateMergeToolbar() {
         btn.style.color = "#d35400";
     } 
     else if (selectedForMerge.length === 1) {
-        // 1 SELECCIONADO -> MODO DESUNIFICAR
+        // MODO DESUNIFICAR
         btn.innerText = "DESUNIFICAR (Separar Nombres)";
         btn.disabled = false;
         btn.style.opacity = 1;
-        btn.style.background = "#c0392b"; // Rojo oscuro
+        btn.style.background = "#c0392b"; 
         btn.style.color = "white";
         btn.onclick = executeUnmerge;
     } 
     else {
-        // 2 O MÁS SELECCIONADOS -> MODO UNIFICAR
+        // MODO UNIFICAR
         btn.innerText = `UNIFICAR (${selectedForMerge.length})`;
         btn.disabled = false;
         btn.style.opacity = 1;
@@ -322,20 +301,13 @@ function updateMergeToolbar() {
 async function executeMerge() {
     if (selectedForMerge.length < 2) return;
     
-    // Preguntar cuál es el nombre principal
-    const mainName = prompt(`Vas a fusionar: \n${selectedForMerge.join('\n')}\n\nEscribe el NOMBRE FINAL que se quedará (debe ser uno de la lista):`, selectedForMerge[0]);
-    
-    if (!mainName) return; // Cancelado
+    // SIMPLIFICADO: Tomamos el primero de la selección como principal
+    const mainName = selectedForMerge[0];
 
-    // Validar que el nombre escrito esté en la selección
-    if (!selectedForMerge.includes(mainName.trim())) {
-        return alert("Error: Debes escribir exactamente uno de los nombres que has seleccionado.");
-    }
-
-    if (confirm(`¿Seguro? Todas las estadísticas se sumarán a "${mainName}".`)) {
-        await mergeAliases(mainName.trim(), selectedForMerge);
+    if (confirm(`¿Fusionar estadísticas de "${mainName}"?\n(Se unirán: ${selectedForMerge.join(', ')})`)) {
+        await mergeAliases(mainName, selectedForMerge);
         alert("¡Fusión completada!");
-        toggleMergeMode(); // Salir del modo y recargar
+        toggleMergeMode();
     }
 }
 
@@ -343,25 +315,19 @@ async function executeUnmerge() {
     if (selectedForMerge.length !== 1) return;
     const target = selectedForMerge[0];
 
-    // Necesitamos saber qué alias tiene este jugador. 
-    // Como no los tenemos guardados en la variable global, los pedimos de nuevo o usamos un truco.
-    // Lo más seguro es recargar stats en segundo plano para obtener el objeto del jugador.
     const stats = await fetchStats();
     const playerArr = Object.values(stats.players);
     const player = playerArr.find(p => p.name === target);
     
-    // Verificamos si tiene alias reales (más de 1 nombre en 'aka')
     if (!player || !player.aka || player.aka.length <= 1) {
         return alert("Este jugador no tiene nombres unificados para separar.");
     }
 
     if (confirm(`¿Quieres separar los nombres de "${target}"?\n\nNombres que se liberarán: ${player.aka.filter(n => n !== target).join(', ')}`)) {
-        // Los nombres a liberar son todos EXCEPTO el principal
         const aliasesToFree = player.aka.filter(n => n !== target);
-        
         await unmergeAliases(aliasesToFree);
         alert("¡Nombres separados correctamente!");
-        toggleMergeMode(); // Salir del modo y recargar
+        toggleMergeMode();
     }
 }
 
