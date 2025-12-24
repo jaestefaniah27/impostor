@@ -1,4 +1,4 @@
-// --- LÓGICA DE TORNEO (Igual) ---
+// --- LÓGICA DE TORNEO ---
 function startTournamentMode() {
     const name = document.getElementById('tournament-name-input').value.trim() || "Torneo Sin Nombre";
     if (confirm(`¿Empezar el torneo "${name}"? Los puntos empezarán desde 0.`)) {
@@ -42,47 +42,34 @@ async function finishTournament() {
     loadAndShowHistory();
 }
 
-// --- LÓGICA DE JUEGO (MODIFICADA PARA SUGERENCIAS CONTEXTUALES) ---
+// --- LÓGICA DE JUEGO ---
 function startGameSetup() {
     if(selectedThemesIds.length === 0) return alert("Elige tema");
     document.getElementById('suggestion-area').innerHTML = '';
     
-    // 1. CREAR POOL CONTEXTUAL
-    // En lugar de guardar solo palabras, guardamos objetos: { wordData: ..., suggestions: ... }
+    // Selección contextual de palabras
     let selectionPool = []; 
-    
     themes.forEach(t => { 
         if(selectedThemesIds.includes(t.id)) {
-            // Usar sugerencias del tema o fallback
             const themeSuggs = (t.suggestions && t.suggestions.length > 0) ? t.suggestions : defaultSuggestions;
-            
             t.words.forEach(w => {
-                selectionPool.push({
-                    wordData: w,
-                    suggestions: themeSuggs
-                });
+                selectionPool.push({ wordData: w, suggestions: themeSuggs });
             });
         } 
     });
 
     if(selectionPool.length === 0) return alert("Temas vacíos");
     
-    // 2. SELECCIONAR
     const selection = selectionPool[Math.floor(Math.random() * selectionPool.length)];
-    
-    // Guardar en gameData
     gameData.secretWord = selection.wordData.text;
-    gameData.currentSuggestions = selection.suggestions; // ¡AQUÍ ESTÁ LA MAGIA!
-    
-    const sel = selection.wordData; // Referencia corta para pistas
+    gameData.currentSuggestions = selection.suggestions;
+    const sel = selection.wordData;
 
-    // Pistas
     const hintsOn = document.getElementById('hints-toggle').checked;
     gameData.secretHint = hintsOn 
         ? (Array.isArray(sel.hints) ? sel.hints : (sel.hint ? [sel.hint] : ["Sin pista"]))[Math.floor(Math.random()*(Array.isArray(sel.hints)?sel.hints.length:1))] 
         : null;
     
-    // Roles
     let impC = parseInt(document.getElementById('impostor-count').value); 
     if(impC >= players.length) impC = players.length - 1;
     gameData.totalImpostors = impC; 
@@ -112,7 +99,25 @@ function startGameSetup() {
     
     gameData.assignments = assign; 
     gameData.currentIndex = 0; 
-    setupCardForPlayer(); 
+    
+    // CAMBIO: En lugar de setupCardForPlayer, vamos a la pantalla de pase
+    showPassScreen();
+}
+
+// NUEVA FUNCIÓN: Muestra la pantalla intermedia
+function showPassScreen() {
+    const p = gameData.assignments[gameData.currentIndex];
+    const av = playerAvatars[p.name] || '👤';
+    
+    document.getElementById('pass-player-name').innerText = p.name;
+    document.getElementById('pass-player-avatar').innerText = av;
+    
+    showScreen('screen-pass-device');
+}
+
+// NUEVA FUNCIÓN: Se llama cuando el usuario confirma "Soy yo"
+function confirmIdentity() {
+    setupCardForPlayer();
     showScreen('screen-reveal');
 }
 
@@ -142,8 +147,18 @@ function setupCardForPlayer() {
     }
     
     const btn = document.getElementById('next-btn');
-    if(gameData.currentIndex >= players.length-1) { btn.innerText="EMPEZAR"; btn.onclick=startActiveGame; }
-    else { btn.innerText="SIGUIENTE"; btn.onclick=()=>{gameData.currentIndex++; setupCardForPlayer();}; }
+    if(gameData.currentIndex >= players.length-1) { 
+        btn.innerText="EMPEZAR PARTIDA"; 
+        btn.onclick=startActiveGame; 
+    } else { 
+        btn.innerText="SIGUIENTE JUGADOR"; 
+        btn.onclick=nextPlayer; // Llama a la función que inicia el pase de móvil
+    }
+}
+
+function nextPlayer(){ 
+    gameData.currentIndex++; 
+    showPassScreen(); // Ahora va a la pantalla intermedia
 }
 
 function startActiveGame() {
@@ -234,8 +249,6 @@ function continueGame() {
     else { showScreen('screen-active'); renderVotingList(); }
 }
 
-function nextPlayer(){ gameData.currentIndex++; setupCardForPlayer(); }
-
 // --- FINALIZAR RONDA ---
 async function endGameWithWinner(winner) {
     clearInterval(timerInterval);
@@ -262,7 +275,7 @@ async function endGameWithWinner(winner) {
             if (winner === 'Impostor' && isBad) tournamentScores[p.name] += 5;
             else if (winner === 'Ciudadanos' && !isBad) tournamentScores[p.name] += 2;
         });
-        renderScoreboard(true);
+        renderScoreboard();
         document.getElementById('scoreboard-container').classList.remove('hidden');
     } else {
         await saveGameRecordToHistory(currentGameRecord);
