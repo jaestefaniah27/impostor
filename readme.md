@@ -27,8 +27,9 @@ sudo apt-get install -y nodejs
 # 4. Verificar instalación
 node -v
 npm -v
-
+```
 📦 2. Instalación del Proyecto
+```bash
 # 1. Clonar el repositorio
 git clone [https://github.com/TU_USUARIO/TU_REPO.git](https://github.com/TU_USUARIO/TU_REPO.git)
 
@@ -40,10 +41,11 @@ npm install
 
 # 4. Prueba rápida (Opcional, Ctrl+C para salir)
 node server.js
-
+```
 ⚙️ 3. Gestor de Procesos (PM2)
 Para mantener la aplicación siempre encendida (incluso si se reinicia el servidor).
 # 1. Instalar PM2 globalmente
+```bash
 sudo npm install -g pm2
 
 # 2. Iniciar la aplicación (Puerto 3000 por defecto)
@@ -55,17 +57,19 @@ pm2 startup
 
 # 4. Guardar la lista de procesos actual
 pm2 save
-
+```
 🌐 4. Servidor Web y Proxy Inverso (Nginx)
 Nginx redirigirá el tráfico de internet (puerto 80) a nuestra aplicación Node.js (puerto 3000).
+```bash
 # 1. Instalar Nginx
 sudo apt install nginx -y
 
 # 2. Crear configuración para el sitio
 sudo nano /etc/nginx/sites-available/impostor
-
+```
 Pega el siguiente contenido en el editor:
 (Sustituye tu-dominio.duckdns.org por tu dominio real)
+```bash
 server {
     listen 80;
     server_name tu-dominio.duckdns.org;
@@ -79,11 +83,11 @@ server {
         proxy_cache_bypass $http_upgrade;
     }
 }
-
+```
 Guardar y Activar:
  * Guarda (Ctrl+O, Enter) y Sal (Ctrl+X).
  * Ejecuta:
-<!-- end list -->
+```bash
 # Activar el sitio (Enlace simbólico)
 sudo ln -s /etc/nginx/sites-available/impostor /etc/nginx/sites-enabled/
 
@@ -92,30 +96,34 @@ sudo nginx -t
 
 # Reiniciar Nginx
 sudo systemctl restart nginx
-
+```
 🔒 5. Certificado SSL (HTTPS)
 Para tener el candado verde y evitar avisos de "Sitio no seguro". Nota: Necesitas que el dominio ya apunte a tu IP.
+```bash
 # 1. Instalar Certbot
 sudo apt install certbot python3-certbot-nginx -y
 
 # 2. Obtener certificado
 sudo certbot --nginx -d tu-dominio.duckdns.org
-
+```
 Sigue las instrucciones en pantalla y acepta la redirección automática a HTTPS.
 🔄 6. Actualizar la Web
 Cuando hagas cambios en tu código y los subas a GitHub, usa este comando en tu servidor para actualizar todo en segundos:
+```bash
 # Entra, descarga, instala dependencias nuevas y reinicia
-cd ~/TU_REPO/juego-impostor && git pull && npm install && pm2 restart impostor
-
+git pull && npm install && pm2 restart impostor
+```
 🛠️ 7. Mantenimiento y Extras
 🗑️ Borrar Historial / Resetear Stats
 Como eliminamos el botón de la web por seguridad, para reiniciar las estadísticas e historial:
+```bash
 # Opción A: Borrar el archivo (se regenera solo)
 rm ~/TU_REPO/juego-impostor/history.json
-
+```
+```bash
 # Opción B: Vaciarlo manualmente
 echo "[]" > ~/TU_REPO/juego-impostor/history.json
-
+```
 ➕ Añadir más juegos (Multi-App)
 Si quieres subir otro juego en el futuro (ej. Ajedrez) en el mismo servidor:
  * Crea otro subdominio (ej: ajedrez.duckdns.org).
@@ -125,9 +133,27 @@ Si quieres subir otro juego en el futuro (ej. Ajedrez) en el mismo servidor:
  * Activa con ln -s ... y reinicia Nginx.
  * Saca el certificado SSL para el nuevo subdominio.
 📜 Comandos Útiles PM2
+
  * pm2 status: Ver estado de las apps.
  * pm2 logs: Ver la consola en tiempo real (útil para errores).
  * pm2 restart all: Reiniciar todo.
  * pm2 stop impostor: Parar el juego.
 <!-- end list -->
+Copia de seguridad rápida:
 
+```bash
+cp juego-impostor/history.json juego-impostor/history.bak
+cp juego-impostor/aliases.json juego-impostor/aliases.bak
+```
+Haz el pull:
+
+```bash
+git pull
+```
+El Truco Final en el Servidor: Si al hacer git pull te dice que hay conflicto o te borra los archivos, simplemente restaura tu copia de seguridad:
+
+```bash
+# Si git los borró:
+mv juego-impostor/history.bak juego-impostor/history.json
+mv juego-impostor/aliases.bak juego-impostor/aliases.json
+```
