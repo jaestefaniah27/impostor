@@ -216,11 +216,14 @@
 
         <div id="merge-tool-bar" class="card hidden" style="background:#e67e22; position:sticky; top:10px; z-index:100; animation: popIn 0.3s;">
             <div style="display:flex; justify-content:space-between; align-items:center;">
-                <span style="color:white; font-weight:bold;">Fusionar Jugadores</span>
+                <span style="color:white; font-weight:bold;">Gestor de Nombres</span>
                 <button class="btn-secondary" style="background:rgba(0,0,0,0.2); width:auto; padding:5px 10px; margin:0;" onclick="cancelMergeMode()">Cancelar</button>
             </div>
-            <p style="font-size:0.8em; margin:5px 0 10px 0; color:white;">Selecciona los nombres que son la misma persona:</p>
-            <button class="btn-main" style="background:white; color:#d35400; margin:0; padding:10px;" onclick="executeMerge()">UNIFICAR SELECCIONADOS</button>
+            <p style="font-size:0.8em; margin:5px 0 10px 0; color:white;">
+                - Selecciona 2+ para <strong>UNIFICAR</strong>.<br>
+                - Selecciona 1 (con alias) para <strong>DESUNIFICAR</strong>.
+            </p>
+            <button id="merge-action-btn" class="btn-main" style="background:white; color:#d35400; margin:0; padding:10px;" disabled>Selecciona jugadores...</button>
         </div>
 
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">

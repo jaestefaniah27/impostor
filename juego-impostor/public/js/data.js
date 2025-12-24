@@ -128,3 +128,11 @@ async function mergeAliases(mainName, aliases) {
         body: JSON.stringify({ mainName: mainName, aliasesToMerge: aliases })
     });
 }
+
+async function unmergeAliases(namesToFree) {
+    await fetch('/api/aliases/unmerge', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({ namesToFree: namesToFree })
+    });
+}
