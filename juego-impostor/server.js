@@ -115,4 +115,17 @@ app.post('/api/aliases', (req, res) => {
     res.json({ success: true });
 });
 
+app.get('/api/themes', (req, res) => {
+    try {
+        const data = fs.readFileSync(DB_FILE, 'utf8');
+        // Intentamos parsear para ver si explota
+        const json = JSON.parse(data); 
+        res.json(json);
+    } catch (e) {
+        console.error("❌ ERROR CRÍTICO EN THEMES.JSON:", e.message);
+        // Si hay error, devolvemos un array vacío para que la web no se cuelgue
+        res.json([]); 
+    }
+});
+
 app.listen(PORT, () => { console.log(`Servidor listo en http://localhost:${PORT}`); });

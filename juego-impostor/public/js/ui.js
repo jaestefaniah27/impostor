@@ -54,7 +54,15 @@ function goToThemeSelection() {
 }
 
 function renderThemeGrid() {
-    document.getElementById('themes-grid').innerHTML = themes.map(t => `
+    const container = document.getElementById('themes-grid');
+    if (!container) return; // Si no estamos en esa pantalla, salir
+
+    if (!themes || themes.length === 0) {
+        container.innerHTML = '<p style="text-align:center; opacity:0.5;">No hay temas cargados.</p>';
+        return;
+    }
+
+    container.innerHTML = themes.map(t => `
         <div class="theme-box ${selectedThemesIds.includes(t.id)?'selected':''}" onclick="toggleTheme(${t.id})">
             <strong>${t.name}</strong><br><small>${t.words.length} palabras</small>
         </div>

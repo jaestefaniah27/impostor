@@ -67,7 +67,15 @@ async function fetchThemes() {
     try {
         const r = await fetch('/api/themes');
         themes = await r.json();
-    } catch(e) { console.error("Error cargando temas", e); }
+        
+        // CORRECCIÓN: Si ya estamos en la pantalla de temas (o para precargar), renderizamos
+        if (typeof renderThemeGrid === 'function') {
+            renderThemeGrid();
+        }
+    } catch(e) { 
+        console.error("Error cargando temas", e); 
+        alert("Error cargando temas. Revisa la consola.");
+    }
 }
 
 async function saveThemeFromUI() {
