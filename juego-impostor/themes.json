@@ -1,7 +1,123 @@
 [
     {
+        "id": 1,
+        "name": "Cocina",
+        "suggestions": [
+            "¿Se come frío o caliente?",
+            "¿Es un utensilio o un ingrediente?",
+            "¿Se guarda en la nevera?",
+            "¿Es dulce o salado?",
+            "¿Se usa para cortar?",
+            "¿Es un electrodoméstico?"
+        ],
+        "words": [
+            {
+                "text": "Sartén",
+                "hints": [
+                    "Para freír",
+                    "Mango largo",
+                    "Se usa con aceite"
+                ]
+            },
+            {
+                "text": "Microondas",
+                "hints": [
+                    "Calienta rápido",
+                    "Tiene plato giratorio",
+                    "Funciona con ondas"
+                ]
+            },
+            {
+                "text": "Nevera",
+                "hints": [
+                    "Enfría",
+                    "Conserva alimentos",
+                    "Tiene congelador"
+                ]
+            },
+            {
+                "text": "Tenedor",
+                "hints": [
+                    "Cubierto con pinchos",
+                    "Para pinchar comida",
+                    "No sirve para sopa"
+                ]
+            },
+            {
+                "text": "Chef",
+                "hints": [
+                    "Persona que cocina",
+                    "Usa gorro alto",
+                    "Jefe de cocina"
+                ]
+            }
+        ]
+    },
+    {
+        "id": 2,
+        "name": "Transporte",
+        "suggestions": [
+            "¿Tiene ruedas?",
+            "¿Va por aire, mar o tierra?",
+            "¿Necesita gasolina?",
+            "¿Es transporte público?",
+            "¿Tiene motor?",
+            "¿Caben muchas personas?"
+        ],
+        "words": [
+            {
+                "text": "Avión",
+                "hints": [
+                    "Vuela alto",
+                    "Tiene alas",
+                    "Va al aeropuerto"
+                ]
+            },
+            {
+                "text": "Submarino",
+                "hints": [
+                    "Bajo el agua",
+                    "Tiene periscopio",
+                    "Vehículo militar o científico"
+                ]
+            },
+            {
+                "text": "Caballo",
+                "hints": [
+                    "Animal que se monta",
+                    "Relincha",
+                    "Tiene crines"
+                ]
+            },
+            {
+                "text": "Patinete",
+                "hints": [
+                    "Dos ruedas y manillar",
+                    "Hay eléctricos",
+                    "Pie en el suelo"
+                ]
+            },
+            {
+                "text": "Cohete",
+                "hints": [
+                    "Viaje espacial",
+                    "Despega vertical",
+                    "Astronautas"
+                ]
+            }
+        ]
+    },
+    {
         "id": 3,
         "name": "Objetos Cotidianos",
+        "suggestions": [
+            "¿Se usa en la cocina?",
+            "¿Funciona con electricidad?",
+            "¿Cabe en un bolsillo?",
+            "¿Es algo que se rompe fácilmente?",
+            "¿Lo usamos todos los días?",
+            "¿Es de plástico?"
+        ],
         "words": [
             {
                 "text": "Reloj",
@@ -808,6 +924,14 @@
     {
         "id": 4,
         "name": "Películas y Series",
+        "suggestions": [
+            "¿Es de animación?",
+            "¿Es una película o una serie?",
+            "¿Es de terror o miedo?",
+            "¿Ganó algún Oscar?",
+            "¿Sale en Netflix?",
+            "¿Tiene secuelas o sagas?"
+        ],
         "words": [
             {
                 "text": "Titanic",
@@ -1614,6 +1738,14 @@
     {
         "id": 6,
         "name": "Cuerpo y Salud",
+        "suggestions": [
+            "¿Es un órgano vital?",
+            "¿Es un síntoma de enfermedad?",
+            "¿Se puede curar?",
+            "¿Es algo visible desde fuera?",
+            "¿Duele?",
+            "¿Está en la cabeza?"
+        ],
         "words": [
             {
                 "text": "Corazón",
@@ -1844,6 +1976,14 @@
     {
         "id": 7,
         "name": "Deportes",
+        "suggestions": [
+            "¿Se juega con balón?",
+            "¿Es un deporte de equipo?",
+            "¿Se juega al aire libre?",
+            "¿Es olímpico?",
+            "¿Necesita equipamiento especial?",
+            "¿Es de contacto?"
+        ],
         "words": [
             {
                 "text": "Fútbol",
@@ -2050,6 +2190,14 @@
     {
         "id": 8,
         "name": "Fantasía",
+        "suggestions": [
+            "¿Tiene magia?",
+            "¿Es un ser vivo?",
+            "¿Aparece en cuentos?",
+            "¿Es peligroso?",
+            "¿Vuela?",
+            "¿Es humanoide?"
+        ],
         "words": [
             {
                 "text": "Dragón",
@@ -2256,6 +2404,14 @@
     {
         "id": 9,
         "name": "Famosos (Celebs)",
+        "suggestions": [
+            "¿Es cantante?",
+            "¿Es actor/actriz?",
+            "¿Es español/a?",
+            "¿Está vivo/a?",
+            "¿Es famoso por las redes sociales?",
+            "¿Ha ganado premios?"
+        ],
         "words": [
             {
                 "text": "Rosalía",
@@ -2462,6 +2618,14 @@
     {
         "id": 10,
         "name": "Juegos",
+        "suggestions": [
+            "¿Es un videojuego?",
+            "¿Se juega con dados?",
+            "¿Es de mesa?",
+            "¿Es multijugador?",
+            "¿Es para niños?",
+            "¿Se juega con cartas?"
+        ],
         "words": [
             {
                 "text": "Ajedrez",
@@ -2668,6 +2832,14 @@
     {
         "id": 11,
         "name": "Marcas",
+        "suggestions": [
+            "¿Es de ropa?",
+            "¿Es de tecnología?",
+            "¿Es de comida?",
+            "¿Es cara?",
+            "¿Su logo es rojo?",
+            "¿Es americana?"
+        ],
         "words": [
             {
                 "text": "Coca-Cola",
@@ -2874,6 +3046,14 @@
     {
         "id": 12,
         "name": "Música",
+        "suggestions": [
+            "¿Es un instrumento?",
+            "¿Es un género musical?",
+            "¿Se toca con las manos?",
+            "¿Tiene cuerdas?",
+            "¿Se baila?",
+            "¿Es música clásica?"
+        ],
         "words": [
             {
                 "text": "Guitarra",
@@ -3080,6 +3260,14 @@
     {
         "id": 13,
         "name": "Personajes Históricos",
+        "suggestions": [
+            "¿Fue un líder político?",
+            "¿Fue artista?",
+            "¿Vivió en el siglo XX?",
+            "¿Murió trágicamente?",
+            "¿Es un hombre?",
+            "¿Descubrió algo?"
+        ],
         "words": [
             {
                 "text": "Cristóbal Colón",
@@ -3286,6 +3474,14 @@
     {
         "id": 14,
         "name": "Tecnología",
+        "suggestions": [
+            "¿Tiene pantalla?",
+            "¿Se conecta a Internet?",
+            "¿Funciona con batería?",
+            "¿Es portátil?",
+            "¿Se usa para trabajar?",
+            "¿Es un software?"
+        ],
         "words": [
             {
                 "text": "Ordenador",
@@ -3492,6 +3688,14 @@
     {
         "id": 15,
         "name": "Trabajos",
+        "suggestions": [
+            "¿Requiere uniforme?",
+            "¿Se trabaja en oficina?",
+            "¿Es peligroso?",
+            "¿Requiere estudios universitarios?",
+            "¿Salva vidas?",
+            "¿Es manual?"
+        ],
         "words": [
             {
                 "text": "Profesor",
@@ -3698,6 +3902,14 @@
     {
         "id": 16,
         "name": "Verano",
+        "suggestions": [
+            "¿Se usa en la playa?",
+            "¿Es refrescante?",
+            "¿Protege del sol?",
+            "¿Sucede en vacaciones?",
+            "¿Es una fruta?",
+            "¿Se derrite?"
+        ],
         "words": [
             {
                 "text": "Sol",
@@ -3904,6 +4116,14 @@
     {
         "id": 17,
         "name": "Invierno",
+        "suggestions": [
+            "¿Es para protegerse del frío?",
+            "¿Tiene que ver con la nieve?",
+            "¿Se celebra en diciembre?",
+            "¿Es una comida caliente?",
+            "¿Se usa en la montaña?",
+            "¿Es una prenda de vestir?"
+        ],
         "words": [
             {
                 "text": "Nieve",
@@ -4110,6 +4330,14 @@
     {
         "id": 18,
         "name": "Primavera",
+        "suggestions": [
+            "¿Tiene que ver con flores?",
+            "¿Es un fenómeno meteorológico?",
+            "¿Es un animal?",
+            "¿Sucede en el campo?",
+            "¿Es colorido?",
+            "¿Produce alergia?"
+        ],
         "words": [
             {
                 "text": "Flor",
@@ -4316,6 +4544,14 @@
     {
         "id": 19,
         "name": "Otoño",
+        "suggestions": [
+            "¿Tiene que ver con hojas secas?",
+            "¿Es de color marrón/naranja?",
+            "¿Es una comida típica?",
+            "¿Tiene que ver con la lluvia?",
+            "¿Se celebra en octubre/noviembre?",
+            "¿Es una prenda de entretiempo?"
+        ],
         "words": [
             {
                 "text": "Hoja",
@@ -4522,6 +4758,14 @@
     {
         "id": 20,
         "name": "Para Adultos (+18)",
+        "suggestions": [
+            "¿Se usa en la cama?",
+            "¿Se compra en un sex shop?",
+            "¿Es una postura?",
+            "¿Tiene que ver con fiestas?",
+            "¿Es ropa interior?",
+            "¿Vibra?"
+        ],
         "words": [
             {
                 "text": "Lencería",
@@ -5029,6 +5273,14 @@
     {
         "id": 21,
         "name": "Animales",
+        "suggestions": [
+            "¿Es mamífero?",
+            "¿Vive en el agua?",
+            "¿Es doméstico?",
+            "¿Vuela?",
+            "¿Tiene cuatro patas?",
+            "¿Es carnívoro?"
+        ],
         "words": [
             {
                 "text": "Perro",
@@ -5275,6 +5527,14 @@
     {
         "id": 22,
         "name": "Comida y Bebida",
+        "suggestions": [
+            "¿Es dulce?",
+            "¿Se come caliente?",
+            "¿Es una bebida?",
+            "¿Lleva carne?",
+            "¿Es saludable?",
+            "¿Es un postre?"
+        ],
         "words": [
             {
                 "text": "Pizza",
@@ -5521,6 +5781,14 @@
     {
         "id": 23,
         "name": "Lugares (Sitios)",
+        "suggestions": [
+            "¿Es un edificio público?",
+            "¿Se va a divertirse?",
+            "¿Hay que pagar entrada?",
+            "¿Está al aire libre?",
+            "¿Hay mucha gente?",
+            "¿Se va a comprar?"
+        ],
         "words": [
             {
                 "text": "Hospital",
@@ -5767,6 +6035,14 @@
     {
         "id": 24,
         "name": "Geografía",
+        "suggestions": [
+            "¿Es un país?",
+            "¿Es una ciudad?",
+            "¿Está en Europa?",
+            "¿Tiene mar?",
+            "¿Es una montaña?",
+            "¿Es una capital?"
+        ],
         "words": [
             {
                 "text": "España",
@@ -6013,6 +6289,14 @@
     {
         "id": 25,
         "name": "Vehículos",
+        "suggestions": [
+            "¿Tiene cuatro ruedas?",
+            "¿Vuela?",
+            "¿Va por el agua?",
+            "¿Es transporte público?",
+            "¿Tiene motor?",
+            "¿Se usa para trabajar?"
+        ],
         "words": [
             {
                 "text": "Coche",
@@ -6203,6 +6487,14 @@
     {
         "id": 26,
         "name": "Ciencia",
+        "suggestions": [
+            "¿Se usa en laboratorio?",
+            "¿Es una teoría?",
+            "¿Tiene que ver con el espacio?",
+            "¿Es algo microscópico?",
+            "¿Es un fenómeno natural?",
+            "¿Tiene que ver con la química?"
+        ],
         "words": [
             {
                 "text": "Microscopio",
@@ -6449,6 +6741,14 @@
     {
         "id": 27,
         "name": "Medicina",
+        "suggestions": [
+            "¿Es un medicamento?",
+            "¿Es una herramienta médica?",
+            "¿Se hace en un hospital?",
+            "¿Sirve para diagnosticar?",
+            "¿Es una especialidad?",
+            "¿Cura enfermedades?"
+        ],
         "words": [
             {
                 "text": "Estetoscopio",
@@ -6695,6 +6995,14 @@
     {
         "id": 28,
         "name": "Ingeniería",
+        "suggestions": [
+            "¿Es una estructura?",
+            "¿Tiene partes móviles?",
+            "¿Funciona con electricidad?",
+            "¿Se usa en construcción?",
+            "¿Es una herramienta?",
+            "¿Tiene que ver con informática?"
+        ],
         "words": [
             {
                 "text": "Puente",
@@ -6941,6 +7249,14 @@
     {
         "id": 29,
         "name": "Artes y Cultura",
+        "suggestions": [
+            "¿Es una obra visual?",
+            "¿Tiene que ver con música?",
+            "¿Se exhibe en un museo?",
+            "¿Es una disciplina artística?",
+            "¿Es un estilo?",
+            "¿Se hace con las manos?"
+        ],
         "words": [
             {
                 "text": "Pintura",
@@ -7187,6 +7503,14 @@
     {
         "id": 30,
         "name": "Ciencias Agrarias",
+        "suggestions": [
+            "¿Se usa en el campo?",
+            "¿Es una herramienta?",
+            "¿Es un cultivo?",
+            "¿Tiene que ver con animales de granja?",
+            "¿Se come?",
+            "¿Depende del clima?"
+        ],
         "words": [
             {
                 "text": "Tractor",
@@ -7433,6 +7757,14 @@
     {
         "id": 31,
         "name": "Ciencias Medioambientales",
+        "suggestions": [
+            "¿Tiene que ver con contaminación?",
+            "¿Es una energía?",
+            "¿Es un problema global?",
+            "¿Tiene que ver con reciclar?",
+            "¿Afecta a los animales?",
+            "¿Es algo natural?"
+        ],
         "words": [
             {
                 "text": "Reciclaje",
