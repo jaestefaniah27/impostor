@@ -104,3 +104,19 @@ async function saveThemeFromUI() {
 async function saveGameRecordToHistory(record) {
     await fetch('/api/history', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(record)});
 }
+
+// --- ESTADÍSTICAS ---
+async function fetchStats() {
+    try {
+        const r = await fetch('/api/stats');
+        return await r.json();
+    } catch(e) { console.error(e); return null; }
+}
+
+async function mergeAliases(mainName, aliases) {
+    await fetch('/api/aliases', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({ mainName: mainName, aliasesToMerge: aliases })
+    });
+}

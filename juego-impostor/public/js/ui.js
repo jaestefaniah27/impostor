@@ -177,3 +177,104 @@ function toggleHistoryDetails(idx) {
     const el = document.getElementById(`h-body-${idx}`);
     el.classList.toggle('expanded');
 }
+
+// VARIABLES UI PARA FUSIÓN
+let isMergeMode = false;
+let selectedForMerge = [];
+
+// --- ESTADÍSTICAS UI ---
+async function loadAndShowStats() {
+    const stats = await fetchStats();
+    if (!stats) return alert("Error cargando estadísticas");
+
+    // 1. Resumen Global
+    const totalMin = Math.floor(stats.global.totalTime / 60);
+    const hours = Math.floor(totalMin / 60);
+    const mins = totalMin % 60;
+    document.getElementById('stat-total-games').innerText = stats.global.totalGames;
+    document.getElementById('stat-total-time').innerText = `${hours}h ${mins}m`;
+
+    // 2. Procesar Jugadores
+    const playersArr = Object.values(stats.players);
+    
+    // Mejor Impostor (Más victorias)
+    const bestImp = playersArr.sort((a,b) => b.impWins - a.impWins)[0];
+    document.getElementById('stat-best-impostor').innerText = bestImp && bestImp.impWins > 0 ? `${bestImp.name} (${bestImp.impWins})` : "-";
+
+    // Más Viciado (Más tiempo)
+    const mostPlayed = playersArr.sort((a,b) => b.time - a.time)[0];
+    document.getElementById('stat-most-played').innerText = mostPlayed ? `${mostPlayed.name}` : "-";
+
+    // 3. Renderizar Lista
+    renderStatsList(playersArr);
+    
+    showScreen('screen-stats');
+}
+
+function renderStatsList(playersArr) {
+    // Ordenar por partidas jugadas por defecto
+    playersArr.sort((a,b) => b.games - a.games);
+
+    const container = document.getElementById('stats-list');
+    container.innerHTML = playersArr.map(p => {
+        const winRate = p.impTotal > 0 ? Math.round((p.impWins / p.impTotal) * 100) : 0;
+        const timeMin = Math.round(p.time / 60);
+        
+        // Checkbox para modo fusión
+        const checkHtml = isMergeMode 
+            ? `<input type="checkbox" class="merge-check" value="${p.name}" onchange="updateMergeSelection(this)" style="width:20px; height:20px; margin-right:10px;">` 
+            : '';
+
+        return `
+        <div class="card" style="display:flex; align-items:center; padding:10px;">
+            ${checkHtml}
+            <div style="flex-grow:1;">
+                <div style="display:flex; justify-content:space-between;">
+                    <strong style="font-size:1.1em; color:var(--accent);">${p.name}</strong>
+                    <span class="badge" style="background:#2f3640;">${p.games} partidas</span>
+                </div>
+                <div style="font-size:0.85em; color:#bdc3c7; margin-top:5px; display:flex; gap:15px;">
+                    <span>⏱️ ${timeMin} min</span>
+                    <span>😈 Wins: ${p.impWins}/${p.impTotal} (${winRate}%)</span>
+                </div>
+            </div>
+        </div>`;
+    }).join('');
+}
+
+// --- LÓGICA DE FUSIÓN ---
+function toggleMergeMode() {
+    isMergeMode = !isMergeMode;
+    selectedForMerge = [];
+    document.getElementById('merge-tool-bar').classList.toggle('hidden', !isMergeMode);
+    loadAndShowStats(); // Recargar para mostrar/ocultar checkboxes
+}
+
+function cancelMergeMode() {
+    isMergeMode = false;
+    selectedForMerge = [];
+    document.getElementById('merge-tool-bar').classList.add('hidden');
+    loadAndShowStats();
+}
+
+function updateMergeSelection(checkbox) {
+    if (checkbox.checked) selectedForMerge.push(checkbox.value);
+    else selectedForMerge = selectedForMerge.filter(n => n !== checkbox.value);
+}
+
+async function executeMerge() {
+    if (selectedForMerge.length < 2) return alert("Selecciona al menos 2 jugadores para unir.");
+    
+    // Preguntar cuál es el nombre principal
+    const mainName = prompt(`Vas a fusionar: ${selectedForMerge.join(', ')}\n\nEscribe el NOMBRE FINAL que se quedará (debe ser exacto):`, selectedForMerge[0]);
+    
+    if (!mainName || !selectedForMerge.includes(mainName)) {
+        return alert("Debes escribir uno de los nombres seleccionados exactamente.");
+    }
+
+    if (confirm(`¿Seguro? Todas las stats de ${selectedForMerge.join(', ')} se sumarán a "${mainName}".`)) {
+        await mergeAliases(mainName, selectedForMerge);
+        alert("¡Fusión completada!");
+        cancelMergeMode();
+    }
+}

@@ -164,6 +164,7 @@ function nextPlayer(){
 function startActiveGame() {
     showScreen('screen-active'); 
     renderVotingList();
+    gameData.startTime = Date.now();
     
     let pool=[]; 
     gameData.assignments.forEach(p=>{
@@ -252,13 +253,14 @@ function continueGame() {
 // --- FINALIZAR RONDA ---
 async function endGameWithWinner(winner) {
     clearInterval(timerInterval);
-    
+    const durationSec = gameData.startTime ? Math.round((Date.now() - gameData.startTime) / 1000) : 0;    
     const impostorObj = gameData.assignments.find(p => p.isImpostor);
     const accompliceObj = gameData.assignments.find(p => p.isAccomplice);
     
     const currentGameRecord = {
         type: 'single_game', 
         date: new Date().toISOString(),
+        duration: durationSec, 
         players: gameData.assignments.map(p => p.name),
         impostor: impostorObj ? impostorObj.name : "?",
         accomplice: accompliceObj ? accompliceObj.name : null,

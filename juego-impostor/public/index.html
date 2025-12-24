@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>El Impostor - Jorge Estefanía</title>
+    <title>El Impostor Pro</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -19,7 +19,8 @@
             <button class="btn-secondary" style="background:rgba(0,0,0,0.3); width:auto; margin:0; font-size:0.8em;" onclick="finishTournament()">🏁 FINALIZAR Y GUARDAR</button>
         </div>
 
-        <div style="text-align: right; margin-bottom: 10px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+            <button class="btn-text" onclick="loadAndShowStats()">📊 Stats</button>
             <button class="btn-text" onclick="loadAndShowHistory()">📜 Historial</button>
         </div>
 
@@ -90,17 +91,62 @@
         </div>
     </div>
 
+    <div id="screen-stats" class="container hidden" style="padding-bottom: 100px;">
+        <h2>📊 Stats</h2>
+        
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:20px;">
+            <div class="card" style="text-align:center; background: #2c3e50; margin:0;">
+                <div style="font-size:2em;">😈</div>
+                <small style="color:#e74c3c">Mejor Impostor</small>
+                <div id="stat-best-impostor" style="font-weight:bold; color:white;">-</div>
+            </div>
+            <div class="card" style="text-align:center; background: #2c3e50; margin:0;">
+                <div style="font-size:2em;">🎮</div>
+                <small style="color:#3498db">Más Viciado</small>
+                <div id="stat-most-played" style="font-weight:bold; color:white;">-</div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h3 style="margin-bottom:5px;">📊 Globales</h3>
+            <p>Partidas Totales: <strong id="stat-total-games" style="color:var(--accent)">0</strong></p>
+            <p>Tiempo de Juego: <strong id="stat-total-time" style="color:var(--accent)">0h 0m</strong></p>
+        </div>
+
+        <div id="merge-tool-bar" class="card hidden" style="background:#e67e22; position:sticky; top:10px; z-index:100; animation: popIn 0.3s;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+                <span style="color:white; font-weight:bold;">Fusionar Jugadores</span>
+                <button class="btn-secondary" style="background:rgba(0,0,0,0.2); width:auto; padding:5px 10px; margin:0;" onclick="cancelMergeMode()">Cancelar</button>
+            </div>
+            <p style="font-size:0.8em; margin:5px 0 10px 0; color:white;">Selecciona los nombres que son la misma persona:</p>
+            <button class="btn-main" style="background:white; color:#d35400; margin:0; padding:10px;" onclick="executeMerge()">UNIFICAR SELECCIONADOS</button>
+        </div>
+
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+            <h3>Ranking Jugadores</h3>
+            <button class="btn-text" style="font-size:0.8em;" onclick="toggleMergeMode()">🔗 Unificar Nombres</button>
+        </div>
+
+        <div id="stats-list"></div>
+
+        <div class="fixed-bottom-bar">
+            <button class="btn-secondary" style="margin:0; width:100%; max-width:500px;" onclick="goToHome()">🏠 VOLVER AL INICIO</button>
+        </div>
+    </div>
+
     <div id="screen-create-theme" class="container hidden">
         <h2>🎨 Nuevo Tema</h2>
         <div class="card">
             <label>Título:</label>
             <input type="text" id="new-theme-title" placeholder="Ej: Superhéroes">
+            
             <div style="margin-top:10px;">
                 <label>Preguntas Sugeridas (Opcional):</label>
                 <small style="color:#bdc3c7; display:block; margin-bottom:5px;">Sepáralas con una barra "/"</small>
                 <textarea id="new-theme-suggestions" placeholder="¿Tiene capa? / ¿Vuela? / ¿Es de Marvel?" rows="3"></textarea>
             </div>
         </div>
+        
         <div id="words-container"></div>
         <button class="btn-secondary" onclick="addWordRow()">+ Añadir Palabra</button>
         <div style="margin-top: 30px; display: flex; gap: 10px;">
@@ -112,6 +158,7 @@
     <div id="screen-themes" class="container hidden" style="padding-bottom: 130px;">
         <h2>Elige Temas</h2>
         <div id="themes-grid" class="grid-container"></div>
+        
         <div class="fixed-bottom-bar" style="flex-direction: column; gap: 5px;">
             <button class="btn-main" style="margin:0;" onclick="startGameSetup()">¡EMPEZAR!</button>
             <button class="btn-text" style="margin:0;" onclick="showScreen('screen-home')">Volver</button>
@@ -146,11 +193,15 @@
             <p style="margin:0; font-size: 0.9em; color: #bdc3c7;">DEBE EMPEZAR HABLANDO:</p>
             <h2 id="starter-name" style="margin: 5px 0; font-size: 1.8em; color: #f1c40f;">...</h2>
         </div>
+        
         <div id="timer-display" class="timer-big">10:00</div>
+        
         <div id="suggestion-area"></div>
         <button class="btn-secondary" onclick="showSuggestion()" style="margin-bottom: 20px;">❓ ¿Qué pregunto? (Sugerencia)</button>
+
         <h3>Votar Expulsión</h3>
         <div id="voting-list" class="voting-grid"></div>
+        
         <button class="btn-secondary bottom-btn" onclick="citizensGiveUp()">RENDARSE (Gana Impostor)</button>
     </div>
 
@@ -158,6 +209,7 @@
         <h1 id="result-title">...</h1>
         <div id="result-icon" style="font-size: 5em; margin: 20px;"></div>
         <p id="result-msg" style="font-size: 1.2em;"></p>
+        
         <div id="impostor-guess-area" class="hidden">
             <p style="color:var(--accent)">¡Oportunidad de robo! ¿Adivina la palabra?</p>
             <div style="display: grid; gap: 10px;">
@@ -170,16 +222,20 @@
 
     <div id="screen-solution" class="container hidden full-height">
         <h1 id="final-result-title">FIN DE RONDA</h1>
+        
         <div class="card">
             <h3>Palabra Secreta:</h3>
             <h1 style="color:var(--accent); font-size:3em; margin:10px 0;" id="final-word">???</h1>
         </div>
+
         <p id="winner-display" style="font-size: 1.5em; font-weight: bold; margin: 10px 0;"></p>
         <div id="roles-reveal" style="margin-bottom: 20px;"></div>
+
         <div id="scoreboard-container" class="card hidden">
             <h3>🏆 Clasificación - <span id="score-tourney-name"></span></h3>
             <table class="scoreboard-table" id="scoreboard-body"></table>
         </div>
+        
         <button class="btn-main" onclick="restartGame()">🔄 SIGUIENTE RONDA</button>
         <button class="btn-secondary" onclick="goToHome()">🏠 MENÚ PRINCIPAL</button>
     </div>
