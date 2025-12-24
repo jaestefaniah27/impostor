@@ -16,7 +16,7 @@
             padding: 15px;
             border-radius: 10px;
             margin-bottom: 20px;
-            margin-top: 20px; /* Añadido margen superior para separar del botón Jugar */
+            margin-top: 20px;
         }
         .tournament-active-banner {
             background: linear-gradient(45deg, #b71c1c, #f1c40f);
@@ -42,7 +42,7 @@
         .suggestion-card { background: #e67e22; color: white; padding: 15px; border-radius: 8px; margin: 15px 0; font-style: italic; position: relative; animation: popIn 0.3s ease-out; }
         @keyframes popIn { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
 
-        /* --- HISTORIAL (NUEVO DISEÑO GUAY) --- */
+        /* --- HISTORIAL (MODIFICADO) --- */
         .history-card { background: #2f3640; border-radius: 8px; margin-bottom: 15px; overflow: hidden; border: 1px solid #455a64; }
         
         /* Tipo: Partida Simple */
@@ -50,9 +50,14 @@
         /* Tipo: Torneo */
         .h-type-tournament { border: 2px solid #f1c40f; box-shadow: 0 0 10px rgba(241, 196, 15, 0.2); }
         
-        .h-header { padding: 10px 15px; background: rgba(0,0,0,0.2); display: flex; justify-content: space-between; align-items: center; cursor: pointer;}
+        .h-header { padding: 10px 15px; background: rgba(0,0,0,0.2); display: flex; justify-content: space-between; align-items: center; }
+        
+        /* Solo los headers "toggleables" (torneos) tendrán cursor de mano */
+        .h-header.toggleable { cursor: pointer; }
+        .h-header.toggleable:hover { background: rgba(255,255,255,0.05); }
+
         .h-body { padding: 15px; display: none; border-top: 1px solid rgba(255,255,255,0.05); }
-        .h-body.expanded { display: block; }
+        .h-body.expanded { display: block; } /* Clase para mostrar */
         
         .tourney-badge { background: #f1c40f; color: #2c3e50; padding: 2px 8px; border-radius: 4px; font-weight: bold; font-size: 0.8em; text-transform: uppercase; }
         .game-row { display: flex; justify-content: space-between; padding: 5px 0; border-bottom: 1px dotted rgba(255,255,255,0.1); font-size: 0.9em; }
@@ -243,8 +248,8 @@
         // ESTADO DE TORNEO
         let isTournamentActive = false;
         let currentTournamentName = "";
-        let tournamentScores = {}; // Puntos solo de este torneo
-        let tournamentGames = [];  // Lista de partidas de este torneo
+        let tournamentScores = {}; 
+        let tournamentGames = []; 
 
         const suggestions = ["¿Es más grande que una caja de zapatos?", "¿Se usa dentro de casa?", "¿Es un ser vivo?", "¿Tiene que ver con tecnología?", "¿Lo usamos todos los días?", "¿Es de algún color específico?", "¿Se puede comprar en el supermercado?", "¿Hace ruido?", "¿Funciona con electricidad?", "¿Es algo que se come?", "¿Es peligroso?", "¿Cabe en un bolsillo?", "¿Es caro?", "¿Se usa para trabajar?", "¿Tiene ruedas?", "¿Huele a algo?"];
         const emojis = ["🦁","🐯","🐻","🐨","🐼","🐸","🐙","🦄","🐝","🐞","🦖","👽","🤖","👻","🤡","🤠","🎃","💀","🍄","🍔","🍕","⚽","🚀","💡","🔥","💎","🎸","🎮"];
@@ -263,7 +268,6 @@
             if (pStored) players = JSON.parse(pStored); else players = ['Ana', 'Juan', 'Pedro'];
             const aStored = localStorage.getItem('impostorAvatars');
             if (aStored) playerAvatars = JSON.parse(aStored);
-            // Asegurar avatares
             players.forEach(p => { if(!playerAvatars[p]) playerAvatars[p] = getRandomAvatar(); });
             saveAllData();
             renderPlayers();
@@ -274,18 +278,15 @@
         }
         function getRandomAvatar() { return emojis[Math.floor(Math.random() * emojis.length)]; }
 
-        // --- LÓGICA DE TORNEO ---
-        
+        // --- TORNEO ---
         function startTournamentMode() {
             const name = document.getElementById('tournament-name-input').value.trim() || "Torneo Sin Nombre";
-            
             if (confirm(`¿Empezar el torneo "${name}"? Los puntos empezarán desde 0.`)) {
                 isTournamentActive = true;
                 currentTournamentName = name;
                 tournamentScores = {};
                 tournamentGames = [];
                 players.forEach(p => tournamentScores[p] = 0);
-                
                 checkTournamentState();
                 alert("¡Torneo Iniciado! Ahora dale a 'JUGAR RONDA'.");
             }
@@ -294,11 +295,10 @@
         function checkTournamentState() {
             const banner = document.getElementById('active-tournament-display');
             const box = document.getElementById('tournament-setup-box');
-            
             if (isTournamentActive) {
                 banner.classList.remove('hidden');
                 document.getElementById('active-tourney-name').innerText = currentTournamentName;
-                box.classList.add('hidden'); // Ocultar setup si ya hay uno
+                box.classList.add('hidden');
             } else {
                 banner.classList.add('hidden');
                 box.classList.remove('hidden');
@@ -307,22 +307,14 @@
 
         async function finishTournament() {
             if (!confirm("¿Terminar torneo y guardar en el historial?")) return;
-
-            // Guardar el registro completo del torneo
             const tournamentRecord = {
                 type: 'tournament',
                 name: currentTournamentName,
                 date: new Date().toISOString(),
-                scores: tournamentScores, // Clasificación final
-                games: tournamentGames // Lista de partidas
+                scores: tournamentScores,
+                games: tournamentGames
             };
-
-            await fetch('/api/history', { 
-                method: 'POST', 
-                headers: {'Content-Type': 'application/json'}, 
-                body: JSON.stringify(tournamentRecord)
-            });
-
+            await fetch('/api/history', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(tournamentRecord) });
             isTournamentActive = false;
             currentTournamentName = "";
             checkTournamentState();
@@ -330,7 +322,7 @@
             loadAndShowHistory();
         }
 
-        // --- HISTORIAL (VISUALIZACIÓN AVANZADA) ---
+        // --- HISTORIAL (MODIFICADO: Tochos expandidos, Normales fijos) ---
         async function loadAndShowHistory() {
             try {
                 const res = await fetch('/api/history');
@@ -343,56 +335,46 @@
                     container.innerHTML = history.map((record, index) => {
                         const date = new Date(record.date || Date.now()).toLocaleDateString();
                         
-                        // OPCIÓN A: TORNEO COMPLETO
+                        // OPCIÓN A: TORNEO COMPLETO (Se puede comprimir, empieza expandido)
                         if (record.type === 'tournament') {
-                            // Encontrar ganador (quien tiene más puntos)
                             let winnerName = "Empate";
                             let maxScore = -1;
-                            Object.entries(record.scores).forEach(([name, score]) => {
-                                if (score > maxScore) { maxScore = score; winnerName = name; }
-                            });
+                            Object.entries(record.scores).forEach(([name, score]) => { if (score > maxScore) { maxScore = score; winnerName = name; } });
 
                             return `
                             <div class="history-card h-type-tournament">
-                                <div class="h-header" onclick="toggleHistoryDetails(${index})">
+                                <div class="h-header toggleable" onclick="toggleHistoryDetails(${index})">
                                     <div>
                                         <span class="tourney-badge">🏆 ${record.name}</span>
                                         <div style="font-size:0.8em; color:#bdc3c7; margin-top:5px;">📅 ${date} • Ganador: <strong>${winnerName}</strong></div>
                                     </div>
-                                    <span style="font-size:1.5em;">⌄</span>
-                                </div>
-                                <div class="h-body" id="h-body-${index}">
+                                    <span style="font-size:1.5em;">⌃</span> </div>
+                                <div class="h-body expanded" id="h-body-${index}">
                                     <p style="color:#f1c40f; border-bottom:1px solid #555;">Clasificación Final:</p>
                                     ${Object.entries(record.scores).sort((a,b)=>b[1]-a[1]).map(([n,s]) => `
-                                        <div style="display:flex; justify-content:space-between; font-size:0.9em;">
-                                            <span>${n}</span> <span>${s} pts</span>
-                                        </div>
+                                        <div style="display:flex; justify-content:space-between; font-size:0.9em;"><span>${n}</span> <span>${s} pts</span></div>
                                     `).join('')}
-                                    
                                     <p style="color:#bdc3c7; border-bottom:1px solid #555; margin-top:10px;">Partidas (${record.games.length}):</p>
                                     ${record.games.map(g => `
-                                        <div class="game-row">
-                                            <span>${g.word}</span>
-                                            <span class="${g.winner==='Impostor'?'win-imp-text':'win-cit-text'}">${g.winner==='Impostor'?'Ganó Imp.':'Ganan Ciu.'}</span>
-                                        </div>
+                                        <div class="game-row"><span>${g.word}</span><span class="${g.winner==='Impostor'?'win-imp-text':'win-cit-text'}">${g.winner==='Impostor'?'Ganó Imp.':'Ganan Ciu.'}</span></div>
                                     `).join('')}
                                 </div>
                             </div>`;
                         }
                         
-                        // OPCIÓN B: PARTIDA SUELTA (LEGACY)
+                        // OPCIÓN B: PARTIDA SUELTA (NO se puede comprimir, siempre fija)
                         else {
                             const wTxt = record.winner === 'Impostor' ? '👑 Ganó Impostor' : '🛡️ Ganaron Ciudadanos';
                             const wClass = record.winner === 'Impostor' ? 'win-imp-text' : 'win-cit-text';
                             return `
                             <div class="history-card h-type-single">
-                                <div class="h-header" onclick="toggleHistoryDetails(${index})">
+                                <div class="h-header">
                                     <div>
                                         <strong>${record.word}</strong> <span style="font-size:0.8em; opacity:0.7">(${date})</span>
                                         <div class="${wClass}" style="font-size:0.9em;">${wTxt}</div>
                                     </div>
                                 </div>
-                                <div class="h-body" id="h-body-${index}">
+                                <div class="h-body expanded" id="h-body-${index}">
                                     <p>😈 Impostor: ${record.impostor}</p>
                                     ${record.accomplice ? `<p>🤝 Cómplice: ${record.accomplice}</p>` : ''}
                                     <p style="font-size:0.8em">Jugadores: ${record.players ? record.players.join(', ') : '?'}</p>
@@ -410,16 +392,15 @@
             el.classList.toggle('expanded');
         }
 
-        // --- FINALIZAR PARTIDA (Lógica de guardado) ---
+        // --- FINALIZAR PARTIDA ---
         async function endGameWithWinner(winner) {
             clearInterval(timerInterval);
             
-            // 1. Objeto de la partida actual
             const impostorObj = gameData.assignments.find(p => p.isImpostor);
             const accompliceObj = gameData.assignments.find(p => p.isAccomplice);
             
             const currentGameRecord = {
-                type: 'single_game', // Por defecto
+                type: 'single_game', 
                 date: new Date().toISOString(),
                 players: gameData.assignments.map(p => p.name),
                 impostor: impostorObj ? impostorObj.name : "?",
@@ -429,35 +410,21 @@
                 winner: winner
             };
 
-            // 2. ¿ESTAMOS EN TORNEO?
             if (isTournamentActive) {
-                // A) Guardar en memoria local del torneo
                 tournamentGames.push(currentGameRecord);
-                
-                // B) Actualizar puntos del torneo
                 gameData.assignments.forEach(p => {
                     if (tournamentScores[p.name] === undefined) tournamentScores[p.name] = 0;
-                    
                     const isBad = p.isImpostor || p.isAccomplice;
                     if (winner === 'Impostor' && isBad) tournamentScores[p.name] += 5;
                     else if (winner === 'Ciudadanos' && !isBad) tournamentScores[p.name] += 2;
                 });
-
-                // C) Mostrar tabla actualizada
                 renderScoreboard(true);
                 document.getElementById('scoreboard-container').classList.remove('hidden');
-
             } else {
-                // MODO PARTIDA SUELTA: Guardar directamente en servidor
-                await fetch('/api/history', { 
-                    method:'POST', 
-                    headers:{'Content-Type':'application/json'}, 
-                    body:JSON.stringify(currentGameRecord)
-                });
+                await fetch('/api/history', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(currentGameRecord)});
                 document.getElementById('scoreboard-container').classList.add('hidden');
             }
 
-            // 3. UI Final
             document.getElementById('final-word').innerText = gameData.secretWord;
             const display = document.getElementById('winner-display');
             display.innerText = (winner === 'Impostor') ? "🏆 GANA EL IMPOSTOR" : "🛡️ GANAN CIUDADANOS";
@@ -475,7 +442,6 @@
             document.getElementById('score-tourney-name').innerText = currentTournamentName;
             const table = document.getElementById('scoreboard-body');
             const sortedPlayers = Object.keys(tournamentScores).sort((a,b) => tournamentScores[b] - tournamentScores[a]);
-            
             table.innerHTML = sortedPlayers.map((name, i) => {
                 const av = playerAvatars[name] || '👤';
                 const sc = tournamentScores[name];
@@ -493,10 +459,7 @@
         }
         function addPlayer() { const v=document.getElementById('new-player').value.trim(); if(v && !players.includes(v)){ players.push(v); playerAvatars[v]=getRandomAvatar(); saveAllData(); renderPlayers(); document.getElementById('new-player').value=''; } else if(players.includes(v)) alert("Repetido"); }
         function removePlayer(i) { players.splice(i,1); saveAllData(); renderPlayers(); }
-        
         function showSuggestion() { document.getElementById('suggestion-area').innerHTML = `<div class="suggestion-card">💡 Pista: "${suggestions[Math.floor(Math.random()*suggestions.length)]}"</div>`; }
-
-        // Resto de lógica de juego (sin cambios mayores)
         function startGameSetup() {
             if(selectedThemesIds.length === 0) return alert("Elige tema");
             document.getElementById('suggestion-area').innerHTML = '';
@@ -506,7 +469,6 @@
             gameData.secretWord = sel.text;
             const hintsOn = document.getElementById('hints-toggle').checked;
             gameData.secretHint = hintsOn ? (Array.isArray(sel.hints)?sel.hints:(sel.hint?[sel.hint]:["Sin pista"]))[Math.floor(Math.random()*(Array.isArray(sel.hints)?sel.hints.length:1))] : null;
-            
             let impC = parseInt(document.getElementById('impostor-count').value); if(impC>=players.length) impC=players.length-1;
             gameData.totalImpostors = impC; gameData.impostorsCaught=0;
             let assign = new Array(players.length).fill(null); let p=0;
@@ -544,7 +506,6 @@
             else if(p.isAccomplice) { t.innerText="¡ERA EL CÓMPLICE!"; t.style.color="#9b59b6"; ic.innerText="🎭"; m.innerText=`${p.name} ayudaba al Impostor.`; ia.classList.add('hidden'); cb.classList.remove('hidden'); }
             else { t.innerText="ERROR..."; t.style.color="#e74c3c"; ic.innerText="💀"; m.innerText=`${p.name} era Inocente.`; ia.classList.add('hidden'); cb.classList.remove('hidden'); }
         }
-        // Navegación
         function showScreen(id){document.querySelectorAll('.container').forEach(d=>d.classList.add('hidden'));document.getElementById(id).classList.remove('hidden');}
         function goToHome(){showScreen('screen-home');}
         function restartGame(){startGameSetup();}
