@@ -2,6 +2,9 @@
 
 Este repositorio contiene el código fuente del juego "El Impostor". A continuación se detallan los pasos para desplegar la aplicación en un servidor Linux (Ubuntu/Debian) desde cero, configurando Node.js, PM2, Nginx y SSL.
 
+[![Deploy](https://img.shields.io/badge/Deploy-impostor--is--sus.duckdns.org-success?style=for-the-badge&logo=rocket)](http://impostor-is-sus.duckdns.org)
+
+Este proyecto está desplegado en un servidor propio accesible públicamente.
 ## 📋 Prerrequisitos
 
 1.  Un servidor **Linux** (Máquina Virtual o VPS) con acceso SSH.
@@ -144,6 +147,7 @@ Copia de seguridad rápida:
 ```bash
 cp juego-impostor/history.json juego-impostor/history.bak
 cp juego-impostor/aliases.json juego-impostor/aliases.bak
+cp juego-impostor/aliases.json juego-impostor/themes.bak
 ```
 Haz el pull:
 
@@ -156,4 +160,13 @@ El Truco Final en el Servidor: Si al hacer git pull te dice que hay conflicto o 
 # Si git los borró:
 mv juego-impostor/history.bak juego-impostor/history.json
 mv juego-impostor/aliases.bak juego-impostor/aliases.json
+mv juego-impostor/aliases.bak juego-impostor/themes.json
+```
+
+En local
+```bash
+git rm --cached juego-impostor/history.json
+git rm --cached juego-impostor/aliases.json
+# Si también modificas temas en el servidor y quieres conservarlos:
+git rm --cached juego-impostor/themes.json
 ```
