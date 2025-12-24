@@ -22,40 +22,46 @@ const defaultSuggestions = ["¿Es grande?", "¿Está vivo?", "¿Tecnología?", "
 
 // --- INICIALIZACIÓN CON PANTALLA DE CARGA SUAVE ---
 window.onload = async () => {
-    loadGameData();      
-    await fetchThemes();       
-    // updateTimeDisplay(); // (Recuerda que esta la quitamos)
-
-    restoreTournamentState();
-    restoreGameState();
-
-    if(typeof renderPlayers === 'function') renderPlayers();
-    if(typeof setupCardInteractions === 'function') setupCardInteractions();
-    if(typeof checkTournamentState === 'function') checkTournamentState();
-
-    // SECUENCIA DE APERTURA SUAVE
-    setTimeout(() => {
+    
+    // Función para ocultar la carga suavemente
+    const removeLoadingScreen = () => {
         const loader = document.getElementById('screen-loading');
-        if (loader) {
-            // 1. Primero hacemos desaparecer el círculo y el texto
-            loader.classList.add('fade-out-items');
+        if (loader && !loader.classList.contains('hidden')) {
+            // 1. Bajamos la opacidad de TODO el bloque a la vez
+            loader.style.opacity = '0';
             
-            // 2. Esperamos 300ms y desvanecemos el fondo negro
+            // 2. Esperamos a que termine la transición CSS (0.5s) y lo quitamos
             setTimeout(() => {
-                loader.style.opacity = '0'; 
-                
-                // 3. Finalmente quitamos el div para que no moleste
-                setTimeout(() => {
-                    loader.classList.add('hidden'); 
-                    
-                    // Comprobación de seguridad
-                    const anyVisible = document.querySelector('.container:not(.hidden):not(#screen-loading)');
-                    if (!anyVisible) showScreen('screen-home');
-                    
-                }, 500); // Tiempo que tarda el fondo en irse
-            }, 300); // Tiempo que tardan los items en irse
+                loader.classList.add('hidden');
+                // Comprobación de seguridad: si no hay pantalla, ir a Home
+                const anyVisible = document.querySelector('.container:not(.hidden):not(#screen-loading)');
+                if (!anyVisible && typeof showScreen === 'function') showScreen('screen-home');
+            }, 500); 
         }
-    }, 800); // Tiempo mínimo de carga inicial
+    };
+
+    // Backup de seguridad: A los 3 segundos se quita sí o sí
+    const safetyTimer = setTimeout(removeLoadingScreen, 3000);
+
+    try {
+        // Cargas de datos
+        loadGameData();      
+        await fetchThemes();       
+        
+        restoreTournamentState();
+        restoreGameState();
+
+        if(typeof renderPlayers === 'function') renderPlayers();
+        if(typeof setupCardInteractions === 'function') setupCardInteractions();
+        if(typeof checkTournamentState === 'function') checkTournamentState();
+        
+    } catch (e) {
+        console.error("Error init:", e);
+    } finally {
+        // Quitamos la pantalla de carga (con un pequeño delay para que se vea el logo)
+        clearTimeout(safetyTimer);
+        setTimeout(removeLoadingScreen, 800);
+    }
 };
 
 function loadGameData() {

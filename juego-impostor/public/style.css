@@ -188,25 +188,28 @@ input:checked + .slider:before { transform: translateX(22px); }
     gap: 4px;
 }
 
-/* --- PANTALLA DE CARGA --- */
+/* --- PANTALLA DE CARGA (LIMPIA) --- */
 #screen-loading {
-    background-color: var(--bg-color);
+    background-color: var(--bg); /* Fondo sólido */
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    z-index: 9999; /* Por encima de todo */
+    z-index: 9999;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    transition: opacity 0.5s ease;
+    
+    /* Esta transición controla TODO el desvanecimiento */
+    transition: opacity 0.5s ease; 
+    opacity: 1;
 }
 
 .loader {
-    border: 5px solid rgba(0, 175, 38, 0.849);
-    border-top: 5px solid var(--success); /* Verde */
+    border: 5px solid rgba(6, 255, 48, 0.795);
+    border-top: 5px solid var(--success);
     border-radius: 50%;
     width: 50px;
     height: 50px;
@@ -217,15 +220,4 @@ input:checked + .slider:before { transform: translateX(22px); }
 @keyframes spin {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
-}
-
-/* --- MEJORA PANTALLA DE CARGA --- */
-/* Esto hace que el círculo y el texto se borren suavemente */
-#screen-loading > * {
-    transition: opacity 0.3s ease;
-}
-
-/* Clase para ocultar solo el contenido interno */
-#screen-loading.fade-out-items > * {
-    opacity: 0;
 }
