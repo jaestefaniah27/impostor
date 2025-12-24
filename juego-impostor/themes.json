@@ -1,125 +1,7679 @@
 [
     {
-        "id": 1,
-        "name": "Cocina",
+        "id": 3,
+        "name": "Objetos Cotidianos",
         "words": [
             {
-                "text": "Sartén",
+                "text": "Reloj",
                 "hints": [
-                    "Para freír",
-                    "Mango largo",
-                    "Se usa con aceite"
+                    "Tiempo",
+                    "Muñeca",
+                    "Agujas"
                 ]
             },
             {
-                "text": "Microondas",
+                "text": "Gafas",
                 "hints": [
-                    "Calienta rápido",
-                    "Tiene plato giratorio",
-                    "Funciona con ondas"
+                    "Vista",
+                    "Cristales",
+                    "Montura"
                 ]
             },
             {
-                "text": "Nevera",
+                "text": "Llave",
                 "hints": [
-                    "Enfría",
-                    "Conserva alimentos",
-                    "Tiene congelador"
+                    "Metal",
+                    "Dientes",
+                    "Acceso"
+                ]
+            },
+            {
+                "text": "Cartera",
+                "hints": [
+                    "Dinero",
+                    "Cuero",
+                    "Tarjetas"
+                ]
+            },
+            {
+                "text": "Móvil",
+                "hints": [
+                    "Bolsillo",
+                    "Digital",
+                    "Conexión"
+                ]
+            },
+            {
+                "text": "Cargador",
+                "hints": [
+                    "Energía",
+                    "Cable",
+                    "Batería"
+                ]
+            },
+            {
+                "text": "Auriculares",
+                "hints": [
+                    "Oído",
+                    "Sonido",
+                    "Música"
+                ]
+            },
+            {
+                "text": "Botella",
+                "hints": [
+                    "Plástico",
+                    "Líquido",
+                    "Tapón"
+                ]
+            },
+            {
+                "text": "Mochila",
+                "hints": [
+                    "Espalda",
+                    "Cremallera",
+                    "Carga"
+                ]
+            },
+            {
+                "text": "Libro",
+                "hints": [
+                    "Papel",
+                    "Historias",
+                    "Páginas"
+                ]
+            },
+            {
+                "text": "Bolígrafo",
+                "hints": [
+                    "Tinta",
+                    "Escribir",
+                    "Click"
+                ]
+            },
+            {
+                "text": "Lápiz",
+                "hints": [
+                    "Grafito",
+                    "Goma",
+                    "Madera"
+                ]
+            },
+            {
+                "text": "Goma",
+                "hints": [
+                    "Borrar",
+                    "Elástica",
+                    "Corrección"
+                ]
+            },
+            {
+                "text": "Tijeras",
+                "hints": [
+                    "Corte",
+                    "Dos filos",
+                    "Metal"
+                ]
+            },
+            {
+                "text": "Cuchara",
+                "hints": [
+                    "Sopa",
+                    "Metal",
+                    "Curva"
                 ]
             },
             {
                 "text": "Tenedor",
                 "hints": [
-                    "Cubierto con pinchos",
-                    "Para pinchar comida",
-                    "No sirve para sopa"
+                    "Pinchos",
+                    "Cuatro",
+                    "Sólido"
                 ]
             },
             {
-                "text": "Chef",
+                "text": "Cuchillo",
                 "hints": [
-                    "Persona que cocina",
-                    "Usa gorro alto",
-                    "Jefe de cocina"
+                    "Filo",
+                    "Corte",
+                    "Sierra"
+                ]
+            },
+            {
+                "text": "Plato",
+                "hints": [
+                    "Cerámica",
+                    "Redondo",
+                    "Base"
+                ]
+            },
+            {
+                "text": "Vaso",
+                "hints": [
+                    "Cristal",
+                    "Beber",
+                    "Cilindro"
+                ]
+            },
+            {
+                "text": "Taza",
+                "hints": [
+                    "Asa",
+                    "Caliente",
+                    "Desayuno"
+                ]
+            },
+            {
+                "text": "Servilleta",
+                "hints": [
+                    "Papel",
+                    "Limpieza",
+                    "Boca"
+                ]
+            },
+            {
+                "text": "Silla",
+                "hints": [
+                    "Patas",
+                    "Respaldo",
+                    "Asiento"
+                ]
+            },
+            {
+                "text": "Mesa",
+                "hints": [
+                    "Tablero",
+                    "Apoyo",
+                    "Comedor"
+                ]
+            },
+            {
+                "text": "Sofá",
+                "hints": [
+                    "Salón",
+                    "Cojines",
+                    "Descanso"
+                ]
+            },
+            {
+                "text": "Cama",
+                "hints": [
+                    "Sueño",
+                    "Colchón",
+                    "Sábanas"
+                ]
+            },
+            {
+                "text": "Almohada",
+                "hints": [
+                    "Cabeza",
+                    "Plumas",
+                    "Blanda"
+                ]
+            },
+            {
+                "text": "Manta",
+                "hints": [
+                    "Abrigo",
+                    "Invierno",
+                    "Sofá"
+                ]
+            },
+            {
+                "text": "Lámpara",
+                "hints": [
+                    "Luz",
+                    "Bombilla",
+                    "Interruptor"
+                ]
+            },
+            {
+                "text": "Espejo",
+                "hints": [
+                    "Reflejo",
+                    "Vidrio",
+                    "Imagen"
+                ]
+            },
+            {
+                "text": "Peine",
+                "hints": [
+                    "Pelo",
+                    "Púas",
+                    "Aseo"
+                ]
+            },
+            {
+                "text": "Cepillo",
+                "hints": [
+                    "Cerdas",
+                    "Dientes",
+                    "Limpieza"
+                ]
+            },
+            {
+                "text": "Jabón",
+                "hints": [
+                    "Espuma",
+                    "Olor",
+                    "Manos"
+                ]
+            },
+            {
+                "text": "Toalla",
+                "hints": [
+                    "Secar",
+                    "Baño",
+                    "Algodón"
+                ]
+            },
+            {
+                "text": "Champú",
+                "hints": [
+                    "Cabeza",
+                    "Ducha",
+                    "Espuma"
+                ]
+            },
+            {
+                "text": "Papel higiénico",
+                "hints": [
+                    "Rollo",
+                    "Baño",
+                    "Desechable"
+                ]
+            },
+            {
+                "text": "Perfume",
+                "hints": [
+                    "Olor",
+                    "Cuello",
+                    "Frasco"
+                ]
+            },
+            {
+                "text": "Desodorante",
+                "hints": [
+                    "Axilas",
+                    "Spray",
+                    "Frescor"
+                ]
+            },
+            {
+                "text": "Maquillaje",
+                "hints": [
+                    "Cara",
+                    "Color",
+                    "Estética"
+                ]
+            },
+            {
+                "text": "Esmalte",
+                "hints": [
+                    "Uñas",
+                    "Pintura",
+                    "Brillo"
+                ]
+            },
+            {
+                "text": "Anillo",
+                "hints": [
+                    "Dedo",
+                    "Metal",
+                    "Compromiso"
+                ]
+            },
+            {
+                "text": "Collar",
+                "hints": [
+                    "Cuello",
+                    "Joya",
+                    "Colgante"
+                ]
+            },
+            {
+                "text": "Pendientes",
+                "hints": [
+                    "Orejas",
+                    "Par",
+                    "Perforación"
+                ]
+            },
+            {
+                "text": "Reloj de pared",
+                "hints": [
+                    "Pared",
+                    "Tic-tac",
+                    "Hora"
+                ]
+            },
+            {
+                "text": "Cuadro",
+                "hints": [
+                    "Marco",
+                    "Pared",
+                    "Arte"
+                ]
+            },
+            {
+                "text": "Alfombra",
+                "hints": [
+                    "Suelo",
+                    "Tejido",
+                    "Pisadas"
+                ]
+            },
+            {
+                "text": "Cortina",
+                "hints": [
+                    "Ventana",
+                    "Tela",
+                    "Luz"
+                ]
+            },
+            {
+                "text": "Persiana",
+                "hints": [
+                    "Lamas",
+                    "Cuerda",
+                    "Oscuridad"
+                ]
+            },
+            {
+                "text": "Puerta",
+                "hints": [
+                    "Entrada",
+                    "Pomo",
+                    "Madera"
+                ]
+            },
+            {
+                "text": "Ventana",
+                "hints": [
+                    "Cristal",
+                    "Vistas",
+                    "Marco"
+                ]
+            },
+            {
+                "text": "Suelo",
+                "hints": [
+                    "Abajo",
+                    "Pisadas",
+                    "Baldosa"
+                ]
+            },
+            {
+                "text": "Techo",
+                "hints": [
+                    "Arriba",
+                    "Lámpara",
+                    "Cobertura"
+                ]
+            },
+            {
+                "text": "Pared",
+                "hints": [
+                    "Vertical",
+                    "Ladrillo",
+                    "Pintura"
+                ]
+            },
+            {
+                "text": "Interruptor",
+                "hints": [
+                    "Luz",
+                    "Click",
+                    "Pared"
+                ]
+            },
+            {
+                "text": "Enchufe",
+                "hints": [
+                    "Corriente",
+                    "Pared",
+                    "Clavija"
+                ]
+            },
+            {
+                "text": "Cable",
+                "hints": [
+                    "Cobre",
+                    "Conexión",
+                    "Largo"
+                ]
+            },
+            {
+                "text": "Mando",
+                "hints": [
+                    "Botones",
+                    "Distancia",
+                    "TV"
+                ]
+            },
+            {
+                "text": "Pilas",
+                "hints": [
+                    "Energía",
+                    "Polo",
+                    "Pequeñas"
+                ]
+            },
+            {
+                "text": "Moneda",
+                "hints": [
+                    "Metal",
+                    "Cambio",
+                    "Redonda"
+                ]
+            },
+            {
+                "text": "Billete",
+                "hints": [
+                    "Papel",
+                    "Valor",
+                    "Cartera"
+                ]
+            },
+            {
+                "text": "Tarjeta",
+                "hints": [
+                    "Plástico",
+                    "Chip",
+                    "Pago"
+                ]
+            },
+            {
+                "text": "Ticket",
+                "hints": [
+                    "Compra",
+                    "Papel",
+                    "Resguardo"
+                ]
+            },
+            {
+                "text": "Bolsa",
+                "hints": [
+                    "Plástico",
+                    "Compra",
+                    "Asas"
+                ]
+            },
+            {
+                "text": "Caja",
+                "hints": [
+                    "Cartón",
+                    "Guardar",
+                    "Cubo"
+                ]
+            },
+            {
+                "text": "Paquete",
+                "hints": [
+                    "Envío",
+                    "Cartón",
+                    "Correo"
+                ]
+            },
+            {
+                "text": "Carta",
+                "hints": [
+                    "Sobre",
+                    "Buzón",
+                    "Escrito"
+                ]
+            },
+            {
+                "text": "Sello",
+                "hints": [
+                    "Estampa",
+                    "Correo",
+                    "Pegatina"
+                ]
+            },
+            {
+                "text": "Sobre",
+                "hints": [
+                    "Papel",
+                    "Carta",
+                    "Cerrado"
+                ]
+            },
+            {
+                "text": "Cuaderno",
+                "hints": [
+                    "Hojas",
+                    "Espirales",
+                    "Apuntes"
+                ]
+            },
+            {
+                "text": "Agenda",
+                "hints": [
+                    "Fechas",
+                    "Días",
+                    "Plan"
+                ]
+            },
+            {
+                "text": "Calendario",
+                "hints": [
+                    "Meses",
+                    "Pared",
+                    "Días"
+                ]
+            },
+            {
+                "text": "Calculadora",
+                "hints": [
+                    "Números",
+                    "Sumas",
+                    "Botones"
+                ]
+            },
+            {
+                "text": "Regla",
+                "hints": [
+                    "Medir",
+                    "Recta",
+                    "Centímetros"
+                ]
+            },
+            {
+                "text": "Grapadora",
+                "hints": [
+                    "Unir",
+                    "Metal",
+                    "Papel"
+                ]
+            },
+            {
+                "text": "Celo",
+                "hints": [
+                    "Pegar",
+                    "Transparente",
+                    "Rollo"
+                ]
+            },
+            {
+                "text": "Pegamento",
+                "hints": [
+                    "Adhesivo",
+                    "Barra",
+                    "Unir"
+                ]
+            },
+            {
+                "text": "Clip",
+                "hints": [
+                    "Metal",
+                    "Sujetar",
+                    "Pequeño"
+                ]
+            },
+            {
+                "text": "Chincheta",
+                "hints": [
+                    "Pinchar",
+                    "Corcho",
+                    "Punta"
+                ]
+            },
+            {
+                "text": "Imán",
+                "hints": [
+                    "Metal",
+                    "Nevera",
+                    "Atracción"
+                ]
+            },
+            {
+                "text": "Paraguas",
+                "hints": [
+                    "Lluvia",
+                    "Abrir",
+                    "Mojado"
+                ]
+            },
+            {
+                "text": "Impermeable",
+                "hints": [
+                    "Agua",
+                    "Plástico",
+                    "Lluvia"
+                ]
+            },
+            {
+                "text": "Sombrero",
+                "hints": [
+                    "Cabeza",
+                    "Sol",
+                    "Ala"
+                ]
+            },
+            {
+                "text": "Gorra",
+                "hints": [
+                    "Visera",
+                    "Deporte",
+                    "Sol"
+                ]
+            },
+            {
+                "text": "Bufanda",
+                "hints": [
+                    "Cuello",
+                    "Lana",
+                    "Invierno"
+                ]
+            },
+            {
+                "text": "Guantes",
+                "hints": [
+                    "Manos",
+                    "Dedos",
+                    "Frío"
+                ]
+            },
+            {
+                "text": "Calcetines",
+                "hints": [
+                    "Pies",
+                    "Par",
+                    "Zapatos"
+                ]
+            },
+            {
+                "text": "Zapatos",
+                "hints": [
+                    "Suela",
+                    "Caminar",
+                    "Cordones"
+                ]
+            },
+            {
+                "text": "Zapatillas",
+                "hints": [
+                    "Casa",
+                    "Cómodo",
+                    "Deporte"
+                ]
+            },
+            {
+                "text": "Botas",
+                "hints": [
+                    "Caña",
+                    "Invierno",
+                    "Resistente"
+                ]
+            },
+            {
+                "text": "Cinturón",
+                "hints": [
+                    "Cintura",
+                    "Hebilla",
+                    "Ajuste"
+                ]
+            },
+            {
+                "text": "Pantalón",
+                "hints": [
+                    "Piernas",
+                    "Tela",
+                    "Bolsillos"
+                ]
+            },
+            {
+                "text": "Camisa",
+                "hints": [
+                    "Botones",
+                    "Cuello",
+                    "Mangas"
+                ]
+            },
+            {
+                "text": "Camiseta",
+                "hints": [
+                    "Algodón",
+                    "Casual",
+                    "Torso"
+                ]
+            },
+            {
+                "text": "Chaqueta",
+                "hints": [
+                    "Abrigo",
+                    "Cremallera",
+                    "Exterior"
+                ]
+            },
+            {
+                "text": "Abrigo",
+                "hints": [
+                    "Largo",
+                    "Frío",
+                    "Grueso"
+                ]
+            },
+            {
+                "text": "Vestido",
+                "hints": [
+                    "Pieza",
+                    "Femenino",
+                    "Largo"
+                ]
+            },
+            {
+                "text": "Falda",
+                "hints": [
+                    "Cintura",
+                    "Vuelo",
+                    "Piernas"
+                ]
+            },
+            {
+                "text": "Maleta",
+                "hints": [
+                    "Viaje",
+                    "Ruedas",
+                    "Ropa"
+                ]
+            },
+            {
+                "text": "Neceser",
+                "hints": [
+                    "Aseo",
+                    "Viaje",
+                    "Pequeño"
+                ]
+            },
+            {
+                "text": "Sartén",
+                "hints": [
+                    "Freír",
+                    "Mango",
+                    "Aceite"
+                ]
+            },
+            {
+                "text": "Olla",
+                "hints": [
+                    "Hervir",
+                    "Tapa",
+                    "Cocido"
                 ]
             }
         ]
     },
     {
-        "id": 2,
-        "name": "Transporte",
+        "id": 4,
+        "name": "Películas y Series",
         "words": [
             {
-                "text": "Avión",
+                "text": "Titanic",
                 "hints": [
-                    "Vuela alto",
-                    "Tiene alas",
-                    "Va al aeropuerto"
+                    "Iceberg",
+                    "Barco",
+                    "Dibujo"
                 ]
             },
             {
-                "text": "Submarino",
+                "text": "Harry Potter",
                 "hints": [
-                    "Bajo el agua",
-                    "Tiene periscopio",
-                    "Vehículo militar o científico"
+                    "Magia",
+                    "Cicatriz",
+                    "Andén"
+                ]
+            },
+            {
+                "text": "Star Wars",
+                "hints": [
+                    "Fuerza",
+                    "Espada",
+                    "Galaxia"
+                ]
+            },
+            {
+                "text": "El Señor de los Anillos",
+                "hints": [
+                    "Anillo",
+                    "Volcán",
+                    "Comunidad"
+                ]
+            },
+            {
+                "text": "Juego de Tronos",
+                "hints": [
+                    "Invierno",
+                    "Dragones",
+                    "Hierro"
+                ]
+            },
+            {
+                "text": "Friends",
+                "hints": [
+                    "Sofá",
+                    "Cafetería",
+                    "Piso"
+                ]
+            },
+            {
+                "text": "Breaking Bad",
+                "hints": [
+                    "Cristal",
+                    "Azul",
+                    "Caravana"
+                ]
+            },
+            {
+                "text": "Stranger Things",
+                "hints": [
+                    "Ochenta",
+                    "Luces",
+                    "Mundo"
+                ]
+            },
+            {
+                "text": "Los Simpson",
+                "hints": [
+                    "Amarillo",
+                    "Sofá",
+                    "Rosquillas"
+                ]
+            },
+            {
+                "text": "Matrix",
+                "hints": [
+                    "Pastilla",
+                    "Código",
+                    "Elegido"
+                ]
+            },
+            {
+                "text": "Avatar",
+                "hints": [
+                    "Azul",
+                    "Cola",
+                    "Planeta"
+                ]
+            },
+            {
+                "text": "El Padrino",
+                "hints": [
+                    "Oferta",
+                    "Mafia",
+                    "Familia"
+                ]
+            },
+            {
+                "text": "Batman",
+                "hints": [
+                    "Murciélago",
+                    "Cueva",
+                    "Noche"
+                ]
+            },
+            {
+                "text": "Spiderman",
+                "hints": [
+                    "Picadura",
+                    "Red",
+                    "Tío"
+                ]
+            },
+            {
+                "text": "Jurassic Park",
+                "hints": [
+                    "Mosquito",
+                    "Ámbar",
+                    "Isla"
+                ]
+            },
+            {
+                "text": "Indiana Jones",
+                "hints": [
+                    "Látigo",
+                    "Sombrero",
+                    "Arca"
+                ]
+            },
+            {
+                "text": "Regreso al Futuro",
+                "hints": [
+                    "Coche",
+                    "Reloj",
+                    "Baile"
+                ]
+            },
+            {
+                "text": "E.T.",
+                "hints": [
+                    "Dedo",
+                    "Bicicleta",
+                    "Teléfono"
+                ]
+            },
+            {
+                "text": "El Rey León",
+                "hints": [
+                    "Sabana",
+                    "Ciclo",
+                    "Tío"
+                ]
+            },
+            {
+                "text": "Toy Story",
+                "hints": [
+                    "Juguetes",
+                    "Vaquero",
+                    "Guardián"
+                ]
+            },
+            {
+                "text": "Piratas del Caribe",
+                "hints": [
+                    "Perla",
+                    "Ron",
+                    "Brújula"
+                ]
+            },
+            {
+                "text": "Los Vengadores",
+                "hints": [
+                    "Gemas",
+                    "Reunión",
+                    "Escudo"
+                ]
+            },
+            {
+                "text": "La Casa de Papel",
+                "hints": [
+                    "Máscara",
+                    "Dinero",
+                    "Profesor"
+                ]
+            },
+            {
+                "text": "El Juego del Calamar",
+                "hints": [
+                    "Verde",
+                    "Muñeca",
+                    "Dinero"
+                ]
+            },
+            {
+                "text": "The Walking Dead",
+                "hints": [
+                    "Caminantes",
+                    "Virus",
+                    "Supervivencia"
+                ]
+            },
+            {
+                "text": "Forrest Gump",
+                "hints": [
+                    "Correr",
+                    "Bombones",
+                    "Banco"
+                ]
+            },
+            {
+                "text": "Gladiator",
+                "hints": [
+                    "Arena",
+                    "Roma",
+                    "Venganza"
+                ]
+            },
+            {
+                "text": "Rocky",
+                "hints": [
+                    "Escaleras",
+                    "Boxeo",
+                    "Grito"
+                ]
+            },
+            {
+                "text": "Terminator",
+                "hints": [
+                    "Futuro",
+                    "Robot",
+                    "Volveré"
+                ]
+            },
+            {
+                "text": "Alien",
+                "hints": [
+                    "Nave",
+                    "Huevo",
+                    "Espacio"
+                ]
+            },
+            {
+                "text": "Tiburón",
+                "hints": [
+                    "Playa",
+                    "Aleta",
+                    "Barco"
+                ]
+            },
+            {
+                "text": "Psicosis",
+                "hints": [
+                    "Ducha",
+                    "Cuchillo",
+                    "Madre"
+                ]
+            },
+            {
+                "text": "El Resplandor",
+                "hints": [
+                    "Hotel",
+                    "Hacha",
+                    "Laberinto"
+                ]
+            },
+            {
+                "text": "Pulp Fiction",
+                "hints": [
+                    "Baile",
+                    "Hamburguesa",
+                    "Maletín"
+                ]
+            },
+            {
+                "text": "Kill Bill",
+                "hints": [
+                    "Amarillo",
+                    "Catana",
+                    "Lista"
+                ]
+            },
+            {
+                "text": "El Show de Truman",
+                "hints": [
+                    "Cámara",
+                    "Falso",
+                    "Barco"
+                ]
+            },
+            {
+                "text": "Origen",
+                "hints": [
+                    "Sueño",
+                    "Peonza",
+                    "Niveles"
+                ]
+            },
+            {
+                "text": "Interstellar",
+                "hints": [
+                    "Maíz",
+                    "Agujero",
+                    "Reloj"
+                ]
+            },
+            {
+                "text": "Shrek",
+                "hints": [
+                    "Ciénaga",
+                    "Burro",
+                    "Cebolla"
+                ]
+            },
+            {
+                "text": "Buscando a Nemo",
+                "hints": [
+                    "Pez",
+                    "Memoria",
+                    "Océano"
+                ]
+            },
+            {
+                "text": "Frozen",
+                "hints": [
+                    "Hielo",
+                    "Hermana",
+                    "Muñeco"
+                ]
+            },
+            {
+                "text": "Coco",
+                "hints": [
+                    "Guitarra",
+                    "Abuela",
+                    "Muertos"
+                ]
+            },
+            {
+                "text": "Up",
+                "hints": [
+                    "Globos",
+                    "Casa",
+                    "Cataratas"
+                ]
+            },
+            {
+                "text": "Los Increíbles",
+                "hints": [
+                    "Familia",
+                    "Trajes",
+                    "Capa"
+                ]
+            },
+            {
+                "text": "Monstruos S.A.",
+                "hints": [
+                    "Puertas",
+                    "Gritos",
+                    "Calcetín"
+                ]
+            },
+            {
+                "text": "Mi Villano Favorito",
+                "hints": [
+                    "Luna",
+                    "Amarillos",
+                    "Niñas"
+                ]
+            },
+            {
+                "text": "Ice Age",
+                "hints": [
+                    "Bellota",
+                    "Mamut",
+                    "Hielo"
+                ]
+            },
+            {
+                "text": "Madagascar",
+                "hints": [
+                    "Zoo",
+                    "Isla",
+                    "Baile"
+                ]
+            },
+            {
+                "text": "Kung Fu Panda",
+                "hints": [
+                    "Fideos",
+                    "Guerrero",
+                    "Rollo"
+                ]
+            },
+            {
+                "text": "Cómo entrenar a tu dragón",
+                "hints": [
+                    "Vikingo",
+                    "Furia",
+                    "Vuelo"
+                ]
+            },
+            {
+                "text": "Men in Black",
+                "hints": [
+                    "Traje",
+                    "Memoria",
+                    "Aliens"
+                ]
+            },
+            {
+                "text": "Cazafantasmas",
+                "hints": [
+                    "Mochila",
+                    "Moco",
+                    "Llamada"
+                ]
+            },
+            {
+                "text": "Grease",
+                "hints": [
+                    "Coche",
+                    "Pelo",
+                    "Instituto"
+                ]
+            },
+            {
+                "text": "Dirty Dancing",
+                "hints": [
+                    "Salto",
+                    "Baile",
+                    "Verano"
+                ]
+            },
+            {
+                "text": "La La Land",
+                "hints": [
+                    "Piano",
+                    "Atasco",
+                    "Ciudad"
+                ]
+            },
+            {
+                "text": "Moulin Rouge",
+                "hints": [
+                    "Molino",
+                    "París",
+                    "Canciones"
+                ]
+            },
+            {
+                "text": "Mamma Mia",
+                "hints": [
+                    "Isla",
+                    "Boda",
+                    "Grupo"
+                ]
+            },
+            {
+                "text": "Bohemian Rhapsody",
+                "hints": [
+                    "Bigote",
+                    "Reina",
+                    "Concierto"
+                ]
+            },
+            {
+                "text": "Joker",
+                "hints": [
+                    "Risa",
+                    "Escaleras",
+                    "Payaso"
+                ]
+            },
+            {
+                "text": "El Caballero Oscuro",
+                "hints": [
+                    "Caos",
+                    "Moneda",
+                    "Héroe"
+                ]
+            },
+            {
+                "text": "Iron Man",
+                "hints": [
+                    "Corazón",
+                    "Armadura",
+                    "Millonario"
+                ]
+            },
+            {
+                "text": "Capitán América",
+                "hints": [
+                    "Escudo",
+                    "Hielo",
+                    "Primer"
+                ]
+            },
+            {
+                "text": "Thor",
+                "hints": [
+                    "Martillo",
+                    "Trueno",
+                    "Hermano"
+                ]
+            },
+            {
+                "text": "Black Panther",
+                "hints": [
+                    "Garras",
+                    "Rey",
+                    "Nación"
+                ]
+            },
+            {
+                "text": "Wonder Woman",
+                "hints": [
+                    "Lazo",
+                    "Isla",
+                    "Guerra"
+                ]
+            },
+            {
+                "text": "Superman",
+                "hints": [
+                    "Capa",
+                    "Kriptonita",
+                    "Periodista"
+                ]
+            },
+            {
+                "text": "Aquaman",
+                "hints": [
+                    "Tridente",
+                    "Mar",
+                    "Atlantis"
+                ]
+            },
+            {
+                "text": "Deadpool",
+                "hints": [
+                    "Rojo",
+                    "Espadas",
+                    "Cámara"
+                ]
+            },
+            {
+                "text": "X-Men",
+                "hints": [
+                    "Escuela",
+                    "Mutante",
+                    "Silla"
+                ]
+            },
+            {
+                "text": "Los Juegos del Hambre",
+                "hints": [
+                    "Arco",
+                    "Sinsajo",
+                    "Distritos"
+                ]
+            },
+            {
+                "text": "Crepúsculo",
+                "hints": [
+                    "Vampiro",
+                    "Lobo",
+                    "Manzana"
+                ]
+            },
+            {
+                "text": "Divergente",
+                "hints": [
+                    "Facciones",
+                    "Prueba",
+                    "Tren"
+                ]
+            },
+            {
+                "text": "El Corredor del Laberinto",
+                "hints": [
+                    "Muros",
+                    "Salida",
+                    "Claro"
+                ]
+            },
+            {
+                "text": "Narnia",
+                "hints": [
+                    "Armario",
+                    "León",
+                    "Bruja"
+                ]
+            },
+            {
+                "text": "Jumanji",
+                "hints": [
+                    "Tablero",
+                    "Selva",
+                    "Tambores"
+                ]
+            },
+            {
+                "text": "Solo en Casa",
+                "hints": [
+                    "Ladrones",
+                    "Trampas",
+                    "Navidad"
+                ]
+            },
+            {
+                "text": "Charlie y la Fábrica de Chocolate",
+                "hints": [
+                    "Billete",
+                    "Dulces",
+                    "Ascensor"
+                ]
+            },
+            {
+                "text": "Matilda",
+                "hints": [
+                    "Poderes",
+                    "Libros",
+                    "Directora"
+                ]
+            },
+            {
+                "text": "Mary Poppins",
+                "hints": [
+                    "Paraguas",
+                    "Niñera",
+                    "Bolso"
+                ]
+            },
+            {
+                "text": "Pesadilla antes de Navidad",
+                "hints": [
+                    "Esqueleto",
+                    "Calabaza",
+                    "Regalos"
+                ]
+            },
+            {
+                "text": "Eduardo Manostijeras",
+                "hints": [
+                    "Corte",
+                    "Jardín",
+                    "Nieve"
+                ]
+            },
+            {
+                "text": "Beetlejuice",
+                "hints": [
+                    "Nombre",
+                    "Rayas",
+                    "Fantasma"
+                ]
+            },
+            {
+                "text": "La Familia Addams",
+                "hints": [
+                    "Chasquido",
+                    "Mano",
+                    "Gótico"
+                ]
+            },
+            {
+                "text": "Casper",
+                "hints": [
+                    "Fantasma",
+                    "Amistad",
+                    "Mansión"
+                ]
+            },
+            {
+                "text": "Scooby Doo",
+                "hints": [
+                    "Furgoneta",
+                    "Perro",
+                    "Misterio"
+                ]
+            },
+            {
+                "text": "Los Picapiedra",
+                "hints": [
+                    "Rueda",
+                    "Piedra",
+                    "Dinosaurio"
+                ]
+            },
+            {
+                "text": "El Príncipe de Bel-Air",
+                "hints": [
+                    "Taxi",
+                    "Tío",
+                    "Barrio"
+                ]
+            },
+            {
+                "text": "Expediente X",
+                "hints": [
+                    "OVNI",
+                    "Verdad",
+                    "Pareja"
+                ]
+            },
+            {
+                "text": "Perdidos",
+                "hints": [
+                    "Isla",
+                    "Humo",
+                    "Avión"
+                ]
+            },
+            {
+                "text": "Prison Break",
+                "hints": [
+                    "Tatuaje",
+                    "Fuga",
+                    "Mapa"
+                ]
+            },
+            {
+                "text": "Peaky Blinders",
+                "hints": [
+                    "Gorras",
+                    "Apuestas",
+                    "Familia"
+                ]
+            },
+            {
+                "text": "Vikingos",
+                "hints": [
+                    "Barcos",
+                    "Hacha",
+                    "Dioses"
+                ]
+            },
+            {
+                "text": "Chernobyl",
+                "hints": [
+                    "Radiación",
+                    "Central",
+                    "Mentira"
+                ]
+            },
+            {
+                "text": "Gambito de Dama",
+                "hints": [
+                    "Ajedrez",
+                    "Techo",
+                    "Pastillas"
+                ]
+            },
+            {
+                "text": "The Crown",
+                "hints": [
+                    "Reina",
+                    "Palacio",
+                    "Historia"
+                ]
+            },
+            {
+                "text": "Black Mirror",
+                "hints": [
+                    "Tecnología",
+                    "Futuro",
+                    "Pantalla"
+                ]
+            },
+            {
+                "text": "Dark",
+                "hints": [
+                    "Cueva",
+                    "Tiempo",
+                    "Lluvia"
+                ]
+            },
+            {
+                "text": "Rick y Morty",
+                "hints": [
+                    "Portal",
+                    "Abuelo",
+                    "Ciencia"
+                ]
+            },
+            {
+                "text": "Futurama",
+                "hints": [
+                    "Reparto",
+                    "Robot",
+                    "Futuro"
+                ]
+            },
+            {
+                "text": "South Park",
+                "hints": [
+                    "Nieve",
+                    "Gorro",
+                    "Muerte"
+                ]
+            }
+        ]
+    },
+    {
+        "id": 6,
+        "name": "Cuerpo y Salud",
+        "words": [
+            {
+                "text": "Corazón",
+                "hints": [
+                    "Latidos",
+                    "Pecho",
+                    "Bomba"
+                ]
+            },
+            {
+                "text": "Cerebro",
+                "hints": [
+                    "Pensar",
+                    "Cabeza",
+                    "Gris"
+                ]
+            },
+            {
+                "text": "Pulmones",
+                "hints": [
+                    "Aire",
+                    "Respirar",
+                    "Pecho"
+                ]
+            },
+            {
+                "text": "Estómago",
+                "hints": [
+                    "Comida",
+                    "Digestión",
+                    "Tripas"
+                ]
+            },
+            {
+                "text": "Sangre",
+                "hints": [
+                    "Roja",
+                    "Venas",
+                    "Líquido"
+                ]
+            },
+            {
+                "text": "Hueso",
+                "hints": [
+                    "Esqueleto",
+                    "Duro",
+                    "Blanco"
+                ]
+            },
+            {
+                "text": "Músculo",
+                "hints": [
+                    "Fuerza",
+                    "Carne",
+                    "Movimiento"
+                ]
+            },
+            {
+                "text": "Piel",
+                "hints": [
+                    "Tacto",
+                    "Recubrimiento",
+                    "Sudor"
+                ]
+            },
+            {
+                "text": "Diente",
+                "hints": [
+                    "Morder",
+                    "Boca",
+                    "Blanco"
+                ]
+            },
+            {
+                "text": "Lengua",
+                "hints": [
+                    "Sabor",
+                    "Boca",
+                    "Hablar"
+                ]
+            },
+            {
+                "text": "Ojo",
+                "hints": [
+                    "Ver",
+                    "Mirada",
+                    "Color"
+                ]
+            },
+            {
+                "text": "Oído",
+                "hints": [
+                    "Escuchar",
+                    "Oreja",
+                    "Sonido"
+                ]
+            },
+            {
+                "text": "Fiebre",
+                "hints": [
+                    "Calor",
+                    "Enfermo",
+                    "Termómetro"
+                ]
+            },
+            {
+                "text": "Gripe",
+                "hints": [
+                    "Virus",
+                    "Invierno",
+                    "Cama"
+                ]
+            },
+            {
+                "text": "Tos",
+                "hints": [
+                    "Garganta",
+                    "Ruido",
+                    "Seca"
+                ]
+            },
+            {
+                "text": "Dolor de cabeza",
+                "hints": [
+                    "Migraña",
+                    "Pastilla",
+                    "Sien"
+                ]
+            },
+            {
+                "text": "Ambulancia",
+                "hints": [
+                    "Sirena",
+                    "Urgencia",
+                    "Vehículo"
+                ]
+            },
+            {
+                "text": "Médico",
+                "hints": [
+                    "Bata",
+                    "Curar",
+                    "Hospital"
+                ]
+            },
+            {
+                "text": "Enfermera",
+                "hints": [
+                    "Cuidados",
+                    "Ayuda",
+                    "Hospital"
+                ]
+            },
+            {
+                "text": "Vacuna",
+                "hints": [
+                    "Aguja",
+                    "Virus",
+                    "Pinchazo"
+                ]
+            },
+            {
+                "text": "Pastilla",
+                "hints": [
+                    "Tragar",
+                    "Farmacia",
+                    "Agua"
+                ]
+            },
+            {
+                "text": "Tirita",
+                "hints": [
+                    "Herida",
+                    "Pegar",
+                    "Corte"
+                ]
+            },
+            {
+                "text": "Escayola",
+                "hints": [
+                    "Roto",
+                    "Yeso",
+                    "Firmas"
+                ]
+            },
+            {
+                "text": "Cirujano",
+                "hints": [
+                    "Operación",
+                    "Bisturí",
+                    "Quirófano"
+                ]
+            },
+            {
+                "text": "ADN",
+                "hints": [
+                    "Genes",
+                    "Herencia",
+                    "Hélice"
+                ]
+            },
+            {
+                "text": "Célula",
+                "hints": [
+                    "Pequeña",
+                    "Microscopio",
+                    "Vida"
+                ]
+            },
+            {
+                "text": "Bactería",
+                "hints": [
+                    "Microbio",
+                    "Infección",
+                    "Suciedad"
+                ]
+            },
+            {
+                "text": "Salud",
+                "hints": [
+                    "Bienestar",
+                    "Brindis",
+                    "Vida"
+                ]
+            }
+        ]
+    },
+    {
+        "id": 7,
+        "name": "Deportes",
+        "words": [
+            {
+                "text": "Fútbol",
+                "hints": [
+                    "Gol",
+                    "Balón",
+                    "Pies"
+                ]
+            },
+            {
+                "text": "Baloncesto",
+                "hints": [
+                    "Canasta",
+                    "Altura",
+                    "Manos"
+                ]
+            },
+            {
+                "text": "Tenis",
+                "hints": [
+                    "Raqueta",
+                    "Red",
+                    "Punto"
+                ]
+            },
+            {
+                "text": "Natación",
+                "hints": [
+                    "Agua",
+                    "Piscina",
+                    "Nadar"
+                ]
+            },
+            {
+                "text": "Atletismo",
+                "hints": [
+                    "Correr",
+                    "Pista",
+                    "Velocidad"
+                ]
+            },
+            {
+                "text": "Ciclismo",
+                "hints": [
+                    "Bicicleta",
+                    "Tour",
+                    "Casco"
+                ]
+            },
+            {
+                "text": "Fórmula 1",
+                "hints": [
+                    "Coche",
+                    "Carrera",
+                    "Motor"
+                ]
+            },
+            {
+                "text": "Boxeo",
+                "hints": [
+                    "Guantes",
+                    "Ring",
+                    "Golpes"
+                ]
+            },
+            {
+                "text": "Golf",
+                "hints": [
+                    "Hoyo",
+                    "Palo",
+                    "Césped"
+                ]
+            },
+            {
+                "text": "Voleibol",
+                "hints": [
+                    "Red",
+                    "Playa",
+                    "Salto"
+                ]
+            },
+            {
+                "text": "Esquí",
+                "hints": [
+                    "Nieve",
+                    "Montaña",
+                    "Deslizar"
+                ]
+            },
+            {
+                "text": "Balón",
+                "hints": [
+                    "Esférico",
+                    "Juego",
+                    "Aire"
+                ]
+            },
+            {
+                "text": "Árbitro",
+                "hints": [
+                    "Silbato",
+                    "Justicia",
+                    "Tarjeta"
+                ]
+            },
+            {
+                "text": "Portería",
+                "hints": [
+                    "Red",
+                    "Palos",
+                    "Gol"
+                ]
+            },
+            {
+                "text": "Estadio",
+                "hints": [
+                    "Grada",
+                    "Público",
+                    "Campo"
+                ]
+            },
+            {
+                "text": "Medalla",
+                "hints": [
+                    "Oro",
+                    "Podio",
+                    "Ganador"
+                ]
+            },
+            {
+                "text": "Trofeo",
+                "hints": [
+                    "Copa",
+                    "Victoria",
+                    "Campeón"
+                ]
+            },
+            {
+                "text": "Entrenador",
+                "hints": [
+                    "Estrategia",
+                    "Mandar",
+                    "Banquillo"
+                ]
+            },
+            {
+                "text": "Gimnasio",
+                "hints": [
+                    "Pesas",
+                    "Sudor",
+                    "Entreno"
+                ]
+            },
+            {
+                "text": "Dopaje",
+                "hints": [
+                    "Prohibido",
+                    "Trampa",
+                    "Sustancia"
+                ]
+            },
+            {
+                "text": "Maratón",
+                "hints": [
+                    "Larga",
+                    "Resistencia",
+                    "42km"
+                ]
+            },
+            {
+                "text": "Penalti",
+                "hints": [
+                    "Falta",
+                    "Disparo",
+                    "Once metros"
+                ]
+            },
+            {
+                "text": "Fuera de juego",
+                "hints": [
+                    "Posición",
+                    "Ilegal",
+                    "Bandera"
+                ]
+            },
+            {
+                "text": "Chándal",
+                "hints": [
+                    "Ropa",
+                    "Cómodo",
+                    "Deporte"
+                ]
+            },
+            {
+                "text": "Olimpiadas",
+                "hints": [
+                    "Aros",
+                    "Juegos",
+                    "Mundial"
+                ]
+            }
+        ]
+    },
+    {
+        "id": 8,
+        "name": "Fantasía",
+        "words": [
+            {
+                "text": "Dragón",
+                "hints": [
+                    "Fuego",
+                    "Volar",
+                    "Escamas"
+                ]
+            },
+            {
+                "text": "Mago",
+                "hints": [
+                    "Hechizo",
+                    "Varita",
+                    "Sombrero"
+                ]
+            },
+            {
+                "text": "Bruja",
+                "hints": [
+                    "Escoba",
+                    "Poción",
+                    "Verruga"
+                ]
+            },
+            {
+                "text": "Hada",
+                "hints": [
+                    "Alas",
+                    "Polvo",
+                    "Pequeña"
+                ]
+            },
+            {
+                "text": "Elfo",
+                "hints": [
+                    "Orejas",
+                    "Bosque",
+                    "Arco"
+                ]
+            },
+            {
+                "text": "Enano",
+                "hints": [
+                    "Barba",
+                    "Mina",
+                    "Hacha"
+                ]
+            },
+            {
+                "text": "Ogro",
+                "hints": [
+                    "Verde",
+                    "Grande",
+                    "Fuerza"
+                ]
+            },
+            {
+                "text": "Vampiro",
+                "hints": [
+                    "Sangre",
+                    "Colmillos",
+                    "Noche"
+                ]
+            },
+            {
+                "text": "Hombre Lobo",
+                "hints": [
+                    "Luna llena",
+                    "Aullido",
+                    "Transformación"
+                ]
+            },
+            {
+                "text": "Zombi",
+                "hints": [
+                    "Cerebro",
+                    "Muerto",
+                    "Lento"
+                ]
+            },
+            {
+                "text": "Fantasma",
+                "hints": [
+                    "Sábana",
+                    "Miedo",
+                    "Traspasar"
+                ]
+            },
+            {
+                "text": "Sirena",
+                "hints": [
+                    "Mar",
+                    "Cola",
+                    "Canto"
+                ]
+            },
+            {
+                "text": "Unicornio",
+                "hints": [
+                    "Cuerno",
+                    "Caballo",
+                    "Arcoíris"
+                ]
+            },
+            {
+                "text": "Castillo",
+                "hints": [
+                    "Torre",
+                    "Rey",
+                    "Piedra"
+                ]
+            },
+            {
+                "text": "Espada",
+                "hints": [
+                    "Acero",
+                    "Caballero",
+                    "Filo"
+                ]
+            },
+            {
+                "text": "Escudo",
+                "hints": [
+                    "Protección",
+                    "Defensa",
+                    "Emblema"
+                ]
+            },
+            {
+                "text": "Poción",
+                "hints": [
+                    "Frasco",
+                    "Beber",
+                    "Mágica"
+                ]
+            },
+            {
+                "text": "Hechizo",
+                "hints": [
+                    "Palabras",
+                    "Magia",
+                    "Libro"
+                ]
+            },
+            {
+                "text": "Rey",
+                "hints": [
+                    "Corona",
+                    "Trono",
+                    "Mandar"
+                ]
+            },
+            {
+                "text": "Princesa",
+                "hints": [
+                    "Rescate",
+                    "Vestido",
+                    "Torre"
+                ]
+            },
+            {
+                "text": "Monstruo",
+                "hints": [
+                    "Debajo cama",
+                    "Miedo",
+                    "Feo"
+                ]
+            },
+            {
+                "text": "Gigante",
+                "hints": [
+                    "Grande",
+                    "Pisadas",
+                    "Alto"
+                ]
+            },
+            {
+                "text": "Tesoro",
+                "hints": [
+                    "Cofre",
+                    "Oro",
+                    "Mapa"
+                ]
+            },
+            {
+                "text": "Mazmorra",
+                "hints": [
+                    "Prisión",
+                    "Oscuro",
+                    "Subsuelo"
+                ]
+            },
+            {
+                "text": "Profecía",
+                "hints": [
+                    "Futuro",
+                    "Destino",
+                    "Escrito"
+                ]
+            }
+        ]
+    },
+    {
+        "id": 9,
+        "name": "Famosos (Celebs)",
+        "words": [
+            {
+                "text": "Rosalía",
+                "hints": [
+                    "Motomami",
+                    "Uñas",
+                    "Cantante"
+                ]
+            },
+            {
+                "text": "Rafa Nadal",
+                "hints": [
+                    "Tenis",
+                    "Mallorca",
+                    "Vamos"
+                ]
+            },
+            {
+                "text": "Ibai Llanos",
+                "hints": [
+                    "Twitch",
+                    "Velada",
+                    "Streamer"
+                ]
+            },
+            {
+                "text": "Shakira",
+                "hints": [
+                    "Caderas",
+                    "Colombia",
+                    "Loba"
+                ]
+            },
+            {
+                "text": "Leo Messi",
+                "hints": [
+                    "Fútbol",
+                    "Argentina",
+                    "10"
+                ]
+            },
+            {
+                "text": "Cristiano Ronaldo",
+                "hints": [
+                    "Siuuu",
+                    "Gol",
+                    "Portugal"
+                ]
+            },
+            {
+                "text": "Fernando Alonso",
+                "hints": [
+                    "Coche",
+                    "Nano",
+                    "33"
+                ]
+            },
+            {
+                "text": "Penélope Cruz",
+                "hints": [
+                    "Actriz",
+                    "Oscar",
+                    "Almodóvar"
+                ]
+            },
+            {
+                "text": "Antonio Banderas",
+                "hints": [
+                    "Zorro",
+                    "Málaga",
+                    "Actor"
+                ]
+            },
+            {
+                "text": "Bad Bunny",
+                "hints": [
+                    "Conejo",
+                    "Trap",
+                    "Puerto Rico"
+                ]
+            },
+            {
+                "text": "Taylor Swift",
+                "hints": [
+                    "Rubia",
+                    "Eras",
+                    "Pop"
+                ]
+            },
+            {
+                "text": "Elon Musk",
+                "hints": [
+                    "Tesla",
+                    "X",
+                    "Cohete"
+                ]
+            },
+            {
+                "text": "Kim Kardashian",
+                "hints": [
+                    "Reality",
+                    "Famosa",
+                    "Hermanas"
+                ]
+            },
+            {
+                "text": "Will Smith",
+                "hints": [
+                    "Príncipe",
+                    "Bel-Air",
+                    "Bofetada"
+                ]
+            },
+            {
+                "text": "Tom Cruise",
+                "hints": [
+                    "Misión",
+                    "Imposible",
+                    "Acción"
+                ]
+            },
+            {
+                "text": "Jennifer Lopez",
+                "hints": [
+                    "JLo",
+                    "Baile",
+                    "Bronx"
+                ]
+            },
+            {
+                "text": "Bizarrap",
+                "hints": [
+                    "Gorra",
+                    "Gafas",
+                    "Sesión"
+                ]
+            },
+            {
+                "text": "Carlos Alcaraz",
+                "hints": [
+                    "Tenis",
+                    "Joven",
+                    "Murcia"
+                ]
+            },
+            {
+                "text": "Aitana",
+                "hints": [
+                    "Triunfo",
+                    "Flequillo",
+                    "Pop"
+                ]
+            },
+            {
+                "text": "David Broncano",
+                "hints": [
+                    "Resistencia",
+                    "Dinero",
+                    "Sexo"
+                ]
+            },
+            {
+                "text": "Piqué",
+                "hints": [
+                    "Fútbol",
+                    "Kings League",
+                    "Casio"
+                ]
+            },
+            {
+                "text": "Beyoncé",
+                "hints": [
+                    "Queen",
+                    "Baile",
+                    "Diva"
+                ]
+            },
+            {
+                "text": "Dua Lipa",
+                "hints": [
+                    "Cantante",
+                    "Pop",
+                    "Modelo"
+                ]
+            },
+            {
+                "text": "Pedro Pascal",
+                "hints": [
+                    "Mandalorian",
+                    "Actor",
+                    "Chile"
+                ]
+            },
+            {
+                "text": "Zendaya",
+                "hints": [
+                    "Euphoria",
+                    "Spider-Man",
+                    "Actriz"
+                ]
+            }
+        ]
+    },
+    {
+        "id": 10,
+        "name": "Juegos",
+        "words": [
+            {
+                "text": "Ajedrez",
+                "hints": [
+                    "Tablero",
+                    "Rey",
+                    "Estrategia"
+                ]
+            },
+            {
+                "text": "Parchís",
+                "hints": [
+                    "Colores",
+                    "Dados",
+                    "Casa"
+                ]
+            },
+            {
+                "text": "Monopoly",
+                "hints": [
+                    "Dinero",
+                    "Calles",
+                    "Hotel"
+                ]
+            },
+            {
+                "text": "Dominó",
+                "hints": [
+                    "Fichas",
+                    "Puntos",
+                    "Mesa"
+                ]
+            },
+            {
+                "text": "Póker",
+                "hints": [
+                    "Cartas",
+                    "Apuesta",
+                    "Farol"
+                ]
+            },
+            {
+                "text": "Tres en raya",
+                "hints": [
+                    "X",
+                    "O",
+                    "Cuaderno"
+                ]
+            },
+            {
+                "text": "Videojuego",
+                "hints": [
+                    "Consola",
+                    "Pantalla",
+                    "Mando"
+                ]
+            },
+            {
+                "text": "Super Mario",
+                "hints": [
+                    "Fontanero",
+                    "Bigote",
+                    "Setas"
+                ]
+            },
+            {
+                "text": "Minecraft",
+                "hints": [
+                    "Cubos",
+                    "Construir",
+                    "Pico"
+                ]
+            },
+            {
+                "text": "Fortnite",
+                "hints": [
+                    "Baile",
+                    "Disparos",
+                    "Construir"
+                ]
+            },
+            {
+                "text": "Pokémon",
+                "hints": [
+                    "Capturar",
+                    "Bola",
+                    "Pikachu"
+                ]
+            },
+            {
+                "text": "Tetris",
+                "hints": [
+                    "Piezas",
+                    "Encajar",
+                    "Línea"
+                ]
+            },
+            {
+                "text": "Pac-Man",
+                "hints": [
+                    "Comecocos",
+                    "Fantasmas",
+                    "Laberinto"
+                ]
+            },
+            {
+                "text": "FIFA",
+                "hints": [
+                    "Fútbol",
+                    "EA",
+                    "Partido"
+                ]
+            },
+            {
+                "text": "GTA",
+                "hints": [
+                    "Coches",
+                    "Robar",
+                    "Ciudad"
+                ]
+            },
+            {
+                "text": "Among Us",
+                "hints": [
+                    "Impostor",
+                    "Nave",
+                    "Tareas"
+                ]
+            },
+            {
+                "text": "Zelda",
+                "hints": [
+                    "Link",
+                    "Espada",
+                    "Princesa"
+                ]
+            },
+            {
+                "text": "Call of Duty",
+                "hints": [
+                    "Guerra",
+                    "Disparos",
+                    "Soldado"
+                ]
+            },
+            {
+                "text": "Puzzle",
+                "hints": [
+                    "Piezas",
+                    "Encajar",
+                    "Imagen"
+                ]
+            },
+            {
+                "text": "Escondite",
+                "hints": [
+                    "Buscar",
+                    "Contar",
+                    "Oculto"
+                ]
+            },
+            {
+                "text": "Pilla-pilla",
+                "hints": [
+                    "Correr",
+                    "Tocar",
+                    "Escapar"
+                ]
+            },
+            {
+                "text": "Dados",
+                "hints": [
+                    "Azar",
+                    "Seis",
+                    "Lanzar"
+                ]
+            },
+            {
+                "text": "Cartas",
+                "hints": [
+                    "Baraja",
+                    "Palos",
+                    "Joker"
+                ]
+            },
+            {
+                "text": "Mando",
+                "hints": [
+                    "Botones",
+                    "Control",
+                    "Jugar"
+                ]
+            },
+            {
+                "text": "Consola",
+                "hints": [
+                    "Máquina",
+                    "TV",
+                    "PlayStation"
+                ]
+            }
+        ]
+    },
+    {
+        "id": 11,
+        "name": "Marcas",
+        "words": [
+            {
+                "text": "Coca-Cola",
+                "hints": [
+                    "Refresco",
+                    "Rojo",
+                    "Felicidad"
+                ]
+            },
+            {
+                "text": "McDonald's",
+                "hints": [
+                    "Hamburguesa",
+                    "M Amarilla",
+                    "Payaso"
+                ]
+            },
+            {
+                "text": "Nike",
+                "hints": [
+                    "Deporte",
+                    "Swoosh",
+                    "Zapatillas"
+                ]
+            },
+            {
+                "text": "Adidas",
+                "hints": [
+                    "Tres rayas",
+                    "Deporte",
+                    "Ropa"
+                ]
+            },
+            {
+                "text": "Apple",
+                "hints": [
+                    "Manzana",
+                    "iPhone",
+                    "Caro"
+                ]
+            },
+            {
+                "text": "Samsung",
+                "hints": [
+                    "Corea",
+                    "Galaxy",
+                    "Android"
+                ]
+            },
+            {
+                "text": "Google",
+                "hints": [
+                    "Buscador",
+                    "Colores",
+                    "Internet"
+                ]
+            },
+            {
+                "text": "Amazon",
+                "hints": [
+                    "Paquetes",
+                    "Online",
+                    "Sonrisa"
+                ]
+            },
+            {
+                "text": "IKEA",
+                "hints": [
+                    "Muebles",
+                    "Suecia",
+                    "Montar"
+                ]
+            },
+            {
+                "text": "Zara",
+                "hints": [
+                    "Ropa",
+                    "Inditex",
+                    "Moda"
+                ]
+            },
+            {
+                "text": "Mercadona",
+                "hints": [
+                    "Supermercado",
+                    "Hacendado",
+                    "España"
+                ]
+            },
+            {
+                "text": "Netflix",
+                "hints": [
+                    "Series",
+                    "Rojo",
+                    "Streaming"
+                ]
+            },
+            {
+                "text": "Disney",
+                "hints": [
+                    "Ratón",
+                    "Castillo",
+                    "Magia"
+                ]
+            },
+            {
+                "text": "Starbucks",
+                "hints": [
+                    "Café",
+                    "Sirena",
+                    "Verde"
+                ]
+            },
+            {
+                "text": "Ferrari",
+                "hints": [
+                    "Coche",
+                    "Rojo",
+                    "Caballo"
+                ]
+            },
+            {
+                "text": "Mercedes",
+                "hints": [
+                    "Coche",
+                    "Estrella",
+                    "Lujo"
+                ]
+            },
+            {
+                "text": "BMW",
+                "hints": [
+                    "Coche",
+                    "Alemania",
+                    "Conducir"
+                ]
+            },
+            {
+                "text": "PlayStation",
+                "hints": [
+                    "Sony",
+                    "Consola",
+                    "Jugar"
+                ]
+            },
+            {
+                "text": "Nintendo",
+                "hints": [
+                    "Mario",
+                    "Japón",
+                    "Juegos"
+                ]
+            },
+            {
+                "text": "Pepsi",
+                "hints": [
+                    "Azul",
+                    "Refresco",
+                    "Competencia"
+                ]
+            },
+            {
+                "text": "Burger King",
+                "hints": [
+                    "Corona",
+                    "Whopper",
+                    "Parrilla"
+                ]
+            },
+            {
+                "text": "YouTube",
+                "hints": [
+                    "Videos",
+                    "Rojo",
+                    "Play"
+                ]
+            },
+            {
+                "text": "Instagram",
+                "hints": [
+                    "Fotos",
+                    "Cámara",
+                    "Stories"
+                ]
+            },
+            {
+                "text": "TikTok",
+                "hints": [
+                    "Bailes",
+                    "Videos",
+                    "Scroll"
+                ]
+            },
+            {
+                "text": "El Corte Inglés",
+                "hints": [
+                    "Tienda",
+                    "Triángulo",
+                    "Verde"
+                ]
+            }
+        ]
+    },
+    {
+        "id": 12,
+        "name": "Música",
+        "words": [
+            {
+                "text": "Guitarra",
+                "hints": [
+                    "Cuerdas",
+                    "Rasguear",
+                    "Española"
+                ]
+            },
+            {
+                "text": "Piano",
+                "hints": [
+                    "Teclas",
+                    "Blanco y negro",
+                    "Cola"
+                ]
+            },
+            {
+                "text": "Batería",
+                "hints": [
+                    "Tambores",
+                    "Ritmo",
+                    "Palillos"
+                ]
+            },
+            {
+                "text": "Violín",
+                "hints": [
+                    "Arco",
+                    "Cuello",
+                    "Clásica"
+                ]
+            },
+            {
+                "text": "Micrófono",
+                "hints": [
+                    "Voz",
+                    "Cantar",
+                    "Amplificar"
+                ]
+            },
+            {
+                "text": "Altavoz",
+                "hints": [
+                    "Sonido",
+                    "Volumen",
+                    "Música"
+                ]
+            },
+            {
+                "text": "Auriculares",
+                "hints": [
+                    "Oídos",
+                    "Escuchar",
+                    "Cascos"
+                ]
+            },
+            {
+                "text": "Concierto",
+                "hints": [
+                    "Directo",
+                    "Público",
+                    "Entrada"
+                ]
+            },
+            {
+                "text": "Festival",
+                "hints": [
+                    "Verano",
+                    "Pulsera",
+                    "Muchos grupos"
+                ]
+            },
+            {
+                "text": "Canción",
+                "hints": [
+                    "Letra",
+                    "Melodía",
+                    "Escuchar"
+                ]
+            },
+            {
+                "text": "Disco",
+                "hints": [
+                    "Álbum",
+                    "CD",
+                    "Vinilo"
+                ]
+            },
+            {
+                "text": "Videoclip",
+                "hints": [
+                    "Video",
+                    "YouTube",
+                    "Musical"
+                ]
+            },
+            {
+                "text": "Rock",
+                "hints": [
+                    "Duro",
+                    "Eléctrica",
+                    "Melena"
+                ]
+            },
+            {
+                "text": "Pop",
+                "hints": [
+                    "Famoso",
+                    "Radio",
+                    "Pegadizo"
+                ]
+            },
+            {
+                "text": "Reggaeton",
+                "hints": [
+                    "Ritmo",
+                    "Baile",
+                    "Latino"
+                ]
+            },
+            {
+                "text": "Rap",
+                "hints": [
+                    "Rima",
+                    "Hablar",
+                    "Calle"
+                ]
+            },
+            {
+                "text": "Clásica",
+                "hints": [
+                    "Orquesta",
+                    "Antigua",
+                    "Relax"
+                ]
+            },
+            {
+                "text": "Jazz",
+                "hints": [
+                    "Saxofón",
+                    "Improvisar",
+                    "Trompeta"
+                ]
+            },
+            {
+                "text": "Cantante",
+                "hints": [
+                    "Voz",
+                    "Artista",
+                    "Fama"
+                ]
+            },
+            {
+                "text": "Banda",
+                "hints": [
+                    "Grupo",
+                    "Instrumentos",
+                    "Equipo"
+                ]
+            },
+            {
+                "text": "Director",
+                "hints": [
+                    "Orquesta",
+                    "Batuta",
+                    "Ritmo"
+                ]
+            },
+            {
+                "text": "Nota",
+                "hints": [
+                    "Do Re Mi",
+                    "Pentagrama",
+                    "Sonido"
+                ]
+            },
+            {
+                "text": "Karaoke",
+                "hints": [
+                    "Cantar",
+                    "Letra",
+                    "Mal"
+                ]
+            },
+            {
+                "text": "Escenario",
+                "hints": [
+                    "Tarima",
+                    "Luces",
+                    "Artistas"
+                ]
+            },
+            {
+                "text": "Aplauso",
+                "hints": [
+                    "Manos",
+                    "Final",
+                    "Gusta"
+                ]
+            }
+        ]
+    },
+    {
+        "id": 13,
+        "name": "Personajes Históricos",
+        "words": [
+            {
+                "text": "Cristóbal Colón",
+                "hints": [
+                    "América",
+                    "Barcos",
+                    "1492"
+                ]
+            },
+            {
+                "text": "Albert Einstein",
+                "hints": [
+                    "Físico",
+                    "Pelo",
+                    "Relatividad"
+                ]
+            },
+            {
+                "text": "Picasso",
+                "hints": [
+                    "Pintor",
+                    "Cubismo",
+                    "Málaga"
+                ]
+            },
+            {
+                "text": "Cervantes",
+                "hints": [
+                    "Escritor",
+                    "Quijote",
+                    "Manco"
+                ]
+            },
+            {
+                "text": "Napoleón",
+                "hints": [
+                    "Francia",
+                    "Emperador",
+                    "Bajo"
+                ]
+            },
+            {
+                "text": "Cleopatra",
+                "hints": [
+                    "Egipto",
+                    "Reina",
+                    "Serpiente"
+                ]
+            },
+            {
+                "text": "Julio César",
+                "hints": [
+                    "Roma",
+                    "Emperador",
+                    "Laureles"
+                ]
+            },
+            {
+                "text": "Da Vinci",
+                "hints": [
+                    "Mona Lisa",
+                    "Inventor",
+                    "Renacimiento"
+                ]
+            },
+            {
+                "text": "Shakespeare",
+                "hints": [
+                    "Escritor",
+                    "Hamlet",
+                    "Ser o no ser"
+                ]
+            },
+            {
+                "text": "Mozart",
+                "hints": [
+                    "Músico",
+                    "Piano",
+                    "Niño prodigio"
+                ]
+            },
+            {
+                "text": "Beethoven",
+                "hints": [
+                    "Sordo",
+                    "Músico",
+                    "Sinfonía"
+                ]
+            },
+            {
+                "text": "Hitler",
+                "hints": [
+                    "Guerra",
+                    "Alemania",
+                    "Dictador"
+                ]
+            },
+            {
+                "text": "Gandhi",
+                "hints": [
+                    "Paz",
+                    "India",
+                    "Gafas"
+                ]
+            },
+            {
+                "text": "Mandela",
+                "hints": [
+                    "África",
+                    "Prisión",
+                    "Presidente"
+                ]
+            },
+            {
+                "text": "Frida Kahlo",
+                "hints": [
+                    "Cejas",
+                    "Pintora",
+                    "México"
+                ]
+            },
+            {
+                "text": "Marilyn Monroe",
+                "hints": [
+                    "Rubia",
+                    "Vestido",
+                    "Actriz"
+                ]
+            },
+            {
+                "text": "Elvis Presley",
+                "hints": [
+                    "Rey",
+                    "Rock",
+                    "Tupé"
+                ]
+            },
+            {
+                "text": "Michael Jackson",
+                "hints": [
+                    "Pop",
+                    "Baile",
+                    "Guante"
+                ]
+            },
+            {
+                "text": "Steve Jobs",
+                "hints": [
+                    "Apple",
+                    "Móvil",
+                    "Jersey"
+                ]
+            },
+            {
+                "text": "Reina Isabel",
+                "hints": [
+                    "Inglaterra",
+                    "Corona",
+                    "Eterna"
+                ]
+            },
+            {
+                "text": "Neil Armstrong",
+                "hints": [
+                    "Luna",
+                    "Astronauta",
+                    "Paso"
+                ]
+            },
+            {
+                "text": "Dalí",
+                "hints": [
+                    "Bigote",
+                    "Relojes",
+                    "Surrealismo"
+                ]
+            },
+            {
+                "text": "Jesucristo",
+                "hints": [
+                    "Cruz",
+                    "Biblia",
+                    "Navidad"
+                ]
+            },
+            {
+                "text": "Darwin",
+                "hints": [
+                    "Evolución",
+                    "Mono",
+                    "Ciencia"
+                ]
+            },
+            {
+                "text": "Newton",
+                "hints": [
+                    "Manzana",
+                    "Gravedad",
+                    "Físico"
+                ]
+            }
+        ]
+    },
+    {
+        "id": 14,
+        "name": "Tecnología",
+        "words": [
+            {
+                "text": "Ordenador",
+                "hints": [
+                    "Teclado",
+                    "Pantalla",
+                    "Trabajo"
+                ]
+            },
+            {
+                "text": "Móvil",
+                "hints": [
+                    "Llamar",
+                    "Bolsillo",
+                    "Apps"
+                ]
+            },
+            {
+                "text": "Tablet",
+                "hints": [
+                    "Pantalla",
+                    "Táctil",
+                    "iPad"
+                ]
+            },
+            {
+                "text": "Internet",
+                "hints": [
+                    "Red",
+                    "Conexión",
+                    "Mundo"
+                ]
+            },
+            {
+                "text": "Wifi",
+                "hints": [
+                    "Sin cables",
+                    "Señal",
+                    "Contraseña"
+                ]
+            },
+            {
+                "text": "Ratón",
+                "hints": [
+                    "Click",
+                    "Mano",
+                    "Flecha"
+                ]
+            },
+            {
+                "text": "Teclado",
+                "hints": [
+                    "Escribir",
+                    "Teclas",
+                    "Letras"
+                ]
+            },
+            {
+                "text": "Pantalla",
+                "hints": [
+                    "Ver",
+                    "Imagen",
+                    "Monitor"
+                ]
+            },
+            {
+                "text": "Batería",
+                "hints": [
+                    "Carga",
+                    "Energía",
+                    "Porcentaje"
+                ]
+            },
+            {
+                "text": "Cargador",
+                "hints": [
+                    "Enchufe",
+                    "Cable",
+                    "Energía"
+                ]
+            },
+            {
+                "text": "Robot",
+                "hints": [
+                    "Máquina",
+                    "Futuro",
+                    "Automático"
+                ]
+            },
+            {
+                "text": "Inteligencia Artificial",
+                "hints": [
+                    "Pensar",
+                    "Chat",
+                    "Futuro"
+                ]
+            },
+            {
+                "text": "Dron",
+                "hints": [
+                    "Volar",
+                    "Cámara",
+                    "Control"
+                ]
+            },
+            {
+                "text": "Impresora",
+                "hints": [
+                    "Papel",
+                    "Tinta",
+                    "Copias"
+                ]
+            },
+            {
+                "text": "USB",
+                "hints": [
+                    "Pincho",
+                    "Datos",
+                    "Conectar"
+                ]
+            },
+            {
+                "text": "Nube",
+                "hints": [
+                    "Guardar",
+                    "Internet",
+                    "Datos"
+                ]
+            },
+            {
+                "text": "Contraseña",
+                "hints": [
+                    "Secreta",
+                    "Clave",
+                    "Acceso"
+                ]
+            },
+            {
+                "text": "Hacker",
+                "hints": [
+                    "Pirata",
+                    "Código",
+                    "Robar"
+                ]
+            },
+            {
+                "text": "Virus",
+                "hints": [
+                    "Infectar",
+                    "Malo",
+                    "Ordenador"
+                ]
+            },
+            {
+                "text": "App",
+                "hints": [
+                    "Icono",
+                    "Móvil",
+                    "Programa"
+                ]
+            },
+            {
+                "text": "Redes Sociales",
+                "hints": [
+                    "Likes",
+                    "Amigos",
+                    "Compartir"
+                ]
+            },
+            {
+                "text": "Cámara",
+                "hints": [
+                    "Fotos",
+                    "Lente",
+                    "Selfie"
+                ]
+            },
+            {
+                "text": "Altavoz Inteligente",
+                "hints": [
+                    "Alexa",
+                    "Voz",
+                    "Preguntar"
+                ]
+            },
+            {
+                "text": "GPS",
+                "hints": [
+                    "Mapa",
+                    "Ubicación",
+                    "Coche"
+                ]
+            },
+            {
+                "text": "Email",
+                "hints": [
+                    "Correo",
+                    "Arroba",
+                    "Mensaje"
+                ]
+            }
+        ]
+    },
+    {
+        "id": 15,
+        "name": "Trabajos",
+        "words": [
+            {
+                "text": "Profesor",
+                "hints": [
+                    "Enseñar",
+                    "Escuela",
+                    "Alumnos"
+                ]
+            },
+            {
+                "text": "Médico",
+                "hints": [
+                    "Curar",
+                    "Hospital",
+                    "Salud"
+                ]
+            },
+            {
+                "text": "Policía",
+                "hints": [
+                    "Detener",
+                    "Placa",
+                    "Ley"
+                ]
+            },
+            {
+                "text": "Bombero",
+                "hints": [
+                    "Fuego",
+                    "Manguera",
+                    "Camión"
+                ]
+            },
+            {
+                "text": "Cocinero",
+                "hints": [
+                    "Comida",
+                    "Restaurante",
+                    "Gorro"
+                ]
+            },
+            {
+                "text": "Camarero",
+                "hints": [
+                    "Bandeja",
+                    "Bar",
+                    "Servir"
+                ]
+            },
+            {
+                "text": "Albañil",
+                "hints": [
+                    "Ladrillos",
+                    "Obra",
+                    "Construir"
+                ]
+            },
+            {
+                "text": "Fontanero",
+                "hints": [
+                    "Tuberías",
+                    "Agua",
+                    "Grifo"
+                ]
+            },
+            {
+                "text": "Electricista",
+                "hints": [
+                    "Luz",
+                    "Cables",
+                    "Chispas"
+                ]
+            },
+            {
+                "text": "Mecánico",
+                "hints": [
+                    "Coche",
+                    "Taller",
+                    "Grasa"
+                ]
+            },
+            {
+                "text": "Peluquero",
+                "hints": [
+                    "Cortar",
+                    "Pelo",
+                    "Tijeras"
+                ]
+            },
+            {
+                "text": "Juez",
+                "hints": [
+                    "Mazo",
+                    "Juicio",
+                    "Sentencia"
+                ]
+            },
+            {
+                "text": "Abogado",
+                "hints": [
+                    "Defender",
+                    "Ley",
+                    "Juicio"
+                ]
+            },
+            {
+                "text": "Piloto",
+                "hints": [
+                    "Avión",
+                    "Volar",
+                    "Uniforme"
+                ]
+            },
+            {
+                "text": "Azafata",
+                "hints": [
+                    "Avión",
+                    "Pasajeros",
+                    "Atención"
+                ]
+            },
+            {
+                "text": "Astronauta",
+                "hints": [
+                    "Espacio",
+                    "Cohete",
+                    "Traje"
+                ]
+            },
+            {
+                "text": "Actor",
+                "hints": [
+                    "Película",
+                    "Teatro",
+                    "Fama"
+                ]
+            },
+            {
+                "text": "Cantante",
+                "hints": [
+                    "Música",
+                    "Voz",
+                    "Micrófono"
+                ]
+            },
+            {
+                "text": "Pintor",
+                "hints": [
+                    "Cuadros",
+                    "Brocha",
+                    "Arte"
+                ]
+            },
+            {
+                "text": "Escritor",
+                "hints": [
+                    "Libros",
+                    "Historias",
+                    "Pluma"
+                ]
+            },
+            {
+                "text": "Periodista",
+                "hints": [
+                    "Noticias",
+                    "TV",
+                    "Micro"
+                ]
+            },
+            {
+                "text": "Granjero",
+                "hints": [
+                    "Campo",
+                    "Animales",
+                    "Tractor"
+                ]
+            },
+            {
+                "text": "Veterinario",
+                "hints": [
+                    "Animales",
+                    "Curar",
+                    "Médico"
+                ]
+            },
+            {
+                "text": "Cartero",
+                "hints": [
+                    "Cartas",
+                    "Buzón",
+                    "Paquetes"
+                ]
+            },
+            {
+                "text": "Taxista",
+                "hints": [
+                    "Coche",
+                    "Llevar",
+                    "Carrera"
+                ]
+            }
+        ]
+    },
+    {
+        "id": 16,
+        "name": "Verano",
+        "words": [
+            {
+                "text": "Sol",
+                "hints": [
+                    "Calor",
+                    "Amarillo",
+                    "Cielo"
+                ]
+            },
+            {
+                "text": "Playa",
+                "hints": [
+                    "Arena",
+                    "Mar",
+                    "Toalla"
+                ]
+            },
+            {
+                "text": "Piscina",
+                "hints": [
+                    "Agua",
+                    "Azul",
+                    "Nadar"
+                ]
+            },
+            {
+                "text": "Helado",
+                "hints": [
+                    "Frío",
+                    "Cucurucho",
+                    "Sabor"
+                ]
+            },
+            {
+                "text": "Vacaciones",
+                "hints": [
+                    "Viaje",
+                    "Descanso",
+                    "Sin cole"
+                ]
+            },
+            {
+                "text": "Calor",
+                "hints": [
+                    "Sudar",
+                    "Sol",
+                    "Temperatura"
+                ]
+            },
+            {
+                "text": "Aire Acondicionado",
+                "hints": [
+                    "Frío",
+                    "Máquina",
+                    "Fresquito"
+                ]
+            },
+            {
+                "text": "Ventilador",
+                "hints": [
+                    "Aspas",
+                    "Aire",
+                    "Girar"
+                ]
+            },
+            {
+                "text": "Bañador",
+                "hints": [
+                    "Ropa",
+                    "Agua",
+                    "Nadar"
+                ]
+            },
+            {
+                "text": "Gafas de sol",
+                "hints": [
+                    "Ojos",
+                    "Oscuras",
+                    "Protección"
+                ]
+            },
+            {
+                "text": "Crema solar",
+                "hints": [
+                    "Piel",
+                    "Quemar",
+                    "Blanca"
+                ]
+            },
+            {
+                "text": "Sandía",
+                "hints": [
+                    "Fruta",
+                    "Roja",
+                    "Pepitas"
+                ]
+            },
+            {
+                "text": "Mosquito",
+                "hints": [
+                    "Picar",
+                    "Bicho",
+                    "Molesto"
+                ]
+            },
+            {
+                "text": "Chiringuito",
+                "hints": [
+                    "Bar",
+                    "Playa",
+                    "Comer"
+                ]
+            },
+            {
+                "text": "Castillo de arena",
+                "hints": [
+                    "Cubo",
+                    "Pala",
+                    "Playa"
+                ]
+            },
+            {
+                "text": "Chanclas",
+                "hints": [
+                    "Pies",
+                    "Goma",
+                    "Verano"
+                ]
+            },
+            {
+                "text": "Sombrilla",
+                "hints": [
+                    "Sombra",
+                    "Playa",
+                    "Clavar"
+                ]
+            },
+            {
+                "text": "Medusa",
+                "hints": [
+                    "Mar",
+                    "Picar",
+                    "Gelatina"
+                ]
+            },
+            {
+                "text": "Barbacoa",
+                "hints": [
+                    "Carne",
+                    "Fuego",
+                    "Jardín"
+                ]
+            },
+            {
+                "text": "Campamento",
+                "hints": [
+                    "Tienda",
+                    "Niños",
+                    "Monitor"
+                ]
+            },
+            {
+                "text": "Siesta",
+                "hints": [
+                    "Dormir",
+                    "Tarde",
+                    "Descanso"
+                ]
+            },
+            {
+                "text": "Toalla",
+                "hints": [
+                    "Secar",
+                    "Suelo",
+                    "Algodón"
+                ]
+            },
+            {
+                "text": "Flotador",
+                "hints": [
+                    "Aire",
+                    "Nadar",
+                    "Plástico"
+                ]
+            },
+            {
+                "text": "Bicicleta",
+                "hints": [
+                    "Ruedas",
+                    "Paseo",
+                    "Pedalear"
+                ]
+            },
+            {
+                "text": "Agosto",
+                "hints": [
+                    "Mes",
+                    "Vacaciones",
+                    "Calor"
+                ]
+            }
+        ]
+    },
+    {
+        "id": 17,
+        "name": "Invierno",
+        "words": [
+            {
+                "text": "Nieve",
+                "hints": [
+                    "Blanca",
+                    "Fría",
+                    "Copos"
+                ]
+            },
+            {
+                "text": "Frío",
+                "hints": [
+                    "Temblar",
+                    "Baja temperatura",
+                    "Hielo"
+                ]
+            },
+            {
+                "text": "Abrigo",
+                "hints": [
+                    "Ropa",
+                    "Calor",
+                    "Grueso"
+                ]
+            },
+            {
+                "text": "Bufanda",
+                "hints": [
+                    "Cuello",
+                    "Lana",
+                    "Larga"
+                ]
+            },
+            {
+                "text": "Guantes",
+                "hints": [
+                    "Manos",
+                    "Dedos",
+                    "Lana"
+                ]
+            },
+            {
+                "text": "Gorro",
+                "hints": [
+                    "Cabeza",
+                    "Lana",
+                    "Orejas"
+                ]
+            },
+            {
+                "text": "Navidad",
+                "hints": [
+                    "Regalos",
+                    "Árbol",
+                    "Diciembre"
+                ]
+            },
+            {
+                "text": "Reyes Magos",
+                "hints": [
+                    "Camellos",
+                    "Regalos",
+                    "Tres"
+                ]
+            },
+            {
+                "text": "Papá Noel",
+                "hints": [
+                    "Rojo",
+                    "Barba",
+                    "Trineo"
+                ]
+            },
+            {
+                "text": "Turrón",
+                "hints": [
+                    "Dulce",
+                    "Almendra",
+                    "Duro"
+                ]
+            },
+            {
+                "text": "Uvas",
+                "hints": [
+                    "Doce",
+                    "Fin de año",
+                    "Fruta"
+                ]
+            },
+            {
+                "text": "Estufa",
+                "hints": [
+                    "Calor",
+                    "Casa",
+                    "Aparato"
+                ]
+            },
+            {
+                "text": "Chimenea",
+                "hints": [
+                    "Fuego",
+                    "Leña",
+                    "Humo"
+                ]
+            },
+            {
+                "text": "Chocolate caliente",
+                "hints": [
+                    "Beber",
+                    "Taza",
+                    "Dulce"
+                ]
+            },
+            {
+                "text": "Esquí",
+                "hints": [
+                    "Montaña",
+                    "Deporte",
+                    "Nieve"
+                ]
+            },
+            {
+                "text": "Trineo",
+                "hints": [
+                    "Deslizar",
+                    "Nieve",
+                    "Bajada"
+                ]
+            },
+            {
+                "text": "Muñeco de nieve",
+                "hints": [
+                    "Bolas",
+                    "Zanahoria",
+                    "Frío"
+                ]
+            },
+            {
+                "text": "Hielo",
+                "hints": [
+                    "Agua",
+                    "Duro",
+                    "Resbalar"
+                ]
+            },
+            {
+                "text": "Manta",
+                "hints": [
+                    "Sofá",
+                    "Taparse",
+                    "Calentito"
+                ]
+            },
+            {
+                "text": "Gripe",
+                "hints": [
+                    "Enfermo",
+                    "Virus",
+                    "Pañuelo"
+                ]
+            },
+            {
+                "text": "Lluvia",
+                "hints": [
+                    "Agua",
+                    "Nubes",
+                    "Mojarse"
+                ]
+            },
+            {
+                "text": "Paraguas",
+                "hints": [
+                    "Lluvia",
+                    "Abrir",
+                    "Protección"
+                ]
+            },
+            {
+                "text": "Botas",
+                "hints": [
+                    "Calzado",
+                    "Agua",
+                    "Pies"
+                ]
+            },
+            {
+                "text": "Sopa",
+                "hints": [
+                    "Caliente",
+                    "Cuchara",
+                    "Comida"
+                ]
+            },
+            {
+                "text": "Pingüino",
+                "hints": [
+                    "Ave",
+                    "Hielo",
+                    "Polo"
+                ]
+            }
+        ]
+    },
+    {
+        "id": 18,
+        "name": "Primavera",
+        "words": [
+            {
+                "text": "Flor",
+                "hints": [
+                    "Pétalos",
+                    "Olor",
+                    "Jardín"
+                ]
+            },
+            {
+                "text": "Sol",
+                "hints": [
+                    "Luz",
+                    "Brillo",
+                    "Día"
+                ]
+            },
+            {
+                "text": "Alergia",
+                "hints": [
+                    "Estornudo",
+                    "Polen",
+                    "Pañuelo"
+                ]
+            },
+            {
+                "text": "Mariposa",
+                "hints": [
+                    "Volar",
+                    "Alas",
+                    "Colores"
+                ]
+            },
+            {
+                "text": "Abeja",
+                "hints": [
+                    "Miel",
+                    "Picar",
+                    "Amarilla"
+                ]
+            },
+            {
+                "text": "Pájaro",
+                "hints": [
+                    "Cantar",
+                    "Volar",
+                    "Nido"
+                ]
+            },
+            {
+                "text": "Lluvia",
+                "hints": [
+                    "Abril",
+                    "Agua",
+                    "Nubes"
+                ]
+            },
+            {
+                "text": "Arcoíris",
+                "hints": [
+                    "Colores",
+                    "Cielo",
+                    "Lluvia"
+                ]
+            },
+            {
+                "text": "Verde",
+                "hints": [
+                    "Color",
+                    "Hierba",
+                    "Campo"
+                ]
+            },
+            {
+                "text": "Semana Santa",
+                "hints": [
+                    "Vacaciones",
+                    "Pasos",
+                    "Procesión"
+                ]
+            },
+            {
+                "text": "Parque",
+                "hints": [
+                    "Jugar",
+                    "Árboles",
+                    "Paseo"
+                ]
+            },
+            {
+                "text": "Picnic",
+                "hints": [
+                    "Comer",
+                    "Campo",
+                    "Mantel"
+                ]
+            },
+            {
+                "text": "Bicicleta",
+                "hints": [
+                    "Paseo",
+                    "Pedales",
+                    "Ruedas"
+                ]
+            },
+            {
+                "text": "Mariquita",
+                "hints": [
+                    "Roja",
+                    "Puntos",
+                    "Bicho"
+                ]
+            },
+            {
+                "text": "Cereza",
+                "hints": [
+                    "Fruta",
+                    "Roja",
+                    "Par"
+                ]
+            },
+            {
+                "text": "Fresa",
+                "hints": [
+                    "Fruta",
+                    "Roja",
+                    "Nata"
+                ]
+            },
+            {
+                "text": "Limpieza",
+                "hints": [
+                    "Casa",
+                    "Orden",
+                    "General"
+                ]
+            },
+            {
+                "text": "Amor",
+                "hints": [
+                    "Corazón",
+                    "Pareja",
+                    "Sentimiento"
+                ]
+            },
+            {
+                "text": "Nido",
+                "hints": [
+                    "Huevos",
+                    "Árbol",
+                    "Pájaro"
+                ]
+            },
+            {
+                "text": "Jardín",
+                "hints": [
+                    "Flores",
+                    "Casa",
+                    "Cuidar"
+                ]
+            },
+            {
+                "text": "Ropa",
+                "hints": [
+                    "Cambio",
+                    "Armario",
+                    "Ligera"
+                ]
+            },
+            {
+                "text": "Deshielo",
+                "hints": [
+                    "Nieve",
+                    "Agua",
+                    "Montaña"
+                ]
+            },
+            {
+                "text": "Día",
+                "hints": [
+                    "Largo",
+                    "Luz",
+                    "Hora"
+                ]
+            },
+            {
+                "text": "Oruga",
+                "hints": [
+                    "Gusano",
+                    "Hoja",
+                    "Mariposa"
+                ]
+            },
+            {
+                "text": "Campo",
+                "hints": [
+                    "Aire libre",
+                    "Verde",
+                    "Excursión"
+                ]
+            }
+        ]
+    },
+    {
+        "id": 19,
+        "name": "Otoño",
+        "words": [
+            {
+                "text": "Hoja",
+                "hints": [
+                    "Árbol",
+                    "Caer",
+                    "Seca"
+                ]
+            },
+            {
+                "text": "Marrón",
+                "hints": [
+                    "Color",
+                    "Oscuro",
+                    "Tierra"
+                ]
+            },
+            {
+                "text": "Viento",
+                "hints": [
+                    "Aire",
+                    "Soplar",
+                    "Frío"
+                ]
+            },
+            {
+                "text": "Lluvia",
+                "hints": [
+                    "Agua",
+                    "Mojado",
+                    "Gris"
+                ]
+            },
+            {
+                "text": "Paraguas",
+                "hints": [
+                    "Lluvia",
+                    "Abrir",
+                    "Mano"
+                ]
+            },
+            {
+                "text": "Castaña",
+                "hints": [
+                    "Fruto",
+                    "Asada",
+                    "Caliente"
+                ]
+            },
+            {
+                "text": "Seta",
+                "hints": [
+                    "Bosque",
+                    "Hongo",
+                    "Comer"
+                ]
+            },
+            {
+                "text": "Halloween",
+                "hints": [
+                    "Miedo",
+                    "Disfraz",
+                    "Calabaza"
+                ]
+            },
+            {
+                "text": "Calabaza",
+                "hints": [
+                    "Naranja",
+                    "Huerto",
+                    "Halloween"
+                ]
+            },
+            {
+                "text": "Colegio",
+                "hints": [
+                    "Vuelta",
+                    "Clase",
+                    "Libros"
+                ]
+            },
+            {
+                "text": "Charco",
+                "hints": [
+                    "Agua",
+                    "Suelo",
+                    "Saltar"
+                ]
+            },
+            {
+                "text": "Naranja",
+                "hints": [
+                    "Color",
+                    "Fruta",
+                    "Hoja"
+                ]
+            },
+            {
+                "text": "Ardilla",
+                "hints": [
+                    "Animal",
+                    "Nueces",
+                    "Árbol"
+                ]
+            },
+            {
+                "text": "Nuez",
+                "hints": [
+                    "Fruto seco",
+                    "Dura",
+                    "Comer"
+                ]
+            },
+            {
+                "text": "Bosque",
+                "hints": [
+                    "Árboles",
+                    "Paseo",
+                    "Naturaleza"
+                ]
+            },
+            {
+                "text": "Chaqueta",
+                "hints": [
+                    "Ropa",
+                    "Frío",
+                    "Vestir"
+                ]
+            },
+            {
+                "text": "Nublado",
+                "hints": [
+                    "Cielo",
+                    "Gris",
+                    "Sin sol"
+                ]
+            },
+            {
+                "text": "Oscuro",
+                "hints": [
+                    "Noche",
+                    "Luz",
+                    "Tarde"
+                ]
+            },
+            {
+                "text": "Vendimia",
+                "hints": [
+                    "Uvas",
+                    "Vino",
+                    "Recoger"
+                ]
+            },
+            {
+                "text": "Noviembre",
+                "hints": [
+                    "Mes",
+                    "Santos",
+                    "Frío"
+                ]
+            },
+            {
+                "text": "Chocolate",
+                "hints": [
+                    "Caliente",
+                    "Churros",
+                    "Dulce"
+                ]
+            },
+            {
+                "text": "Manta",
+                "hints": [
+                    "Sofá",
+                    "Peli",
+                    "Calor"
+                ]
+            },
+            {
+                "text": "Pijama",
+                "hints": [
+                    "Dormir",
+                    "Largo",
+                    "Ropa"
+                ]
+            },
+            {
+                "text": "Estornudo",
+                "hints": [
+                    "Resfriado",
+                    "Pañuelo",
+                    "Salud"
+                ]
+            },
+            {
+                "text": "Bota",
+                "hints": [
+                    "Zapato",
+                    "Agua",
+                    "Charco"
+                ]
+            }
+        ]
+    },
+    {
+        "id": 20,
+        "name": "Para Adultos (+18)",
+        "words": [
+            {
+                "text": "Lencería",
+                "hints": [
+                    "Ropa interior",
+                    "Encaje",
+                    "Sexy"
+                ]
+            },
+            {
+                "text": "Esposas",
+                "hints": [
+                    "Metal",
+                    "Muñecas",
+                    "Policía"
+                ]
+            },
+            {
+                "text": "Látigo",
+                "hints": [
+                    "Cuero",
+                    "Castigo",
+                    "Grey"
+                ]
+            },
+            {
+                "text": "Antifaz",
+                "hints": [
+                    "Ojos",
+                    "Oscuridad",
+                    "No ver"
+                ]
+            },
+            {
+                "text": "Aceite",
+                "hints": [
+                    "Masaje",
+                    "Resbalar",
+                    "Piel"
+                ]
+            },
+            {
+                "text": "Hielo",
+                "hints": [
+                    "Frío",
+                    "Sensación",
+                    "Derretir"
+                ]
+            },
+            {
+                "text": "Striptease",
+                "hints": [
+                    "Baile",
+                    "Quitar ropa",
+                    "Privado"
+                ]
+            },
+            {
+                "text": "Despedida de soltero",
+                "hints": [
+                    "Fiesta",
+                    "Boda",
+                    "Amigos"
+                ]
+            },
+            {
+                "text": "Resaca",
+                "hints": [
+                    "Dolor de cabeza",
+                    "Alcohol",
+                    "Mañana"
+                ]
+            },
+            {
+                "text": "Kamasutra",
+                "hints": [
+                    "Libro",
+                    "Posturas",
+                    "India"
+                ]
+            },
+            {
+                "text": "Preservativo",
+                "hints": [
+                    "Látex",
+                    "Protección",
+                    "Farmacia"
+                ]
+            },
+            {
+                "text": "Tanga",
+                "hints": [
+                    "Ropa interior",
+                    "Hilo",
+                    "Playa"
+                ]
+            },
+            {
+                "text": "Topless",
+                "hints": [
+                    "Playa",
+                    "Sin parte arriba",
+                    "Sol"
+                ]
+            },
+            {
+                "text": "Nudista",
+                "hints": [
+                    "Playa",
+                    "Sin ropa",
+                    "Natural"
+                ]
+            },
+            {
+                "text": "Motel",
+                "hints": [
+                    "Carretera",
+                    "Habitaciones",
+                    "Discreción"
+                ]
+            },
+            {
+                "text": "Jacuzzi",
+                "hints": [
+                    "Burbujas",
+                    "Agua caliente",
+                    "Hotel"
+                ]
+            },
+            {
+                "text": "Sauna",
+                "hints": [
+                    "Vapor",
+                    "Calor",
+                    "Toalla"
+                ]
+            },
+            {
+                "text": "Tinder",
+                "hints": [
+                    "App",
+                    "Ligues",
+                    "Deslizar"
+                ]
+            },
+            {
+                "text": "Amante",
+                "hints": [
+                    "Secreto",
+                    "Tercero",
+                    "Infiel"
+                ]
+            },
+            {
+                "text": "Cuernos",
+                "hints": [
+                    "Infidelidad",
+                    "Pareja",
+                    "Toro"
+                ]
+            },
+            {
+                "text": "Divorcio",
+                "hints": [
+                    "Separación",
+                    "Abogados",
+                    "Ex"
+                ]
+            },
+            {
+                "text": "Trío",
+                "hints": [
+                    "Tres personas",
+                    "Cama",
+                    "Fantasía"
+                ]
+            },
+            {
+                "text": "Voyeur",
+                "hints": [
+                    "Mirar",
+                    "Escondido",
+                    "Ventana"
+                ]
+            },
+            {
+                "text": "Exhibicionista",
+                "hints": [
+                    "Enseñar",
+                    "Público",
+                    "Gabardina"
+                ]
+            },
+            {
+                "text": "Sadomasoquismo",
+                "hints": [
+                    "Dolor",
+                    "Placer",
+                    "Atar"
+                ]
+            },
+            {
+                "text": "Dominatrix",
+                "hints": [
+                    "Mandar",
+                    "Cuero",
+                    "Tacones"
+                ]
+            },
+            {
+                "text": "Sumiso",
+                "hints": [
+                    "Obedecer",
+                    "Suelo",
+                    "Orden"
+                ]
+            },
+            {
+                "text": "Fetiche",
+                "hints": [
+                    "Obsesión",
+                    "Pies",
+                    "Objeto"
+                ]
+            },
+            {
+                "text": "Juguete",
+                "hints": [
+                    "Pilas",
+                    "Vibración",
+                    "Sexshop"
+                ]
+            },
+            {
+                "text": "Lubricante",
+                "hints": [
+                    "Resbalar",
+                    "Gel",
+                    "Bote"
+                ]
+            },
+            {
+                "text": "Viagra",
+                "hints": [
+                    "Pastilla",
+                    "Azul",
+                    "Duro"
+                ]
+            },
+            {
+                "text": "Porno",
+                "hints": [
+                    "Cine",
+                    "Internet",
+                    "XXX"
+                ]
+            },
+            {
+                "text": "Orgasmo",
+                "hints": [
+                    "Final",
+                    "Grito",
+                    "Clímax"
+                ]
+            },
+            {
+                "text": "Preliminares",
+                "hints": [
+                    "Antes",
+                    "Calentar",
+                    "Juego"
+                ]
+            },
+            {
+                "text": "69",
+                "hints": [
+                    "Número",
+                    "Postura",
+                    "Boca"
+                ]
+            },
+            {
+                "text": "Misionero",
+                "hints": [
+                    "Postura",
+                    "Clásica",
+                    "Cama"
+                ]
+            },
+            {
+                "text": "Perrito",
+                "hints": [
+                    "Postura",
+                    "Animal",
+                    "Cuatro"
+                ]
+            },
+            {
+                "text": "Cucharita",
+                "hints": [
+                    "Dormir",
+                    "Abrazo",
+                    "Lado"
+                ]
+            },
+            {
+                "text": "Chupetón",
+                "hints": [
+                    "Cuello",
+                    "Marca",
+                    "Morado"
+                ]
+            },
+            {
+                "text": "Mordisco",
+                "hints": [
+                    "Dientes",
+                    "Dolor",
+                    "Marca"
+                ]
+            },
+            {
+                "text": "Arañazo",
+                "hints": [
+                    "Uñas",
+                    "Espalda",
+                    "Gato"
+                ]
+            },
+            {
+                "text": "Nalga",
+                "hints": [
+                    "Trasero",
+                    "Cachete",
+                    "Azote"
+                ]
+            },
+            {
+                "text": "Pecho",
+                "hints": [
+                    "Sujetador",
+                    "Escote",
+                    "Mujer"
+                ]
+            },
+            {
+                "text": "Lengua",
+                "hints": [
+                    "Beso",
+                    "Húmeda",
+                    "Saborear"
+                ]
+            },
+            {
+                "text": "Gemido",
+                "hints": [
+                    "Sonido",
+                    "Voz",
+                    "Oído"
+                ]
+            },
+            {
+                "text": "Susurro",
+                "hints": [
+                    "Oído",
+                    "Bajito",
+                    "Secreto"
+                ]
+            },
+            {
+                "text": "Tequila",
+                "hints": [
+                    "Sal",
+                    "Limón",
+                    "Chupito"
+                ]
+            },
+            {
+                "text": "Champán",
+                "hints": [
+                    "Burbujas",
+                    "Brindis",
+                    "Copa"
+                ]
+            },
+            {
+                "text": "Nata",
+                "hints": [
+                    "Fresas",
+                    "Spray",
+                    "Dulce"
+                ]
+            },
+            {
+                "text": "Chocolate",
+                "hints": [
+                    "Derretir",
+                    "Dulce",
+                    "Cuerpo"
+                ]
+            },
+            {
+                "text": "Venda",
+                "hints": [
+                    "Ojos",
+                    "Ciega",
+                    "Sorpresa"
+                ]
+            },
+            {
+                "text": "Pluma",
+                "hints": [
+                    "Cosquillas",
+                    "Pájaro",
+                    "Suave"
+                ]
+            },
+            {
+                "text": "Pole Dance",
+                "hints": [
+                    "Barra",
+                    "Baile",
+                    "Gimnasia"
+                ]
+            },
+            {
+                "text": "Lap Dance",
+                "hints": [
+                    "Baile",
+                    "Sentado",
+                    "Regazo"
+                ]
+            },
+            {
+                "text": "Sugar Daddy",
+                "hints": [
+                    "Dinero",
+                    "Mayor",
+                    "Regalos"
+                ]
+            },
+            {
+                "text": "Milf",
+                "hints": [
+                    "Madre",
+                    "Atractiva",
+                    "Señora"
+                ]
+            },
+            {
+                "text": "Virginidad",
+                "hints": [
+                    "Primera vez",
+                    "Perder",
+                    "Inocencia"
+                ]
+            },
+            {
+                "text": "Sex Shop",
+                "hints": [
+                    "Tienda",
+                    "Adultos",
+                    "Escaparate"
+                ]
+            },
+            {
+                "text": "Tatuaje",
+                "hints": [
+                    "Tinta",
+                    "Piel",
+                    "Dolor"
+                ]
+            },
+            {
+                "text": "Piercing",
+                "hints": [
+                    "Metal",
+                    "Agujero",
+                    "Lengua"
+                ]
+            },
+            {
+                "text": "Sesenta y nueve",
+                "hints": [
+                    "Posición",
+                    "Número"
+                ]
+            },
+            {
+                "text": "Beso negro",
+                "hints": [
+                    "Oscuro",
+                    "Ano"
+                ]
+            },
+            {
+                "text": "Anal",
+                "hints": [
+                    "Agujero",
+                    "Liso"
+                ]
+            }
+        ]
+    },
+    {
+        "id": 21,
+        "name": "Animales",
+        "words": [
+            {
+                "text": "Perro",
+                "hints": [
+                    "Ladrido",
+                    "Mejor amigo",
+                    "Hueso"
+                ]
+            },
+            {
+                "text": "Gato",
+                "hints": [
+                    "Maullido",
+                    "Vidas",
+                    "Bigotes"
+                ]
+            },
+            {
+                "text": "León",
+                "hints": [
+                    "Rey",
+                    "Selva",
+                    "Melena"
+                ]
+            },
+            {
+                "text": "Elefante",
+                "hints": [
+                    "Trompa",
+                    "Orejas",
+                    "Memoria"
+                ]
+            },
+            {
+                "text": "Jirafa",
+                "hints": [
+                    "Cuello",
+                    "Alta",
+                    "Manchas"
+                ]
+            },
+            {
+                "text": "Águila",
+                "hints": [
+                    "Volar",
+                    "Visión",
+                    "Garra"
+                ]
+            },
+            {
+                "text": "Tiburón",
+                "hints": [
+                    "Aleta",
+                    "Mar",
+                    "Dientes"
+                ]
+            },
+            {
+                "text": "Delfín",
+                "hints": [
+                    "Inteligente",
+                    "Salto",
+                    "Sonido"
+                ]
+            },
+            {
+                "text": "Pingüino",
+                "hints": [
+                    "Frío",
+                    "Esmoquin",
+                    "Ave"
+                ]
+            },
+            {
+                "text": "Serpiente",
+                "hints": [
+                    "Veneno",
+                    "Reptar",
+                    "Siseo"
+                ]
+            },
+            {
+                "text": "Araña",
+                "hints": [
+                    "Ocho patas",
+                    "Telaraña",
+                    "Miedo"
+                ]
+            },
+            {
+                "text": "Murciélago",
+                "hints": [
+                    "Noche",
+                    "Cueva",
+                    "Ciego"
+                ]
+            },
+            {
+                "text": "Vaca",
+                "hints": [
+                    "Leche",
+                    "Muu",
+                    "Granja"
+                ]
+            },
+            {
+                "text": "Cerdo",
+                "hints": [
+                    "Rosa",
+                    "Barro",
+                    "Jamón"
                 ]
             },
             {
                 "text": "Caballo",
                 "hints": [
-                    "Animal que se monta",
-                    "Relincha",
-                    "Tiene crines"
+                    "Montar",
+                    "Relincho",
+                    "Carrera"
                 ]
             },
             {
-                "text": "Patinete",
+                "text": "Mono",
                 "hints": [
-                    "Dos ruedas y manillar",
-                    "Hay eléctricos",
-                    "Pie en el suelo"
+                    "Plátano",
+                    "Árbol",
+                    "Parecido"
                 ]
             },
             {
-                "text": "Cohete",
+                "text": "Oso",
                 "hints": [
-                    "Viaje espacial",
-                    "Despega vertical",
-                    "Astronautas"
+                    "Miel",
+                    "Hibernar",
+                    "Fuerte"
+                ]
+            },
+            {
+                "text": "Lobo",
+                "hints": [
+                    "Aullido",
+                    "Luna",
+                    "Manada"
+                ]
+            },
+            {
+                "text": "Cocodrilo",
+                "hints": [
+                    "Río",
+                    "Dientes",
+                    "Piel dura"
+                ]
+            },
+            {
+                "text": "Tortuga",
+                "hints": [
+                    "Caparazón",
+                    "Lenta",
+                    "Longeva"
+                ]
+            },
+            {
+                "text": "Rana",
+                "hints": [
+                    "Verde",
+                    "Salto",
+                    "Príncipe"
+                ]
+            },
+            {
+                "text": "Canguro",
+                "hints": [
+                    "Bolsa",
+                    "Salto",
+                    "Australia"
+                ]
+            },
+            {
+                "text": "Koala",
+                "hints": [
+                    "Eucalipto",
+                    "Dormir",
+                    "Australia"
+                ]
+            },
+            {
+                "text": "Panda",
+                "hints": [
+                    "Bambú",
+                    "Blanco y negro",
+                    "China"
+                ]
+            },
+            {
+                "text": "Hormiga",
+                "hints": [
+                    "Trabajadora",
+                    "Fuerte",
+                    "Colonia"
+                ]
+            },
+            {
+                "text": "Abeja",
+                "hints": [
+                    "Miel",
+                    "Reina",
+                    "Picadura"
+                ]
+            },
+            {
+                "text": "Mariposa",
+                "hints": [
+                    "Oruga",
+                    "Alas",
+                    "Colores"
+                ]
+            },
+            {
+                "text": "Pulpo",
+                "hints": [
+                    "Tentáculos",
+                    "Tinta",
+                    "Mar"
+                ]
+            },
+            {
+                "text": "Ballena",
+                "hints": [
+                    "Grande",
+                    "Océano",
+                    "Chorro"
+                ]
+            },
+            {
+                "text": "Cebra",
+                "hints": [
+                    "Rayas",
+                    "Blanco y negro",
+                    "África"
                 ]
             }
         ]
     },
     {
-        "name": "Lol",
+        "id": 22,
+        "name": "Comida y Bebida",
         "words": [
             {
-                "text": "Cachimba",
+                "text": "Pizza",
                 "hints": [
-                    "Humo",
-                    "Vapor"
+                    "Italia",
+                    "Queso",
+                    "Redonda"
                 ]
             },
             {
-                "text": "España",
+                "text": "Hamburguesa",
                 "hints": [
-                    "Arriba"
+                    "Carne",
+                    "Pan",
+                    "Rápida"
                 ]
             },
             {
-                "text": "Racismo",
+                "text": "Sushi",
                 "hints": [
+                    "Japón",
+                    "Pescado",
+                    "Arroz"
+                ]
+            },
+            {
+                "text": "Paella",
+                "hints": [
+                    "Arroz",
+                    "Valencia",
+                    "Domingo"
+                ]
+            },
+            {
+                "text": "Tortilla",
+                "hints": [
+                    "Huevo",
+                    "Patata",
+                    "Cebolla"
+                ]
+            },
+            {
+                "text": "Espaguetis",
+                "hints": [
+                    "Pasta",
+                    "Largo",
+                    "Tomate"
+                ]
+            },
+            {
+                "text": "Ensalada",
+                "hints": [
+                    "Lechuga",
+                    "Sana",
+                    "Aceite"
+                ]
+            },
+            {
+                "text": "Sopa",
+                "hints": [
+                    "Cuchara",
+                    "Caliente",
+                    "Invierno"
+                ]
+            },
+            {
+                "text": "Pan",
+                "hints": [
+                    "Harina",
+                    "Horno",
+                    "Barra"
+                ]
+            },
+            {
+                "text": "Queso",
+                "hints": [
+                    "Ratón",
+                    "Leche",
+                    "Agujeros"
+                ]
+            },
+            {
+                "text": "Jamón",
+                "hints": [
+                    "Cerdo",
+                    "Serrano",
+                    "Pata"
+                ]
+            },
+            {
+                "text": "Huevo",
+                "hints": [
+                    "Gallina",
+                    "Frito",
+                    "Clara"
+                ]
+            },
+            {
+                "text": "Patatas fritas",
+                "hints": [
+                    "Crujiente",
+                    "Aceite",
+                    "Sal"
+                ]
+            },
+            {
+                "text": "Chocolate",
+                "hints": [
+                    "Cacao",
+                    "Dulce",
                     "Negro"
                 ]
             },
             {
-                "text": "Mantel",
+                "text": "Helado",
                 "hints": [
-                    "Para comer"
+                    "Frío",
+                    "Verano",
+                    "Bola"
+                ]
+            },
+            {
+                "text": "Tarta",
+                "hints": [
+                    "Cumpleaños",
+                    "Velas",
+                    "Dulce"
+                ]
+            },
+            {
+                "text": "Galleta",
+                "hints": [
+                    "Desayuno",
+                    "Leche",
+                    "Crujiente"
+                ]
+            },
+            {
+                "text": "Manzana",
+                "hints": [
+                    "Fruta",
+                    "Roja",
+                    "Blancanieves"
+                ]
+            },
+            {
+                "text": "Plátano",
+                "hints": [
+                    "Amarillo",
+                    "Curvo",
+                    "Potasio"
+                ]
+            },
+            {
+                "text": "Naranja",
+                "hints": [
+                    "Zumo",
+                    "Vitamina C",
+                    "Color"
+                ]
+            },
+            {
+                "text": "Café",
+                "hints": [
+                    "Despertar",
+                    "Negro",
+                    "Cafeína"
+                ]
+            },
+            {
+                "text": "Cerveza",
+                "hints": [
+                    "Rubia",
+                    "Espuma",
+                    "Caña"
+                ]
+            },
+            {
+                "text": "Vino",
+                "hints": [
+                    "Uva",
+                    "Copa",
+                    "Tinto"
+                ]
+            },
+            {
+                "text": "Agua",
+                "hints": [
+                    "Vida",
+                    "Transparente",
+                    "Sed"
+                ]
+            },
+            {
+                "text": "Leche",
+                "hints": [
+                    "Blanca",
+                    "Vaca",
+                    "Calcio"
+                ]
+            },
+            {
+                "text": "Coca-Cola",
+                "hints": [
+                    "Burbujas",
+                    "Negra",
+                    "Refresco"
+                ]
+            },
+            {
+                "text": "Palomitas",
+                "hints": [
+                    "Cine",
+                    "Maíz",
+                    "Sal"
+                ]
+            },
+            {
+                "text": "Chicle",
+                "hints": [
+                    "Masticar",
+                    "Globo",
+                    "Pegajoso"
+                ]
+            },
+            {
+                "text": "Yogur",
+                "hints": [
+                    "Cuchara",
+                    "Lácteo",
+                    "Postre"
+                ]
+            },
+            {
+                "text": "Ketchup",
+                "hints": [
+                    "Tomate",
+                    "Rojo",
+                    "Salsa"
                 ]
             }
-        ],
-        "id": 1766519124626
+        ]
+    },
+    {
+        "id": 23,
+        "name": "Lugares (Sitios)",
+        "words": [
+            {
+                "text": "Hospital",
+                "hints": [
+                    "Médicos",
+                    "Urgencias",
+                    "Silencio"
+                ]
+            },
+            {
+                "text": "Colegio",
+                "hints": [
+                    "Estudiar",
+                    "Niños",
+                    "Recreo"
+                ]
+            },
+            {
+                "text": "Supermercado",
+                "hints": [
+                    "Carro",
+                    "Compra",
+                    "Cajera"
+                ]
+            },
+            {
+                "text": "Aeropuerto",
+                "hints": [
+                    "Aviones",
+                    "Maletas",
+                    "Volar"
+                ]
+            },
+            {
+                "text": "Cine",
+                "hints": [
+                    "Película",
+                    "Palomitas",
+                    "Oscuro"
+                ]
+            },
+            {
+                "text": "Playa",
+                "hints": [
+                    "Arena",
+                    "Mar",
+                    "Sol"
+                ]
+            },
+            {
+                "text": "Restaurante",
+                "hints": [
+                    "Comer",
+                    "Carta",
+                    "Camarero"
+                ]
+            },
+            {
+                "text": "Gimnasio",
+                "hints": [
+                    "Pesas",
+                    "Deporte",
+                    "Sudar"
+                ]
+            },
+            {
+                "text": "Biblioteca",
+                "hints": [
+                    "Libros",
+                    "Silencio",
+                    "Leer"
+                ]
+            },
+            {
+                "text": "Discoteca",
+                "hints": [
+                    "Música",
+                    "Baile",
+                    "Noche"
+                ]
+            },
+            {
+                "text": "Banco",
+                "hints": [
+                    "Dinero",
+                    "Cajero",
+                    "Ahorros"
+                ]
+            },
+            {
+                "text": "Comisaría",
+                "hints": [
+                    "Policía",
+                    "Denuncia",
+                    "Calabozo"
+                ]
+            },
+            {
+                "text": "Parque",
+                "hints": [
+                    "Árboles",
+                    "Banco",
+                    "Niños"
+                ]
+            },
+            {
+                "text": "Hotel",
+                "hints": [
+                    "Cama",
+                    "Viaje",
+                    "Recepción"
+                ]
+            },
+            {
+                "text": "Gasolinera",
+                "hints": [
+                    "Coche",
+                    "Combustible",
+                    "Repostar"
+                ]
+            },
+            {
+                "text": "Farmacia",
+                "hints": [
+                    "Medicinas",
+                    "Cruz verde",
+                    "Receta"
+                ]
+            },
+            {
+                "text": "Iglesia",
+                "hints": [
+                    "Rezar",
+                    "Domingo",
+                    "Cura"
+                ]
+            },
+            {
+                "text": "Cementerio",
+                "hints": [
+                    "Tumbas",
+                    "Muertos",
+                    "Flores"
+                ]
+            },
+            {
+                "text": "Estadio",
+                "hints": [
+                    "Fútbol",
+                    "Grada",
+                    "Partido"
+                ]
+            },
+            {
+                "text": "Zoo",
+                "hints": [
+                    "Animales",
+                    "Jaulas",
+                    "Visita"
+                ]
+            },
+            {
+                "text": "Circo",
+                "hints": [
+                    "Payasos",
+                    "Carpa",
+                    "Espectáculo"
+                ]
+            },
+            {
+                "text": "Casino",
+                "hints": [
+                    "Apuestas",
+                    "Fichas",
+                    "Ruleta"
+                ]
+            },
+            {
+                "text": "Peluquería",
+                "hints": [
+                    "Cortar",
+                    "Tijeras",
+                    "Peinado"
+                ]
+            },
+            {
+                "text": "Taller",
+                "hints": [
+                    "Mecánico",
+                    "Coche",
+                    "Avería"
+                ]
+            },
+            {
+                "text": "Cárcel",
+                "hints": [
+                    "Presos",
+                    "Rejas",
+                    "Celda"
+                ]
+            },
+            {
+                "text": "Museo",
+                "hints": [
+                    "Arte",
+                    "Cuadros",
+                    "Antiguo"
+                ]
+            },
+            {
+                "text": "Teatro",
+                "hints": [
+                    "Actores",
+                    "Escenario",
+                    "Telón"
+                ]
+            },
+            {
+                "text": "Spa",
+                "hints": [
+                    "Relax",
+                    "Masaje",
+                    "Agua"
+                ]
+            },
+            {
+                "text": "Estación de Tren",
+                "hints": [
+                    "Vías",
+                    "Andén",
+                    "Viaje"
+                ]
+            },
+            {
+                "text": "Base Espacial",
+                "hints": [
+                    "Cohete",
+                    "Astronauta",
+                    "Futuro"
+                ]
+            }
+        ]
+    },
+    {
+        "id": 24,
+        "name": "Geografía",
+        "words": [
+            {
+                "text": "España",
+                "hints": [
+                    "Madrid",
+                    "Toros",
+                    "Sol"
+                ]
+            },
+            {
+                "text": "Francia",
+                "hints": [
+                    "París",
+                    "Torre Eiffel",
+                    "Amor"
+                ]
+            },
+            {
+                "text": "Italia",
+                "hints": [
+                    "Roma",
+                    "Pizza",
+                    "Bota"
+                ]
+            },
+            {
+                "text": "Reino Unido",
+                "hints": [
+                    "Londres",
+                    "Reina",
+                    "Té"
+                ]
+            },
+            {
+                "text": "Estados Unidos",
+                "hints": [
+                    "Dólar",
+                    "Hollywood",
+                    "Potencia"
+                ]
+            },
+            {
+                "text": "Japón",
+                "hints": [
+                    "Sushi",
+                    "Anime",
+                    "Isla"
+                ]
+            },
+            {
+                "text": "China",
+                "hints": [
+                    "Muralla",
+                    "Dragón",
+                    "Arroz"
+                ]
+            },
+            {
+                "text": "Rusia",
+                "hints": [
+                    "Frío",
+                    "Grande",
+                    "Vodka"
+                ]
+            },
+            {
+                "text": "Alemania",
+                "hints": [
+                    "Cerveza",
+                    "Coches",
+                    "Berlín"
+                ]
+            },
+            {
+                "text": "Brasil",
+                "hints": [
+                    "Fútbol",
+                    "Carnaval",
+                    "Samba"
+                ]
+            },
+            {
+                "text": "Argentina",
+                "hints": [
+                    "Tango",
+                    "Messi",
+                    "Asado"
+                ]
+            },
+            {
+                "text": "México",
+                "hints": [
+                    "Picante",
+                    "Mariachi",
+                    "Tacos"
+                ]
+            },
+            {
+                "text": "Egipto",
+                "hints": [
+                    "Pirámides",
+                    "Faraón",
+                    "Desierto"
+                ]
+            },
+            {
+                "text": "Australia",
+                "hints": [
+                    "Canguro",
+                    "Isla",
+                    "Surf"
+                ]
+            },
+            {
+                "text": "India",
+                "hints": [
+                    "Curry",
+                    "Gente",
+                    "Taj Mahal"
+                ]
+            },
+            {
+                "text": "Madrid",
+                "hints": [
+                    "Capital",
+                    "España",
+                    "Oso"
+                ]
+            },
+            {
+                "text": "París",
+                "hints": [
+                    "Luz",
+                    "Torre",
+                    "Francia"
+                ]
+            },
+            {
+                "text": "Londres",
+                "hints": [
+                    "Big Ben",
+                    "Bus rojo",
+                    "Lluvia"
+                ]
+            },
+            {
+                "text": "Nueva York",
+                "hints": [
+                    "Rascacielos",
+                    "Estatua",
+                    "Manzana"
+                ]
+            },
+            {
+                "text": "Roma",
+                "hints": [
+                    "Coliseo",
+                    "Antigua",
+                    "Papa"
+                ]
+            },
+            {
+                "text": "Monte Everest",
+                "hints": [
+                    "Alto",
+                    "Nieve",
+                    "Escalar"
+                ]
+            },
+            {
+                "text": "Amazonas",
+                "hints": [
+                    "Selva",
+                    "Río",
+                    "Pulmón"
+                ]
+            },
+            {
+                "text": "Desierto del Sahara",
+                "hints": [
+                    "Arena",
+                    "Calor",
+                    "Camellos"
+                ]
+            },
+            {
+                "text": "Polo Norte",
+                "hints": [
+                    "Hielo",
+                    "Frío",
+                    "Papá Noel"
+                ]
+            },
+            {
+                "text": "Torre Eiffel",
+                "hints": [
+                    "Hierro",
+                    "Alta",
+                    "París"
+                ]
+            },
+            {
+                "text": "Estatua de la Libertad",
+                "hints": [
+                    "Antorcha",
+                    "Isla",
+                    "EEUU"
+                ]
+            },
+            {
+                "text": "Muralla China",
+                "hints": [
+                    "Larga",
+                    "Piedra",
+                    "Defensa"
+                ]
+            },
+            {
+                "text": "Coliseo",
+                "hints": [
+                    "Gladiadores",
+                    "Ruinas",
+                    "Redondo"
+                ]
+            },
+            {
+                "text": "Venecia",
+                "hints": [
+                    "Canales",
+                    "Góndola",
+                    "Agua"
+                ]
+            },
+            {
+                "text": "Hawái",
+                "hints": [
+                    "Volcán",
+                    "Flores",
+                    "Aloha"
+                ]
+            }
+        ]
+    },
+    {
+        "id": 25,
+        "name": "Vehículos",
+        "words": [
+            {
+                "text": "Coche",
+                "hints": [
+                    "Cuatro ruedas",
+                    "Volante",
+                    "Carretera"
+                ]
+            },
+            {
+                "text": "Moto",
+                "hints": [
+                    "Dos ruedas",
+                    "Casco",
+                    "Equilibrio"
+                ]
+            },
+            {
+                "text": "Bicicleta",
+                "hints": [
+                    "Pedales",
+                    "Sin motor",
+                    "Deporte"
+                ]
+            },
+            {
+                "text": "Autobús",
+                "hints": [
+                    "Grande",
+                    "Pasajeros",
+                    "Paradas"
+                ]
+            },
+            {
+                "text": "Tren",
+                "hints": [
+                    "Vías",
+                    "Estación",
+                    "Vagones"
+                ]
+            },
+            {
+                "text": "Metro",
+                "hints": [
+                    "Subterráneo",
+                    "Ciudad",
+                    "Túnel"
+                ]
+            },
+            {
+                "text": "Avión",
+                "hints": [
+                    "Volar",
+                    "Alas",
+                    "Aeropuerto"
+                ]
+            },
+            {
+                "text": "Helicóptero",
+                "hints": [
+                    "Hélices",
+                    "Vertical",
+                    "Ruido"
+                ]
+            },
+            {
+                "text": "Barco",
+                "hints": [
+                    "Mar",
+                    "Navegar",
+                    "Puerto"
+                ]
+            },
+            {
+                "text": "Crucero",
+                "hints": [
+                    "Vacaciones",
+                    "Enorme",
+                    "Lujo"
+                ]
+            },
+            {
+                "text": "Submarino",
+                "hints": [
+                    "Bajo agua",
+                    "Periscopio",
+                    "Militar"
+                ]
+            },
+            {
+                "text": "Camión",
+                "hints": [
+                    "Carga",
+                    "Grande",
+                    "Carretera"
+                ]
+            },
+            {
+                "text": "Furgoneta",
+                "hints": [
+                    "Reparto",
+                    "Espacio",
+                    "Blanca"
+                ]
+            },
+            {
+                "text": "Taxi",
+                "hints": [
+                    "Ciudad",
+                    "Dinero",
+                    "Llevar"
+                ]
+            },
+            {
+                "text": "Ambulancia",
+                "hints": [
+                    "Sirena",
+                    "Hospital",
+                    "Urgencia"
+                ]
+            },
+            {
+                "text": "Coche de Policía",
+                "hints": [
+                    "Luces",
+                    "Sirena",
+                    "Patrulla"
+                ]
+            },
+            {
+                "text": "Camión de Bomberos",
+                "hints": [
+                    "Rojo",
+                    "Manguera",
+                    "Escalera"
+                ]
+            },
+            {
+                "text": "Tractor",
+                "hints": [
+                    "Campo",
+                    "Granja",
+                    "Lento"
+                ]
+            },
+            {
+                "text": "Grúa",
+                "hints": [
+                    "Levantar",
+                    "Obras",
+                    "Gancho"
+                ]
+            },
+            {
+                "text": "Patinete",
+                "hints": [
+                    "Manillar",
+                    "Pie",
+                    "Ciudad"
+                ]
+            },
+            {
+                "text": "Monopatín",
+                "hints": [
+                    "Skate",
+                    "Tabla",
+                    "Trucos"
+                ]
+            },
+            {
+                "text": "Globo aerostático",
+                "hints": [
+                    "Cesta",
+                    "Fuego",
+                    "Volar"
+                ]
+            },
+            {
+                "text": "Cohete",
+                "hints": [
+                    "Espacio",
+                    "Lanzamiento",
+                    "Astronauta"
+                ]
+            }
+        ]
+    },
+    {
+        "id": 26,
+        "name": "Ciencia",
+        "words": [
+            {
+                "text": "Microscopio",
+                "hints": [
+                    "Lente",
+                    "Pequeño",
+                    "Laboratorio"
+                ]
+            },
+            {
+                "text": "Telescopio",
+                "hints": [
+                    "Estrellas",
+                    "Espacio",
+                    "Mirar"
+                ]
+            },
+            {
+                "text": "Laboratorio",
+                "hints": [
+                    "Bata",
+                    "Experimentos",
+                    "Ciencia"
+                ]
+            },
+            {
+                "text": "Científico",
+                "hints": [
+                    "Investigar",
+                    "Einstein",
+                    "Estudioso"
+                ]
+            },
+            {
+                "text": "Átomo",
+                "hints": [
+                    "Pequeño",
+                    "Partícula",
+                    "Núcleo"
+                ]
+            },
+            {
+                "text": "Gravedad",
+                "hints": [
+                    "Caer",
+                    "Newton",
+                    "Manzana"
+                ]
+            },
+            {
+                "text": "Imán",
+                "hints": [
+                    "Metal",
+                    "Atraer",
+                    "Polos"
+                ]
+            },
+            {
+                "text": "Electricidad",
+                "hints": [
+                    "Luz",
+                    "Enchufe",
+                    "Rayo"
+                ]
+            },
+            {
+                "text": "Volcán",
+                "hints": [
+                    "Lava",
+                    "Erupción",
+                    "Montaña"
+                ]
+            },
+            {
+                "text": "Terremoto",
+                "hints": [
+                    "Temblor",
+                    "Suelo",
+                    "Grieta"
+                ]
+            },
+            {
+                "text": "Espacio",
+                "hints": [
+                    "Universo",
+                    "Vacío",
+                    "Estrellas"
+                ]
+            },
+            {
+                "text": "Planeta",
+                "hints": [
+                    "Tierra",
+                    "Redondo",
+                    "Girar"
+                ]
+            },
+            {
+                "text": "Dinosaurio",
+                "hints": [
+                    "Extinguido",
+                    "Fósil",
+                    "Jurásico"
+                ]
+            },
+            {
+                "text": "Fósil",
+                "hints": [
+                    "Hueso",
+                    "Antiguo",
+                    "Piedra"
+                ]
+            },
+            {
+                "text": "Química",
+                "hints": [
+                    "Mezclas",
+                    "Reacción",
+                    "Tubos"
+                ]
+            },
+            {
+                "text": "Física",
+                "hints": [
+                    "Movimiento",
+                    "Fuerza",
+                    "Leyes"
+                ]
+            },
+            {
+                "text": "Experimento",
+                "hints": [
+                    "Prueba",
+                    "Resultado",
+                    "Ciencia"
+                ]
+            },
+            {
+                "text": "Fórmula",
+                "hints": [
+                    "Matemáticas",
+                    "Ecuación",
+                    "Pizarra"
+                ]
+            },
+            {
+                "text": "Tabla Periódica",
+                "hints": [
+                    "Elementos",
+                    "Símbolos",
+                    "Química"
+                ]
+            },
+            {
+                "text": "Oxígeno",
+                "hints": [
+                    "Aire",
+                    "Respirar",
+                    "Gas"
+                ]
+            },
+            {
+                "text": "Agua",
+                "hints": [
+                    "H2O",
+                    "Líquido",
+                    "Vida"
+                ]
+            },
+            {
+                "text": "Einstein",
+                "hints": [
+                    "Relatividad",
+                    "Pelo",
+                    "Genio"
+                ]
+            },
+            {
+                "text": "Robot",
+                "hints": [
+                    "Máquina",
+                    "Futuro",
+                    "Inteligencia"
+                ]
+            },
+            {
+                "text": "Energía",
+                "hints": [
+                    "Fuerza",
+                    "Luz",
+                    "Batería"
+                ]
+            },
+            {
+                "text": "Luz",
+                "hints": [
+                    "Sol",
+                    "Velocidad",
+                    "Bombilla"
+                ]
+            },
+            {
+                "text": "Sonido",
+                "hints": [
+                    "Oído",
+                    "Ondas",
+                    "Ruido"
+                ]
+            },
+            {
+                "text": "Ecosistema",
+                "hints": [
+                    "Naturaleza",
+                    "Animales",
+                    "Equilibrio"
+                ]
+            },
+            {
+                "text": "Evolución",
+                "hints": [
+                    "Darwin",
+                    "Cambio",
+                    "Mono"
+                ]
+            },
+            {
+                "text": "ADN",
+                "hints": [
+                    "Genética",
+                    "Cadena",
+                    "Herencia"
+                ]
+            },
+            {
+                "text": "Bacteria",
+                "hints": [
+                    "Microbio",
+                    "Enfermedad",
+                    "Pequeña"
+                ]
+            }
+        ]
+    },
+    {
+        "id": 27,
+        "name": "Medicina",
+        "words": [
+            {
+                "text": "Estetoscopio",
+                "hints": [
+                    "Escuchar",
+                    "Corazón",
+                    "Pecho"
+                ]
+            },
+            {
+                "text": "Bisturí",
+                "hints": [
+                    "Cortar",
+                    "Cirujano",
+                    "Operación"
+                ]
+            },
+            {
+                "text": "Radiografía",
+                "hints": [
+                    "Huesos",
+                    "Rayos X",
+                    "Foto"
+                ]
+            },
+            {
+                "text": "Anestesia",
+                "hints": [
+                    "Dormir",
+                    "Sin dolor",
+                    "Operación"
+                ]
+            },
+            {
+                "text": "Ambulancia",
+                "hints": [
+                    "Sirena",
+                    "Urgencia",
+                    "Vehículo"
+                ]
+            },
+            {
+                "text": "Vacuna",
+                "hints": [
+                    "Aguja",
+                    "Virus",
+                    "Prevención"
+                ]
+            },
+            {
+                "text": "Antibiótico",
+                "hints": [
+                    "Bacterias",
+                    "Infección",
+                    "Medicamento"
+                ]
+            },
+            {
+                "text": "Receta",
+                "hints": [
+                    "Papel",
+                    "Farmacia",
+                    "Firma"
+                ]
+            },
+            {
+                "text": "Diagnóstico",
+                "hints": [
+                    "Resultado",
+                    "Enfermedad",
+                    "Saber"
+                ]
+            },
+            {
+                "text": "Cirugía",
+                "hints": [
+                    "Operar",
+                    "Quirófano",
+                    "Médicos"
+                ]
+            },
+            {
+                "text": "Pediatra",
+                "hints": [
+                    "Niños",
+                    "Médico",
+                    "Bebés"
+                ]
+            },
+            {
+                "text": "Cardiólogo",
+                "hints": [
+                    "Corazón",
+                    "Especialista",
+                    "Infarto"
+                ]
+            },
+            {
+                "text": "Urgencias",
+                "hints": [
+                    "Hospital",
+                    "Rápido",
+                    "Esperar"
+                ]
+            },
+            {
+                "text": "UCI",
+                "hints": [
+                    "Cuidados intensivos",
+                    "Grave",
+                    "Monitores"
+                ]
+            },
+            {
+                "text": "Termómetro",
+                "hints": [
+                    "Fiebre",
+                    "Temperatura",
+                    "Axila"
+                ]
+            },
+            {
+                "text": "Tensión",
+                "hints": [
+                    "Brazo",
+                    "Alta o baja",
+                    "Sangre"
+                ]
+            },
+            {
+                "text": "Inyección",
+                "hints": [
+                    "Pinchazo",
+                    "Jeringuilla",
+                    "Líquido"
+                ]
+            },
+            {
+                "text": "Farmacia",
+                "hints": [
+                    "Medicamentos",
+                    "Cruz verde",
+                    "Comprar"
+                ]
+            },
+            {
+                "text": "Trasplante",
+                "hints": [
+                    "Órgano",
+                    "Donante",
+                    "Cambio"
+                ]
+            },
+            {
+                "text": "Rehabilitación",
+                "hints": [
+                    "Recuperar",
+                    "Ejercicios",
+                    "Fisio"
+                ]
+            },
+            {
+                "text": "Psicólogo",
+                "hints": [
+                    "Mente",
+                    "Hablar",
+                    "Terapia"
+                ]
+            },
+            {
+                "text": "Dentista",
+                "hints": [
+                    "Dientes",
+                    "Muela",
+                    "Torno"
+                ]
+            },
+            {
+                "text": "Enfermera",
+                "hints": [
+                    "Cuidados",
+                    "Ayuda",
+                    "Hospital"
+                ]
+            },
+            {
+                "text": "Yeso",
+                "hints": [
+                    "Escayola",
+                    "Hueso roto",
+                    "Brazo"
+                ]
+            },
+            {
+                "text": "Camilla",
+                "hints": [
+                    "Ruedas",
+                    "Tumbarse",
+                    "Transporte"
+                ]
+            },
+            {
+                "text": "Botiquín",
+                "hints": [
+                    "Primeros auxilios",
+                    "Caja",
+                    "Emergencia"
+                ]
+            },
+            {
+                "text": "Virus",
+                "hints": [
+                    "Contagio",
+                    "Gripe",
+                    "Microscópico"
+                ]
+            },
+            {
+                "text": "Alergia",
+                "hints": [
+                    "Reacción",
+                    "Polen",
+                    "Estornudo"
+                ]
+            },
+            {
+                "text": "Tirita",
+                "hints": [
+                    "Herida",
+                    "Pequeña",
+                    "Pegar"
+                ]
+            },
+            {
+                "text": "Donante",
+                "hints": [
+                    "Sangre",
+                    "Regalar",
+                    "Vida"
+                ]
+            }
+        ]
+    },
+    {
+        "id": 28,
+        "name": "Ingeniería",
+        "words": [
+            {
+                "text": "Puente",
+                "hints": [
+                    "Cruzar",
+                    "Río",
+                    "Estructura"
+                ]
+            },
+            {
+                "text": "Rascacielos",
+                "hints": [
+                    "Alto",
+                    "Edificio",
+                    "Ciudad"
+                ]
+            },
+            {
+                "text": "Motor",
+                "hints": [
+                    "Coche",
+                    "Piezas",
+                    "Movimiento"
+                ]
+            },
+            {
+                "text": "Robot",
+                "hints": [
+                    "Automático",
+                    "Máquina",
+                    "Futuro"
+                ]
+            },
+            {
+                "text": "Electricidad",
+                "hints": [
+                    "Luz",
+                    "Cables",
+                    "Energía"
+                ]
+            },
+            {
+                "text": "Circuito",
+                "hints": [
+                    "Chip",
+                    "Cerrado",
+                    "Electrónica"
+                ]
+            },
+            {
+                "text": "Engranaje",
+                "hints": [
+                    "Rueda",
+                    "Dientes",
+                    "Mecanismo"
+                ]
+            },
+            {
+                "text": "Plano",
+                "hints": [
+                    "Dibujo",
+                    "Arquitecto",
+                    "Papel"
+                ]
+            },
+            {
+                "text": "Software",
+                "hints": [
+                    "Programa",
+                    "Código",
+                    "Ordenador"
+                ]
+            },
+            {
+                "text": "Satélite",
+                "hints": [
+                    "Espacio",
+                    "Órbita",
+                    "Señal"
+                ]
+            },
+            {
+                "text": "Cohete",
+                "hints": [
+                    "NASA",
+                    "Despegue",
+                    "Espacio"
+                ]
+            },
+            {
+                "text": "Dron",
+                "hints": [
+                    "Volar",
+                    "Hélices",
+                    "Control"
+                ]
+            },
+            {
+                "text": "Presa",
+                "hints": [
+                    "Agua",
+                    "Muro",
+                    "Embalse"
+                ]
+            },
+            {
+                "text": "Túnel",
+                "hints": [
+                    "Montaña",
+                    "Oscuro",
+                    "Atravesar"
+                ]
+            },
+            {
+                "text": "Carretera",
+                "hints": [
+                    "Asfalto",
+                    "Coches",
+                    "Camino"
+                ]
+            },
+            {
+                "text": "Vía",
+                "hints": [
+                    "Tren",
+                    "Raíles",
+                    "Ferrocarril"
+                ]
+            },
+            {
+                "text": "Fibra óptica",
+                "hints": [
+                    "Internet",
+                    "Rápido",
+                    "Cable"
+                ]
+            },
+            {
+                "text": "Antena",
+                "hints": [
+                    "Señal",
+                    "Tejado",
+                    "Receptor"
+                ]
+            },
+            {
+                "text": "Panel solar",
+                "hints": [
+                    "Sol",
+                    "Energía",
+                    "Tejado"
+                ]
+            },
+            {
+                "text": "Molino eólico",
+                "hints": [
+                    "Viento",
+                    "Aspas",
+                    "Energía"
+                ]
+            },
+            {
+                "text": "Batería",
+                "hints": [
+                    "Pila",
+                    "Carga",
+                    "Energía"
+                ]
+            },
+            {
+                "text": "Tornillo",
+                "hints": [
+                    "Rosca",
+                    "Metal",
+                    "Ajustar"
+                ]
+            },
+            {
+                "text": "Herramienta",
+                "hints": [
+                    "Martillo",
+                    "Arreglar",
+                    "Mano"
+                ]
+            },
+            {
+                "text": "Fábrica",
+                "hints": [
+                    "Producción",
+                    "Humo",
+                    "Máquinas"
+                ]
+            },
+            {
+                "text": "Patente",
+                "hints": [
+                    "Invento",
+                    "Registro",
+                    "Idea"
+                ]
+            },
+            {
+                "text": "Innovación",
+                "hints": [
+                    "Nuevo",
+                    "Mejora",
+                    "Futuro"
+                ]
+            },
+            {
+                "text": "Mecánica",
+                "hints": [
+                    "Movimiento",
+                    "Física",
+                    "Coches"
+                ]
+            },
+            {
+                "text": "Informática",
+                "hints": [
+                    "Ordenadores",
+                    "Datos",
+                    "Redes"
+                ]
+            },
+            {
+                "text": "Aeronáutica",
+                "hints": [
+                    "Aviones",
+                    "Volar",
+                    "Aire"
+                ]
+            },
+            {
+                "text": "Algoritmo",
+                "hints": [
+                    "Matemáticas",
+                    "Pasos",
+                    "Resolver"
+                ]
+            }
+        ]
+    },
+    {
+        "id": 29,
+        "name": "Artes y Cultura",
+        "words": [
+            {
+                "text": "Pintura",
+                "hints": [
+                    "Cuadro",
+                    "Brocha",
+                    "Color"
+                ]
+            },
+            {
+                "text": "Escultura",
+                "hints": [
+                    "Estatua",
+                    "Piedra",
+                    "Cincel"
+                ]
+            },
+            {
+                "text": "Museo",
+                "hints": [
+                    "Arte",
+                    "Visita",
+                    "Antiguo"
+                ]
+            },
+            {
+                "text": "Teatro",
+                "hints": [
+                    "Actores",
+                    "Telón",
+                    "Escenario"
+                ]
+            },
+            {
+                "text": "Danza",
+                "hints": [
+                    "Baile",
+                    "Movimiento",
+                    "Música"
+                ]
+            },
+            {
+                "text": "Ballet",
+                "hints": [
+                    "Puntas",
+                    "Tutú",
+                    "Clásico"
+                ]
+            },
+            {
+                "text": "Ópera",
+                "hints": [
+                    "Cantar",
+                    "Teatro",
+                    "Voz"
+                ]
+            },
+            {
+                "text": "Poesía",
+                "hints": [
+                    "Rima",
+                    "Versos",
+                    "Escrito"
+                ]
+            },
+            {
+                "text": "Novela",
+                "hints": [
+                    "Libro",
+                    "Historia",
+                    "Largo"
+                ]
+            },
+            {
+                "text": "Escritor",
+                "hints": [
+                    "Autor",
+                    "Pluma",
+                    "Libros"
+                ]
+            },
+            {
+                "text": "Director",
+                "hints": [
+                    "Cine",
+                    "Corten",
+                    "Jefe"
+                ]
+            },
+            {
+                "text": "Fotografía",
+                "hints": [
+                    "Cámara",
+                    "Imagen",
+                    "Retrato"
+                ]
+            },
+            {
+                "text": "Retrato",
+                "hints": [
+                    "Cara",
+                    "Pintura",
+                    "Foto"
+                ]
+            },
+            {
+                "text": "Paisaje",
+                "hints": [
+                    "Naturaleza",
+                    "Vistas",
+                    "Cuadro"
+                ]
+            },
+            {
+                "text": "Abstracto",
+                "hints": [
+                    "Raro",
+                    "Formas",
+                    "No real"
+                ]
+            },
+            {
+                "text": "Renacimiento",
+                "hints": [
+                    "Época",
+                    "Da Vinci",
+                    "Italia"
+                ]
+            },
+            {
+                "text": "Arquitectura",
+                "hints": [
+                    "Edificios",
+                    "Diseño",
+                    "Planos"
+                ]
+            },
+            {
+                "text": "Acuarela",
+                "hints": [
+                    "Agua",
+                    "Pintura",
+                    "Suave"
+                ]
+            },
+            {
+                "text": "Boceto",
+                "hints": [
+                    "Dibujo",
+                    "Lápiz",
+                    "Prueba"
+                ]
+            },
+            {
+                "text": "Exposición",
+                "hints": [
+                    "Galería",
+                    "Muestra",
+                    "Público"
+                ]
+            },
+            {
+                "text": "Graffiti",
+                "hints": [
+                    "Spray",
+                    "Pared",
+                    "Calle"
+                ]
+            },
+            {
+                "text": "Cómic",
+                "hints": [
+                    "Viñetas",
+                    "Bocadillos",
+                    "Dibujos"
+                ]
+            },
+            {
+                "text": "Mosaico",
+                "hints": [
+                    "Piezas",
+                    "Suelo",
+                    "Romano"
+                ]
+            },
+            {
+                "text": "Orquesta",
+                "hints": [
+                    "Música",
+                    "Instrumentos",
+                    "Director"
+                ]
+            },
+            {
+                "text": "Cerámica",
+                "hints": [
+                    "Barro",
+                    "Horno",
+                    "Jarrón"
+                ]
+            },
+            {
+                "text": "Lienzo",
+                "hints": [
+                    "Tela",
+                    "Pintar",
+                    "Blanco"
+                ]
+            },
+            {
+                "text": "Pincel",
+                "hints": [
+                    "Pelos",
+                    "Mango",
+                    "Pintar"
+                ]
+            },
+            {
+                "text": "Cine",
+                "hints": [
+                    "Séptimo arte",
+                    "Pantalla",
+                    "Película"
+                ]
+            },
+            {
+                "text": "Guion",
+                "hints": [
+                    "Texto",
+                    "Diálogo",
+                    "Película"
+                ]
+            },
+            {
+                "text": "Oscar",
+                "hints": [
+                    "Premio",
+                    "Cine",
+                    "Dorado"
+                ]
+            }
+        ]
+    },
+    {
+        "id": 30,
+        "name": "Ciencias Agrarias",
+        "words": [
+            {
+                "text": "Tractor",
+                "hints": [
+                    "Vehículo",
+                    "Campo",
+                    "Ruedas grandes"
+                ]
+            },
+            {
+                "text": "Arado",
+                "hints": [
+                    "Tierra",
+                    "Surco",
+                    "Herramienta"
+                ]
+            },
+            {
+                "text": "Semilla",
+                "hints": [
+                    "Plantar",
+                    "Pequeña",
+                    "Vida"
+                ]
+            },
+            {
+                "text": "Cosecha",
+                "hints": [
+                    "Recoger",
+                    "Fruto",
+                    "Temporada"
+                ]
+            },
+            {
+                "text": "Riego",
+                "hints": [
+                    "Agua",
+                    "Campo",
+                    "Mojar"
+                ]
+            },
+            {
+                "text": "Fertilizante",
+                "hints": [
+                    "Abono",
+                    "Crecer",
+                    "Químico"
+                ]
+            },
+            {
+                "text": "Invernadero",
+                "hints": [
+                    "Plástico",
+                    "Calor",
+                    "Protección"
+                ]
+            },
+            {
+                "text": "Granja",
+                "hints": [
+                    "Animales",
+                    "Casa",
+                    "Campo"
+                ]
+            },
+            {
+                "text": "Ganado",
+                "hints": [
+                    "Vacas",
+                    "Ovejas",
+                    "Rebaño"
+                ]
+            },
+            {
+                "text": "Trigo",
+                "hints": [
+                    "Cereal",
+                    "Harina",
+                    "Amarillo"
+                ]
+            },
+            {
+                "text": "Maíz",
+                "hints": [
+                    "Mazorca",
+                    "Amarillo",
+                    "Palomitas"
+                ]
+            },
+            {
+                "text": "Viñedo",
+                "hints": [
+                    "Uvas",
+                    "Vino",
+                    "Campo"
+                ]
+            },
+            {
+                "text": "Huerto",
+                "hints": [
+                    "Pequeño",
+                    "Verduras",
+                    "Casa"
+                ]
+            },
+            {
+                "text": "Espantapájaros",
+                "hints": [
+                    "Muñeco",
+                    "Paja",
+                    "Miedo"
+                ]
+            },
+            {
+                "text": "Plaga",
+                "hints": [
+                    "Bichos",
+                    "Daño",
+                    "Invasión"
+                ]
+            },
+            {
+                "text": "Pesticida",
+                "hints": [
+                    "Veneno",
+                    "Matar",
+                    "Bichos"
+                ]
+            },
+            {
+                "text": "Suelo",
+                "hints": [
+                    "Tierra",
+                    "Pisar",
+                    "Nutrientes"
+                ]
+            },
+            {
+                "text": "Compost",
+                "hints": [
+                    "Basura",
+                    "Orgánico",
+                    "Abono"
+                ]
+            },
+            {
+                "text": "Silo",
+                "hints": [
+                    "Torre",
+                    "Guardar",
+                    "Grano"
+                ]
+            },
+            {
+                "text": "Heno",
+                "hints": [
+                    "Hierba seca",
+                    "Paca",
+                    "Comida"
+                ]
+            },
+            {
+                "text": "Veterinario",
+                "hints": [
+                    "Animales",
+                    "Médico",
+                    "Salud"
+                ]
+            },
+            {
+                "text": "Ordeñar",
+                "hints": [
+                    "Leche",
+                    "Vaca",
+                    "Sacar"
+                ]
+            },
+            {
+                "text": "Apicultura",
+                "hints": [
+                    "Abejas",
+                    "Miel",
+                    "Colmena"
+                ]
+            },
+            {
+                "text": "Fruta",
+                "hints": [
+                    "Árbol",
+                    "Comer",
+                    "Dulce"
+                ]
+            },
+            {
+                "text": "Hortaliza",
+                "hints": [
+                    "Verdura",
+                    "Huerto",
+                    "Sana"
+                ]
+            },
+            {
+                "text": "Regadera",
+                "hints": [
+                    "Agua",
+                    "Mano",
+                    "Plantas"
+                ]
+            },
+            {
+                "text": "Poda",
+                "hints": [
+                    "Cortar",
+                    "Ramas",
+                    "Tijeras"
+                ]
+            },
+            {
+                "text": "Injerto",
+                "hints": [
+                    "Unir",
+                    "Planta",
+                    "Rama"
+                ]
+            },
+            {
+                "text": "Agrónomo",
+                "hints": [
+                    "Experto",
+                    "Campo",
+                    "Estudio"
+                ]
+            },
+            {
+                "text": "Espiga",
+                "hints": [
+                    "Trigo",
+                    "Grano",
+                    "Punta"
+                ]
+            }
+        ]
+    },
+    {
+        "id": 31,
+        "name": "Ciencias Medioambientales",
+        "words": [
+            {
+                "text": "Reciclaje",
+                "hints": [
+                    "Basura",
+                    "Colores",
+                    "Reutilizar"
+                ]
+            },
+            {
+                "text": "Contaminación",
+                "hints": [
+                    "Humo",
+                    "Sucio",
+                    "Malo"
+                ]
+            },
+            {
+                "text": "Cambio climático",
+                "hints": [
+                    "Calor",
+                    "Global",
+                    "Problema"
+                ]
+            },
+            {
+                "text": "Capa de ozono",
+                "hints": [
+                    "Agujero",
+                    "Protección",
+                    "Sol"
+                ]
+            },
+            {
+                "text": "Energía renovable",
+                "hints": [
+                    "Limpia",
+                    "Sol",
+                    "Viento"
+                ]
+            },
+            {
+                "text": "Panel solar",
+                "hints": [
+                    "Sol",
+                    "Tejado",
+                    "Electricidad"
+                ]
+            },
+            {
+                "text": "Eólico",
+                "hints": [
+                    "Viento",
+                    "Molino",
+                    "Energía"
+                ]
+            },
+            {
+                "text": "Bosque",
+                "hints": [
+                    "Árboles",
+                    "Verde",
+                    "Pulmón"
+                ]
+            },
+            {
+                "text": "Selva",
+                "hints": [
+                    "Amazonas",
+                    "Lluvia",
+                    "Animales"
+                ]
+            },
+            {
+                "text": "Océano",
+                "hints": [
+                    "Agua",
+                    "Mar",
+                    "Azul"
+                ]
+            },
+            {
+                "text": "Biodiversidad",
+                "hints": [
+                    "Vida",
+                    "Variedad",
+                    "Especies"
+                ]
+            },
+            {
+                "text": "Extinción",
+                "hints": [
+                    "Desaparecer",
+                    "Fin",
+                    "Dinosaurios"
+                ]
+            },
+            {
+                "text": "Ecosistema",
+                "hints": [
+                    "Equilibrio",
+                    "Naturaleza",
+                    "Hábitat"
+                ]
+            },
+            {
+                "text": "Sostenible",
+                "hints": [
+                    "Duradero",
+                    "Bueno",
+                    "Futuro"
+                ]
+            },
+            {
+                "text": "Plástico",
+                "hints": [
+                    "Envase",
+                    "Contamina",
+                    "Mar"
+                ]
+            },
+            {
+                "text": "Residuo",
+                "hints": [
+                    "Basura",
+                    "Sobra",
+                    "Tirar"
+                ]
+            },
+            {
+                "text": "Vertedero",
+                "hints": [
+                    "Basura",
+                    "Montaña",
+                    "Olor"
+                ]
+            },
+            {
+                "text": "Atmósfera",
+                "hints": [
+                    "Aire",
+                    "Cielo",
+                    "Capas"
+                ]
+            },
+            {
+                "text": "Efecto invernadero",
+                "hints": [
+                    "Calor",
+                    "Gases",
+                    "Atrapar"
+                ]
+            },
+            {
+                "text": "Sequía",
+                "hints": [
+                    "Sin agua",
+                    "Seco",
+                    "Desierto"
+                ]
+            },
+            {
+                "text": "Inundación",
+                "hints": [
+                    "Mucha agua",
+                    "Desastre",
+                    "Lluvia"
+                ]
+            },
+            {
+                "text": "Deshielo",
+                "hints": [
+                    "Polos",
+                    "Calor",
+                    "Agua"
+                ]
+            },
+            {
+                "text": "Conservación",
+                "hints": [
+                    "Proteger",
+                    "Cuidar",
+                    "Naturaleza"
+                ]
+            },
+            {
+                "text": "Parque Natural",
+                "hints": [
+                    "Protegido",
+                    "Visita",
+                    "Animales"
+                ]
+            },
+            {
+                "text": "Fauna",
+                "hints": [
+                    "Animales",
+                    "Región",
+                    "Vida"
+                ]
+            },
+            {
+                "text": "Flora",
+                "hints": [
+                    "Plantas",
+                    "Flores",
+                    "Vegetación"
+                ]
+            },
+            {
+                "text": "Ecología",
+                "hints": [
+                    "Ciencia",
+                    "Verde",
+                    "Estudio"
+                ]
+            },
+            {
+                "text": "Deforestación",
+                "hints": [
+                    "Cortar",
+                    "Árboles",
+                    "Madera"
+                ]
+            },
+            {
+                "text": "Huella de carbono",
+                "hints": [
+                    "CO2",
+                    "Impacto",
+                    "Rastro"
+                ]
+            },
+            {
+                "text": "Compostaje",
+                "hints": [
+                    "Orgánico",
+                    "Abono",
+                    "Basura"
+                ]
+            }
+        ]
     }
 ]
