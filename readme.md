@@ -147,6 +147,7 @@ Copia de seguridad rápida:
 ```bash
 cp juego-impostor/history.json juego-impostor/history.bak
 cp juego-impostor/aliases.json juego-impostor/aliases.bak
+cp juego-impostor/aliases.json juego-impostor/themes.bak
 ```
 Haz el pull:
 
@@ -159,4 +160,13 @@ El Truco Final en el Servidor: Si al hacer git pull te dice que hay conflicto o 
 # Si git los borró:
 mv juego-impostor/history.bak juego-impostor/history.json
 mv juego-impostor/aliases.bak juego-impostor/aliases.json
+mv juego-impostor/aliases.bak juego-impostor/themes.json
+```
+
+En local
+```bash
+git rm --cached juego-impostor/history.json
+git rm --cached juego-impostor/aliases.json
+# Si también modificas temas en el servidor y quieres conservarlos:
+git rm --cached juego-impostor/themes.json
 ```
