@@ -51,18 +51,35 @@
         .h-type-tournament { border: 2px solid #f1c40f; box-shadow: 0 0 10px rgba(241, 196, 15, 0.2); }
         
         .h-header { padding: 10px 15px; background: rgba(0,0,0,0.2); display: flex; justify-content: space-between; align-items: center; }
-        
-        /* Solo los headers "toggleables" (torneos) tendrán cursor de mano */
         .h-header.toggleable { cursor: pointer; }
         .h-header.toggleable:hover { background: rgba(255,255,255,0.05); }
 
         .h-body { padding: 15px; display: none; border-top: 1px solid rgba(255,255,255,0.05); }
-        .h-body.expanded { display: block; } /* Clase para mostrar */
+        .h-body.expanded { display: block; }
         
         .tourney-badge { background: #f1c40f; color: #2c3e50; padding: 2px 8px; border-radius: 4px; font-weight: bold; font-size: 0.8em; text-transform: uppercase; }
         .game-row { display: flex; justify-content: space-between; padding: 5px 0; border-bottom: 1px dotted rgba(255,255,255,0.1); font-size: 0.9em; }
         .win-imp-text { color: #e74c3c; }
         .win-cit-text { color: #2ecc71; }
+
+        /* --- NUEVO: BARRA FIJA INFERIOR --- */
+        .fixed-bottom-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: var(--bg); /* Usa el color de fondo del tema */
+            padding: 15px;
+            box-shadow: 0 -5px 15px rgba(0,0,0,0.5); /* Sombra para separar */
+            display: flex;
+            justify-content: center;
+            z-index: 1000;
+        }
+        
+        /* Espacio extra al final de la lista para que el botón no tape nada */
+        #history-list {
+            padding-bottom: 100px; 
+        }
     </style>
 </head>
 <body>
@@ -144,7 +161,10 @@
     <div id="screen-history" class="container hidden">
         <h2>📜 Historial</h2>
         <div id="history-list"></div>
-        <button class="btn-secondary" onclick="goToHome()">🏠 Volver</button>
+        
+        <div class="fixed-bottom-bar">
+            <button class="btn-secondary" style="margin:0; width:100%; max-width:500px;" onclick="goToHome()">🏠 VOLVER AL INICIO</button>
+        </div>
     </div>
 
     <div id="screen-create-theme" class="container hidden">
@@ -322,7 +342,7 @@
             loadAndShowHistory();
         }
 
-        // --- HISTORIAL (MODIFICADO: Tochos expandidos, Normales fijos) ---
+        // --- HISTORIAL (MODIFICADO) ---
         async function loadAndShowHistory() {
             try {
                 const res = await fetch('/api/history');
@@ -335,7 +355,7 @@
                     container.innerHTML = history.map((record, index) => {
                         const date = new Date(record.date || Date.now()).toLocaleDateString();
                         
-                        // OPCIÓN A: TORNEO COMPLETO (Se puede comprimir, empieza expandido)
+                        // TORNEO (Con opción de comprimir)
                         if (record.type === 'tournament') {
                             let winnerName = "Empate";
                             let maxScore = -1;
@@ -348,7 +368,8 @@
                                         <span class="tourney-badge">🏆 ${record.name}</span>
                                         <div style="font-size:0.8em; color:#bdc3c7; margin-top:5px;">📅 ${date} • Ganador: <strong>${winnerName}</strong></div>
                                     </div>
-                                    <span style="font-size:1.5em;">⌃</span> </div>
+                                    <span style="font-size:1.5em;">⌃</span>
+                                </div>
                                 <div class="h-body expanded" id="h-body-${index}">
                                     <p style="color:#f1c40f; border-bottom:1px solid #555;">Clasificación Final:</p>
                                     ${Object.entries(record.scores).sort((a,b)=>b[1]-a[1]).map(([n,s]) => `
@@ -362,7 +383,7 @@
                             </div>`;
                         }
                         
-                        // OPCIÓN B: PARTIDA SUELTA (NO se puede comprimir, siempre fija)
+                        // PARTIDA SUELTA (Siempre abierta, sin toggle)
                         else {
                             const wTxt = record.winner === 'Impostor' ? '👑 Ganó Impostor' : '🛡️ Ganaron Ciudadanos';
                             const wClass = record.winner === 'Impostor' ? 'win-imp-text' : 'win-cit-text';
