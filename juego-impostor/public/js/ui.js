@@ -457,3 +457,48 @@ function cancelMergeMode() {
     document.getElementById('merge-tool-bar').classList.add('hidden');
     loadAndShowStats();
 }
+
+// --- MODO ADMIN SECRETO ---
+let secretClicks = 0;
+let secretTimer;
+
+function triggerSecretAdmin() {
+    // 1. Contar clics
+    secretClicks++;
+    
+    // 2. Reiniciar contador si pasa 1 segundo sin clics
+    clearTimeout(secretTimer);
+    secretTimer = setTimeout(() => { secretClicks = 0; }, 1000);
+
+    // 3. Si llega a 5 clics... ¡BINGO!
+    if (secretClicks === 5) {
+        secretClicks = 0;
+        const pwd = prompt("🕵️‍♂️ ACCESO ADMIN DETECTADO\n\nIntroduce la contraseña para BORRAR EL HISTORIAL:");
+        
+        if (pwd) {
+            deleteHistory(pwd);
+        }
+    }
+}
+
+async function deleteHistory(password) {
+    try {
+        const res = await fetch('/api/history', {
+            method: 'DELETE',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ password: password })
+        });
+        
+        const data = await res.json();
+        
+        if (data.success) {
+            alert("✅ Historial borrado correctamente.");
+            location.reload(); // Recargar para ver los cambios
+        } else {
+            alert(data.error || "❌ Error desconocido");
+        }
+    } catch (e) {
+        console.error(e);
+        alert("❌ Error de conexión con el servidor");
+    }
+}

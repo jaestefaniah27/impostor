@@ -2,6 +2,7 @@ const express = require('express');
 const fs = require('fs');
 const app = express();
 const PORT = 3000;
+const ADMIN_PASSWORD = "adminadmin"; // <--- ¡CAMBIA ESTO POR TU CONTRASEÑA SECRETA!
 
 app.use(express.static('public'));
 app.use(express.json());
@@ -150,4 +151,21 @@ app.post('/api/themes', (req, res) => {
     fs.writeFileSync(DB_FILE, JSON.stringify(themes, null, 2));
     res.json({ success: true });
 });
+// --- ZONA ADMIN ---
+app.delete('/api/history', (req, res) => {
+    const { password } = req.body;
+    if (password !== ADMIN_PASSWORD) {
+        return res.status(403).json({ success: false, error: "Contraseña incorrecta 🚫" });
+    }
+
+    // Vaciar el historial
+    fs.writeFileSync(HISTORY_FILE, JSON.stringify([]));
+
+    // Opcional: También podrías querer resetear alias si quisieras
+    // fs.writeFileSync(ALIAS_FILE, JSON.stringify({}));
+
+    console.log("⚠️ HISTORIAL BORRADO POR ADMIN");
+    res.json({ success: true });
+});
+
 app.listen(PORT, () => { console.log(`Servidor listo en http://localhost:${PORT}`); });
