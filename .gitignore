@@ -1,4 +1,5 @@
 /juego-impostor/node_modules
-/juego-impostor/history.json
-/juego-impostor/themes.json
-/juego-impostor/aliases.json
+# Ignorar datos generados en el servidor
+juego-impostor/history.json
+juego-impostor/aliases.json
+juego-impostor/themes.json
