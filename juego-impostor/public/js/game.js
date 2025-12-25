@@ -134,57 +134,87 @@ function getWeightedRandomPlayerIndex(players, currentAssignments, pastImpostors
 function startGameSetup() {
     if(selectedThemesIds.length === 0) return alert("Elige al menos un tema.");
     
-    // Preparar partida: mezclar palabras de los temas elegidos
-    let selectionPool = []; 
-    themes.forEach(t => { 
-        if(selectedThemesIds.includes(t.id)) {
-            const themeSuggs = (t.suggestions && t.suggestions.length > 0) ? t.suggestions : defaultSuggestions;
-            t.words.forEach(w => selectionPool.push({ wordData: w, suggestions: themeSuggs }));
-        } 
-    });
+    const activeThemes = themes.filter(t => selectedThemesIds.includes(t.id));
+    if(activeThemes.length === 0) return alert("Error cargando temas.");
 
-    if(selectionPool.length === 0) return alert("Los temas seleccionados no tienen palabras.");
+    // --- LÓGICA ANTI-REPETICIÓN ---
+    // 1. Juntamos historial histórico + torneo actual
+    const fullHistory = [...(gameHistory || []), ...tournamentGames];
     
-    // Elegir palabra
-    const selection = selectionPool[Math.floor(Math.random() * selectionPool.length)];
-    gameData.secretWord = selection.wordData.text;
-    gameData.currentSuggestions = selection.suggestions;
-    gameData.startTime = null; // Reset tiempo para nueva partida
-    gameData.lastWinner = null; // Reiniciamos el candado de duplicados
-    // Elegir pista
-    const sel = selection.wordData;
+    // 2. Set de palabras prohibidas (ignorando mayúsculas)
+    const usedWordsSet = new Set(fullHistory.map(h => h.word ? h.word.toLowerCase().trim() : ""));
+
+    // 3. Ordenar temas por "menos usado recientemente"
+    const themeLastUsed = {}; 
+    activeThemes.forEach(t => themeLastUsed[t.id] = 0);
+
+    fullHistory.forEach(record => {
+        const recDate = new Date(record.date || 0).getTime();
+        activeThemes.forEach(t => {
+            if (t.words.some(w => w.text.toLowerCase().trim() === (record.word||"").toLowerCase().trim())) {
+                if (recDate > themeLastUsed[t.id]) themeLastUsed[t.id] = recDate;
+            }
+        });
+    });
+    activeThemes.sort((a, b) => themeLastUsed[a.id] - themeLastUsed[b.id]);
+
+    // 4. Elegir palabra NO usada del tema prioritario
+    let finalSelection = null;
+    for (let theme of activeThemes) {
+        const availableWords = theme.words.filter(w => !usedWordsSet.has(w.text.toLowerCase().trim()));
+        if (availableWords.length > 0) {
+            const randomWord = availableWords[Math.floor(Math.random() * availableWords.length)];
+            finalSelection = {
+                wordData: randomWord,
+                suggestions: (theme.suggestions && theme.suggestions.length > 0) ? theme.suggestions : defaultSuggestions
+            };
+            break; 
+        }
+    }
+
+    // Fallback: Si todas están usadas, repetimos (pero del tema menos usado)
+    if (!finalSelection) {
+        const fallbackTheme = activeThemes[0];
+        const randomWord = fallbackTheme.words[Math.floor(Math.random() * fallbackTheme.words.length)];
+        finalSelection = {
+            wordData: randomWord,
+            suggestions: (fallbackTheme.suggestions && fallbackTheme.suggestions.length > 0) ? fallbackTheme.suggestions : defaultSuggestions
+        };
+    }
+    // -----------------------------
+
+    gameData.secretWord = finalSelection.wordData.text;
+    gameData.currentSuggestions = finalSelection.suggestions;
+    gameData.startTime = null; 
+    gameData.lastWinner = null; 
+
+    // Pista
     const hintsOn = document.getElementById('hints-toggle').checked;
+    const wData = finalSelection.wordData;
     gameData.secretHint = hintsOn 
-        ? (Array.isArray(sel.hints) ? sel.hints : (sel.hint ? [sel.hint] : ["Sin pista"]))[Math.floor(Math.random()*(Array.isArray(sel.hints)?sel.hints.length:1))] 
+        ? (Array.isArray(wData.hints) ? wData.hints : (wData.hint ? [wData.hint] : ["Sin pista"]))[Math.floor(Math.random()*(Array.isArray(wData.hints)?wData.hints.length:1))] 
         : null;
     
-    // Asignar roles
+    // Roles (con tu lógica de peso ponderado para impostores)
     let impC = parseInt(document.getElementById('impostor-count').value); 
     if(impC >= players.length) impC = players.length - 1;
     gameData.totalImpostors = impC; 
     
     let assign = new Array(players.length).fill(null); 
     let p = 0;
-    
-    // Asignar Impostores (CON PROBABILIDAD DINÁMICA)
-    // Aseguramos que existe el array de historial
     if (!gameData.pastImpostors) gameData.pastImpostors = [];
 
     while(p < impC) { 
-        // USAMOS LA NUEVA FUNCIÓN PONDERADA EN LUGAR DE RANDOM PURO
         let r = getWeightedRandomPlayerIndex(players, assign, gameData.pastImpostors);
-        
         if(r !== -1 && !assign[r]) { 
             assign[r] = { isImpostor: true, isAccomplice: false, name: players[r], alive: true }; 
             p++; 
         } else {
-            // Fallback de seguridad por si falla el algoritmo (raro)
             let backup = Math.floor(Math.random()*players.length);
             if(!assign[backup]) { assign[backup]={isImpostor:true, isAccomplice:false, name:players[backup], alive:true}; p++; }
         }
     }
     
-    // Asignar Cómplice
     const accOn = document.getElementById('accomplice-toggle').checked;
     if(accOn && (players.length - impC) >= 2) {
         let assigned = false;
@@ -194,13 +224,11 @@ function startGameSetup() {
         }
     }
     
-    // Asignar Ciudadanos
     for(let i=0; i<players.length; i++) if(!assign[i]) assign[i]={isImpostor:false, isAccomplice:false, name:players[i], alive:true};
     
     gameData.assignments = assign; 
     gameData.currentIndex = 0; 
     
-    // Guardar estado inicial y mostrar
     saveGameState('screen-pass-device');
     showPassScreen();
 }

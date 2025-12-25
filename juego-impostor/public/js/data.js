@@ -18,6 +18,7 @@ let gameData = {
     lastWinner: null,
     pastImpostors: []
 };
+let gameHistory = []; // Almacén para todo el historial de palabras usadas
 let timerInterval;
 let timeRemaining = 600;
 let editingThemeId = null; // Para el editor de temas
@@ -57,7 +58,9 @@ window.onload = async () => {
     try {
         // Cargas de datos
         loadGameData();      
-        await fetchThemes();       
+        await fetchThemes();   
+        
+        await fetchGameHistory();
         
         restoreTournamentState();
         restoreGameState();
@@ -223,6 +226,16 @@ function clearGameState() {
 }
 
 // --- API FETCHES ---
+async function fetchGameHistory() {
+    try {
+        const r = await fetch('/api/history');
+        gameHistory = await r.json();
+    } catch(e) { 
+        console.error("Error cargando historial:", e);
+        gameHistory = [];
+    }
+}
+
 async function fetchThemes() {
     try {
         const r = await fetch('/api/themes');
@@ -274,7 +287,22 @@ async function saveThemeFromUI() {
 }
 
 async function saveGameRecordToHistory(record) {
-    await fetch('/api/history', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(record)});
+    try {
+        // 1. Guardar en el servidor
+        await fetch('/api/history', { 
+            method: 'POST', 
+            headers: { 'Content-Type': 'application/json' }, 
+            body: JSON.stringify(record)
+        });
+
+        // 2. IMPORTANTE: Guardar en memoria local también
+        // Así, si juegas otra ronda seguida sin recargar, el juego sabe que esta palabra ya salió.
+        if (!gameHistory) gameHistory = [];
+        gameHistory.push(record);
+
+    } catch (e) {
+        console.error("Error al guardar historial:", e);
+    }
 }
 
 async function fetchStats() {
