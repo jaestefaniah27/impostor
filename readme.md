@@ -170,3 +170,11 @@ git rm --cached juego-impostor/aliases.json
 # Si también modificas temas en el servidor y quieres conservarlos:
 git rm --cached juego-impostor/themes.json
 ```
+Comando de Actualización Rápida sin perder historial:
+```bash
+cp juego-impostor/history.json juego-impostor/history.bak
+git stash
+git pull
+mv juego-impostor/history.bak juego-impostor/history.json
+pm2 restart impostor
+```
