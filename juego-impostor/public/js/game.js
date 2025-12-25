@@ -359,5 +359,19 @@ function renderScoreboard() {
         return `<tr style="${i===0?'background:rgba(241,196,15,0.2)':''}"><td>#${i+1} <span style="font-size:1.2em">${av}</span> ${name}</td><td class="score-val">${sc}</td></tr>`;
     }).join('');
 }
-
+// --- FUNCIÓN PARA CANCELAR PARTIDA ---
+function cancelGame() {
+    if (confirm("¿⛔️ Cancelar esta partida?\n\nNo se guardará en el historial ni afectará al torneo.")) {
+        // 1. Parar el reloj
+        clearInterval(timerInterval);
+        
+        // 2. Limpiar datos de la partida actual (resetear ganador para el candado)
+        gameData.lastWinner = null;
+        gameData.startTime = null;
+        
+        // 3. Salir al menú (esto borra el estado temporal 'impostorGameState')
+        // Nota: Si hay un torneo activo, NO se borra, sigue ahí esperándote.
+        exitGameToHome();
+    }
+}
 function restartGame(){ startGameSetup(); }

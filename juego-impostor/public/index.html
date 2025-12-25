@@ -98,7 +98,7 @@
             </p>
         
 
-            <small>v1.8 • El Impostor - Jorge Estefanía</small>
+            <small>v1.9 • El Impostor - Jorge Estefanía</small>
         </footer>
     </div>
 
@@ -150,26 +150,39 @@
     </div>
 
     <div id="screen-pass-device" class="container hidden full-height">
-        <div class="card" style="text-align: center; padding: 40px 20px;">
-            <div id="pass-player-avatar" style="font-size: 4em; margin-bottom: 10px;">👤</div>
-            <h3 style="color: #bdc3c7; margin: 0;">Pásale el móvil a:</h3>
-            <h1 id="pass-player-name" style="font-size: 2.5em; margin: 15px 0; color: var(--accent);">Nombre</h1>
-            <p style="margin-bottom: 30px; opacity: 0.7;">No mires si no eres tú</p>
-            <button class="btn-main" onclick="confirmIdentity()">¡SOY YO, VER MI CARTA!</button>
+        
+        <div style="flex: 1; display: flex; align-items: center; justify-content: center; width: 100%;">
+            <div class="card" style="text-align: center; padding: 40px 20px; width: 100%; max-width: 400px;">
+                <div id="pass-player-avatar" style="font-size: 4em; margin-bottom: 10px;">👤</div>
+                <h3 style="color: #bdc3c7; margin: 0;">Pásale el móvil a:</h3>
+                <h1 id="pass-player-name" style="font-size: 2.5em; margin: 15px 0; color: var(--accent);">Nombre</h1>
+                <p style="margin-bottom: 30px; opacity: 0.7;">No mires si no eres tú</p>
+                <button class="btn-main" onclick="confirmIdentity()">¡SOY YO, VER MI CARTA!</button>
+            </div>
         </div>
+
+        <button class="btn-text" onclick="cancelGame()" style="margin-bottom: 20px; color: #bdc3c7; opacity: 0.8;">Cancelar partida</button>
     </div>
 
     <div id="screen-reveal" class="container hidden full-height">
-        <h2 id="current-player-display">Nombre</h2>
-        <p class="instruction">Mantén pulsada la carta</p>
-        <div class="magic-card-container" id="magic-card">
-            <div class="card-content">
-                <div id="secret-word" class="secret-text">...</div>
-                <div id="secret-role" class="role-subtext"></div>
+        
+        <div style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%;">
+            <h2 id="current-player-display" style="margin-top: 0;">Nombre</h2>
+            <p class="instruction" style="margin-bottom: 20px;">Mantén pulsada la carta</p>
+            
+            <div class="magic-card-container" id="magic-card">
+                <div class="card-content">
+                    <div id="secret-word" class="secret-text">...</div>
+                    <div id="secret-role" class="role-subtext"></div>
+                </div>
+                <div class="card-cover"><span>🤫 MANTENER</span></div>
             </div>
-            <div class="card-cover"><span>🤫 MANTENER</span></div>
         </div>
-        <button id="next-btn" class="btn-main bottom-btn" onclick="nextPlayer()">SIGUIENTE</button>
+
+        <div style="width: 100%; margin-bottom: 20px; display: flex; flex-direction: column; gap: 45px;">
+            <button id="next-btn" class="btn-main" onclick="nextPlayer()" style="margin: 0;">SIGUIENTE</button>
+            <button class="btn-text" onclick="cancelGame()" style="color: #bdc3c7; opacity: 0.8;">Cancelar partida</button>
+        </div>
     </div>
 
     <div id="screen-active" class="container hidden">
@@ -182,9 +195,11 @@
         <button class="btn-secondary" onclick="showSuggestion()" style="margin-bottom: 20px;">❓ ¿Qué pregunto? (Sugerencia)</button>
         <h3>Votar Expulsión</h3>
         <div id="voting-list" class="voting-grid"></div>
-        <button class="btn-secondary bottom-btn" onclick="citizensGiveUp()">RENDIRSE (Gana Impostor)</button>
+        <div style="width: 100%; margin-bottom: 20px; display: flex; flex-direction: column; gap: 45px;">
+            <button class="btn-secondary bottom-btn" onclick="citizensGiveUp()">RENDIRSE (Gana Impostor)</button>
+            <button class="btn-text" onclick="cancelGame()" style="margin-top: 20px; color: #bdc3c7;">Cancelar partida</button>        
+        </div>
     </div>
-
     <div id="screen-result" class="container hidden full-height">
         <h1 id="result-title">...</h1>
         <div id="result-icon" style="font-size: 5em; margin: 20px;"></div>

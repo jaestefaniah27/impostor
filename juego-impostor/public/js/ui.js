@@ -259,6 +259,14 @@ function updateTournamentBanner() {
 }
 
 // --- HISTORIAL UI ---
+// Función auxiliar para formatear tiempo (ej: "3m 45s")
+function formatDuration(seconds) {
+    if (!seconds && seconds !== 0) return "-";
+    const m = Math.floor(seconds / 60);
+    const s = seconds % 60;
+    return `${m}m ${s}s`;
+}
+// --- HISTORIAL UI CON TIEMPOS ---
 async function loadAndShowHistory() {
     try {
         const res = await fetch('/api/history');
@@ -272,39 +280,57 @@ async function loadAndShowHistory() {
                 const date = new Date(record.date || Date.now()).toLocaleDateString();
                 
                 if (record.type === 'tournament') {
+                    // Lógica Torneo
                     let winnerName = "Empate";
                     let maxScore = -1;
-                    Object.entries(record.scores).forEach(([name, score]) => { if (score > maxScore) { maxScore = score; winnerName = name; } });
+                    if(record.scores) {
+                        Object.entries(record.scores).forEach(([name, score]) => { if (score > maxScore) { maxScore = score; winnerName = name; } });
+                    }
+                    
+                    // Calcular duración total del torneo sumando partidas
+                    let totalSeconds = 0;
+                    if(record.games) record.games.forEach(g => totalSeconds += (g.duration || 0));
+                    const totalTimeStr = formatDuration(totalSeconds);
 
                     return `
                     <div class="history-card h-type-tournament">
                         <div class="h-header toggleable" onclick="toggleHistoryDetails(${index})">
                             <div>
                                 <span class="tourney-badge">🏆 ${record.name}</span>
-                                <div style="font-size:0.8em; color:#bdc3c7; margin-top:5px;">📅 ${date} • Ganador: <strong>${winnerName}</strong></div>
+                                <div style="font-size:0.8em; color:#bdc3c7; margin-top:5px;">
+                                    📅 ${date} • ⏱️ ${totalTimeStr} • Ganador: <strong>${winnerName}</strong>
+                                </div>
                             </div>
                             <span style="font-size:1.5em;">⌃</span>
                         </div>
                         <div class="h-body expanded" id="h-body-${index}">
                             <p style="color:#f1c40f; border-bottom:1px solid #555;">Clasificación Final:</p>
-                            ${Object.entries(record.scores).sort((a,b)=>b[1]-a[1]).map(([n,s]) => `
+                            ${record.scores ? Object.entries(record.scores).sort((a,b)=>b[1]-a[1]).map(([n,s]) => `
                                 <div style="display:flex; justify-content:space-between; font-size:0.9em;"><span>${n}</span> <span>${s} pts</span></div>
-                            `).join('')}
-                            <p style="color:#bdc3c7; border-bottom:1px solid #555; margin-top:10px;">Partidas (${record.games.length}):</p>
-                            ${record.games.map(g => `
-                                <div class="game-row"><span>${g.word}</span><span class="${g.winner==='Impostor'?'win-imp-text':'win-cit-text'}">${g.winner==='Impostor'?'Ganó Imp.':'Ganan Ciu.'}</span></div>
-                            `).join('')}
+                            `).join('') : ''}
+                            
+                            <p style="color:#bdc3c7; border-bottom:1px solid #555; margin-top:10px;">Partidas (${record.games ? record.games.length : 0}):</p>
+                            ${record.games ? record.games.map(g => `
+                                <div class="game-row">
+                                    <span>${g.word} <small style="opacity:0.6">(${formatDuration(g.duration)})</small></span>
+                                    <span class="${g.winner==='Impostor'?'win-imp-text':'win-cit-text'}">${g.winner==='Impostor'?'Ganó Imp.':'Ganan Ciu.'}</span>
+                                </div>
+                            `).join('') : ''}
                         </div>
                     </div>`;
                 } else {
+                    // Lógica Partida Individual
                     const wTxt = record.winner === 'Impostor' ? '👑 Ganó Impostor' : '🛡️ Ganaron Ciudadanos';
                     const wClass = record.winner === 'Impostor' ? 'win-imp-text' : 'win-cit-text';
+                    const timeStr = formatDuration(record.duration); // Duración individual
+
                     return `
                     <div class="history-card h-type-single">
                         <div class="h-header">
                             <div>
                                 <strong>${record.word}</strong> <span style="font-size:0.8em; opacity:0.7">(${date})</span>
-                                <div class="${wClass}" style="font-size:0.9em;">${wTxt}</div>
+                                <div style="font-size:0.8em; color:#bdc3c7;">⏱️ ${timeStr}</div>
+                                <div class="${wClass}" style="font-size:0.9em; margin-top:2px;">${wTxt}</div>
                             </div>
                         </div>
                         <div class="h-body expanded" id="h-body-${index}">
