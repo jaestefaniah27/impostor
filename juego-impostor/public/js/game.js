@@ -86,6 +86,50 @@ async function finishTournament() {
 }
 
 // --- LÓGICA DE JUEGO ---
+// --- LÓGICA DE SELECCIÓN PONDERADA (Anti-repetición) ---
+function getWeightedRandomPlayerIndex(players, currentAssignments, pastImpostors) {
+    const N = players.length;
+    let candidates = [];
+    let totalWeight = 0;
+
+    // 1. Calcular peso para cada jugador
+    for (let i = 0; i < N; i++) {
+        // Si ya tiene rol asignado en esta ronda, saltar
+        if (currentAssignments[i]) continue;
+
+        const playerName = players[i];
+        let weight = 100; // Peso base (máxima probabilidad)
+
+        // Buscar cuándo fue impostor por última vez
+        // index 0 = partida anterior, 1 = hace 2 partidas...
+        const lastIndex = pastImpostors.indexOf(playerName);
+
+        if (lastIndex === -1) {
+            // Si NO está en la memoria reciente, le damos mas peso (140)
+            // Esto fuerza a que el sistema prefiera a gente nueva antes que repetir
+            weight = 140; 
+        } else {
+            // Si ESTÁ en memoria, aplicamos el enfriamiento (de 5 a 100)
+            const recovery = lastIndex / (pastImpostors.length || 1); 
+            weight = 25 + Math.floor(75 * recovery);
+        }
+
+        candidates.push({ index: i, weight: weight });
+        totalWeight += weight;
+    }
+
+    // 2. Selección aleatoria basada en pesos (Ruleta)
+    let randomValue = Math.random() * totalWeight;
+    for (let candidate of candidates) {
+        randomValue -= candidate.weight;
+        if (randomValue <= 0) {
+            return candidate.index;
+        }
+    }
+
+    // Fallback por seguridad (devuelve el último válido)
+    return candidates.length > 0 ? candidates[candidates.length - 1].index : -1;
+}
 
 function startGameSetup() {
     if(selectedThemesIds.length === 0) return alert("Elige al menos un tema.");
@@ -122,10 +166,22 @@ function startGameSetup() {
     let assign = new Array(players.length).fill(null); 
     let p = 0;
     
-    // Asignar Impostores
+    // Asignar Impostores (CON PROBABILIDAD DINÁMICA)
+    // Aseguramos que existe el array de historial
+    if (!gameData.pastImpostors) gameData.pastImpostors = [];
+
     while(p < impC) { 
-        let r = Math.floor(Math.random()*players.length); 
-        if(!assign[r]) { assign[r]={isImpostor:true, isAccomplice:false, name:players[r], alive:true}; p++; } 
+        // USAMOS LA NUEVA FUNCIÓN PONDERADA EN LUGAR DE RANDOM PURO
+        let r = getWeightedRandomPlayerIndex(players, assign, gameData.pastImpostors);
+        
+        if(r !== -1 && !assign[r]) { 
+            assign[r] = { isImpostor: true, isAccomplice: false, name: players[r], alive: true }; 
+            p++; 
+        } else {
+            // Fallback de seguridad por si falla el algoritmo (raro)
+            let backup = Math.floor(Math.random()*players.length);
+            if(!assign[backup]) { assign[backup]={isImpostor:true, isAccomplice:false, name:players[backup], alive:true}; p++; }
+        }
     }
     
     // Asignar Cómplice
@@ -300,6 +356,29 @@ function continueGame() {
 async function endGameWithWinner(winner) {
     if (gameData.lastWinner) return; // Candado
     gameData.lastWinner = winner;    // Bloqueo
+
+    if (!gameData.pastImpostors) gameData.pastImpostors = [];
+    
+    // Identificar impostores de esta partida
+    const currentImpostors = gameData.assignments
+        .filter(p => p.isImpostor)
+        .map(p => p.name);
+    
+    // Añadirlos AL PRINCIPIO de la lista (índice 0 = más reciente)
+    // Usamos un loop por si hay varios impostores
+    currentImpostors.forEach(impName => {
+        // Si ya estaba en la lista, lo quitamos de su posición vieja para ponerlo primero
+        const oldIdx = gameData.pastImpostors.indexOf(impName);
+        if (oldIdx !== -1) gameData.pastImpostors.splice(oldIdx, 1);
+        
+        gameData.pastImpostors.unshift(impName);
+    });
+
+    // Limitar el historial para no ocupar memoria infinita (guardamos el doble de jugadores)
+    const memoryLimit = Math.ceil(players.length * 1.2);
+    if (gameData.pastImpostors.length > memoryLimit) {
+        gameData.pastImpostors = gameData.pastImpostors.slice(0, memoryLimit);
+    }
 
     clearInterval(timerInterval);
     const durationSec = gameData.startTime ? Math.round((Date.now() - gameData.startTime) / 1000) : 0;    

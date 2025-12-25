@@ -6,7 +6,18 @@ let selectedThemesIds = [];
 
 // ESTADO DE JUEGO (Persistente)
 // Añadimos startTime para recuperar el tiempo real
-let gameData = { assignments: [], currentIndex: 0, secretWord: '', secretHint: '', currentSuggestions: [], impostorsCaught: 0, totalImpostors: 0, startTime: null };
+let gameData = { 
+    assignments: [], 
+    currentIndex: 0, 
+    secretWord: '', 
+    secretHint: '', 
+    currentSuggestions: [], 
+    impostorsCaught: 0, 
+    totalImpostors: 0, 
+    startTime: null,
+    lastWinner: null,
+    pastImpostors: []
+};
 let timerInterval;
 let timeRemaining = 600;
 let editingThemeId = null; // Para el editor de temas
