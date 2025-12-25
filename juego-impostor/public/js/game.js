@@ -45,34 +45,44 @@ function checkTournamentState() {
         if(box) box.classList.remove('hidden');
     }
 }
-
+// Variable de seguridad para evitar duplicados en torneos
+let isSavingTournament = false;
 async function finishTournament() {
+    // CANDADO: Si ya se está guardando, no hacemos nada
+    if (isSavingTournament) return;
+
     if (!confirm("¿Seguro que quieres terminar el torneo? Se guardará el historial y se borrarán los marcadores.")) return;
 
-    const tournamentRecord = {
-        type: 'tournament',
-        name: currentTournamentName,
-        date: new Date().toISOString(),
-        scores: tournamentScores,
-        games: tournamentGames,
-        players: Object.keys(tournamentScores)
-    };
+    // Activamos el candado
+    isSavingTournament = true;
 
-    // Guardar en historial del servidor
-    await saveGameRecordToHistory(tournamentRecord);
+    try {
+        const tournamentRecord = {
+            type: 'tournament',
+            name: currentTournamentName,
+            date: new Date().toISOString(),
+            scores: tournamentScores,
+            games: tournamentGames,
+            players: Object.keys(tournamentScores)
+        };
 
-    // Limpiar y borrar persistencia
-    isTournamentActive = false;
-    currentTournamentName = "";
-    tournamentScores = {};
-    tournamentGames = [];
-    saveTournamentState(); // Esto borrará el localStorage
+        await saveGameRecordToHistory(tournamentRecord);
 
-    // Actualizar visual
-    checkTournamentState();
+        isTournamentActive = false;
+        currentTournamentName = "";
+        tournamentScores = {};
+        tournamentGames = [];
+        saveTournamentState();
 
-    alert("🏆 Torneo finalizado y guardado.");
-    goToHome();
+        checkTournamentState();
+        alert("🏆 Torneo finalizado y guardado.");
+        goToHome();
+    } catch (e) {
+        console.error(e);
+    } finally {
+        // Liberamos el candado
+        isSavingTournament = false;
+    }
 }
 
 // --- LÓGICA DE JUEGO ---
@@ -96,7 +106,7 @@ function startGameSetup() {
     gameData.secretWord = selection.wordData.text;
     gameData.currentSuggestions = selection.suggestions;
     gameData.startTime = null; // Reset tiempo para nueva partida
-    
+    gameData.lastWinner = null; // Reiniciamos el candado de duplicados
     // Elegir pista
     const sel = selection.wordData;
     const hintsOn = document.getElementById('hints-toggle').checked;
@@ -288,6 +298,9 @@ function continueGame() {
 }
 
 async function endGameWithWinner(winner) {
+    if (gameData.lastWinner) return; // Candado
+    gameData.lastWinner = winner;    // Bloqueo
+
     clearInterval(timerInterval);
     const durationSec = gameData.startTime ? Math.round((Date.now() - gameData.startTime) / 1000) : 0;    
     const impostorObj = gameData.assignments.find(p => p.isImpostor);
@@ -331,9 +344,6 @@ async function endGameWithWinner(winner) {
     const imps = gameData.assignments.filter(p => p.isImpostor).map(p => `<strong>${p.name}</strong>`).join(', ');
     const accs = gameData.assignments.filter(p => p.isAccomplice).map(p => `<strong>${p.name}</strong>`).join(', ');
     rolesDiv.innerHTML = `<p style="color:#e74c3c">😈 Impostor: ${imps}</p>` + (accs ? `<p style="color:#9b59b6">🤝 Cómplice: ${accs}</p>` : '');
-
-    // CAMBIO IMPORTANTE: Guardamos el ganador en gameData
-    gameData.lastWinner = winner;
     
     saveGameState('screen-solution');
     showScreen('screen-solution');
