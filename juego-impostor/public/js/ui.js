@@ -341,7 +341,7 @@ async function loadAndShowHistory() {
                             </div>
                         </div>
                         <div class="h-body expanded" id="h-body-${index}">
-                            <p>😈 Impostor: ${record.impostor}</p>
+                            <p>🥷 Impostor: ${record.impostor}</p>
                             ${record.accomplice ? `<p>🤝 Cómplice: ${record.accomplice}</p>` : ''}
                             <p style="font-size:0.8em">Jugadores: ${record.players ? record.players.join(', ') : '?'}</p>
                             ${record.mode ? `<p style="font-size:0.7em; color:#7f8c8d">Modo: ${record.mode}</p>` : ''}
@@ -401,7 +401,7 @@ function renderStatsList(playersArr) {
                     <span class="badge" style="background:#2f3640;">${p.games} partidas</span>
                 </div>
                 <div style="font-size:0.85em; color:#bdc3c7; margin-top:5px;">
-                    <span>⏱️ ${Math.round(p.time/60)} min</span> • <span>😈 Wins: ${p.impWins}/${p.impTotal} (${winRate}%)</span>
+                    <span>⏱️ ${Math.round(p.time/60)} min</span> • <span>🥷 Wins: ${p.impWins}/${p.impTotal} (${winRate}%)</span>
                 </div>
             </div>
         </div>`;
@@ -545,6 +545,6 @@ function updateScoringText(isSiege) {
         desc.innerHTML = `<span style="color:#e74c3c">☠️ Alto riesgo</span> <small style="opacity:0.7">(Si el Impostor gana poco, se premia victoria rápida)</small>`;
     } else {
         // Texto para Modo Supervivencia
-        desc.innerHTML = `<span style="color:#2ecc71">⏳ Supervivencia</span> <small style="opacity:0.7">(Si el Impostor gana mucho, se premia más la supervivencia)</small>`;
+        desc.innerHTML = `<span style="color:#2ecc71">🥷 Supervivencia</span> <small style="opacity:0.7">(Si el Impostor gana mucho, se premia más la supervivencia)</small>`;
     }
 }

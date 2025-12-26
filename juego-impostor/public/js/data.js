@@ -7,17 +7,17 @@ let selectedThemesIds = [];
 const SCORING_MODES = {
     HUNTER: {
         id: 'HUNTER',
-        name: "🏹 Supervivencia (Impostor gana fácil)",
+        name: "🥷 Supervivencia (Impostor gana mucho)",
         desc: "Puntos bajos al inicio, suben exponencialmente. Obliga al impostor a sobrevivir.",
-        impostor: { guess_base: 200, guess_decay: 40, surv_base: 50, surv_multiplier: 5.0, surv_linear_step: 500 },
-        citizen: { base_pot: 150, flat_bonus: 50 }
+        impostor: { guess_base: 20, guess_decay: 4, surv_base: 5, surv_multiplier: 5.0, surv_linear_step: 50 },
+        citizen: { base_pot: 30, flat_bonus: 10 }
     },
     SIEGE: {
         id: 'SIEGE',
-        name: "🏰 Alto riesgo (Ciudadanos ganan fácil)",
+        name: "☠️ Alto riesgo (Impostor gana poco)",
         desc: "Puntos altos desde el inicio. Premia cualquier victoria del impostor.",
-        impostor: { guess_base: 400, guess_decay: 80, surv_base: 100, surv_multiplier: 5.0, surv_linear_step: 1000 },
-        citizen: { base_pot: 150, flat_bonus: 50 }
+        impostor: { guess_base: 80, guess_decay: 4, surv_base: 20, surv_multiplier: 5.0, surv_linear_step: 100 },
+        citizen: { base_pot: 15, flat_bonus: 5 }
     }
 };
 
@@ -214,9 +214,8 @@ function restoreGameState() {
         }
         if (state.scoringMode && SCORING_MODES[state.scoringMode]) {
             currentScoringMode = state.scoringMode;
-            // Actualizar selector visual si existe (lo crearemos luego en UI)
-            const selector = document.getElementById('scoring-mode-select');
-            if(selector) selector.value = currentScoringMode;
+            // Actualizar el interruptor visualmente
+            if(typeof initScoringUI === 'function') initScoringUI();
         }
     } catch (e) {
         console.error("Error restaurando partida", e);
@@ -246,7 +245,7 @@ function restoreEndGameUI(screen) {
     if (rolesDiv && gameData.assignments) {
         const imps = gameData.assignments.filter(p => p.isImpostor).map(p => `<strong>${p.name}</strong>`).join(', ');
         const accs = gameData.assignments.filter(p => p.isAccomplice).map(p => `<strong>${p.name}</strong>`).join(', ');
-        rolesDiv.innerHTML = `<p style="color:#e74c3c">😈 Impostor: ${imps}</p>` + (accs ? `<p style="color:#9b59b6">🤝 Cómplice: ${accs}</p>` : '');
+        rolesDiv.innerHTML = `<p style="color:#e74c3c">🥷 Impostor: ${imps}</p>` + (accs ? `<p style="color:#9b59b6">🤝 Cómplice: ${accs}</p>` : '');
     }
 
     // Restaurar tabla de torneo si hace falta

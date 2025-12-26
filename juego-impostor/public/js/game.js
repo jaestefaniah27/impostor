@@ -255,7 +255,7 @@ function setupCardForPlayer() {
     const rd = document.getElementById('secret-role');
     
     if(p.isImpostor) { 
-        wd.innerText="😈 IMPOSTOR"; wd.style.color="#e74c3c"; 
+        wd.innerText="🥷 IMPOSTOR"; wd.style.color="#e74c3c"; 
         rd.innerHTML=gameData.secretHint?`Pista: <strong style='color:#f1c40f'>${gameData.secretHint}</strong>`:"Sin pista"; 
     } else if(p.isAccomplice) { 
         wd.innerText=gameData.secretWord; wd.style.color="#9b59b6"; 
@@ -516,7 +516,7 @@ async function endGameWithWinner(winner) {
     const rolesDiv = document.getElementById('roles-reveal');
     const imps = gameData.assignments.filter(p => p.isImpostor).map(p => `<strong>${p.name}</strong>`).join(', ');
     const accs = gameData.assignments.filter(p => p.isAccomplice).map(p => `<strong>${p.name}</strong>`).join(', ');
-    rolesDiv.innerHTML = `<p style="color:#e74c3c">😈 Impostor: ${imps}</p>` + (accs ? `<p style="color:#9b59b6">🤝 Cómplice: ${accs}</p>` : '');
+    rolesDiv.innerHTML = `<p style="color:#e74c3c">🥷 Impostor: ${imps}</p>` + (accs ? `<p style="color:#9b59b6">🤝 Cómplice: ${accs}</p>` : '');
     
     saveGameState('screen-solution');
     showScreen('screen-solution');
