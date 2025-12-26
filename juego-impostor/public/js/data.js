@@ -87,7 +87,8 @@ window.onload = async () => {
 
         if(typeof renderPlayers === 'function') renderPlayers();
         if(typeof setupCardInteractions === 'function') setupCardInteractions();
-        if(typeof checkTournamentState === 'function') checkTournamentState();
+        if (typeof checkTournamentState === 'function') checkTournamentState();
+        if(typeof initScoringUI === 'function') initScoringUI();
         
     } catch (e) {
         console.error("Error init:", e);

@@ -542,9 +542,9 @@ function updateScoringText(isSiege) {
 
     if (isSiege) {
         // Texto para Modo Alto riesgo
-        desc.innerHTML = `<span style="color:#e74c3c">☠️ Alto riesgo</span> <small style="opacity:0.7">(Si el Impostor gana poco, Se premia victoria rápida)</small>`;
+        desc.innerHTML = `<span style="color:#e74c3c">☠️ Alto riesgo</span> <small style="opacity:0.7">(Si el Impostor gana poco, se premia victoria rápida)</small>`;
     } else {
         // Texto para Modo Supervivencia
-        desc.innerHTML = `<span style="color:#2ecc71">⏳ Supervivencia</span> <small style="opacity:0.7">(Si el Impostor gana mucho. Se premia más la supervivencia)</small>`;
+        desc.innerHTML = `<span style="color:#2ecc71">⏳ Supervivencia</span> <small style="opacity:0.7">(Si el Impostor gana mucho, se premia más la supervivencia)</small>`;
     }
 }
