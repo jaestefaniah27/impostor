@@ -177,12 +177,12 @@ cp juego-impostor/aliases.json juego-impostor/aliases.bak
 cp juego-impostor/themes.json juego-impostor/themes.bak
 git stash
 git pull
-mv juego-impostor/history.bak juego-impostor/history.json
-mv juego-impostor/aliases.bak juego-impostor/aliases.json
-mv juego-impostor/aliases.bak juego-impostor/themes.json
+cp juego-impostor/history.bak juego-impostor/history.json
+cp juego-impostor/aliases.bak juego-impostor/aliases.json
+cp juego-impostor/themes.bak juego-impostor/themes.json
 pm2 restart impostor
 ```
 En una línea:
 ```bash
-cp juego-impostor/history.json juego-impostor/history.bak && cp juego-impostor/aliases.json juego-impostor/aliases.bak && cp juego-impostor/themes.json juego-impostor/themes.bak && git stash && git pull && mv juego-impostor/history.bak juego-impostor/history.json && mv juego-impostor/aliases.bak juego-impostor/aliases.json && mv juego-impostor/aliases.bak juego-impostor/themes.json && pm2 restart impostor
+cp juego-impostor/history.json juego-impostor/history.bak && cp juego-impostor/aliases.json juego-impostor/aliases.bak && cp juego-impostor/themes.json juego-impostor/themes.bak && git stash && git pull && cp juego-impostor/history.bak juego-impostor/history.json && cp juego-impostor/aliases.bak juego-impostor/aliases.json && cp juego-impostor/themes.bak juego-impostor/themes.json && pm2 restart impostor
 ```
