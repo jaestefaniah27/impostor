@@ -388,19 +388,38 @@ function calculateScore(winnerTeam, roundsPlayed) {
     const r = Math.max(1, roundsPlayed);
 
     if (winnerTeam === 'Impostor') {
-        // FÓRMULA IMPOSTOR: (BasePalabra - Decay) + (BaseSurv * Multi^Ronda)
-        // Nota: Si adivina, asumimos que se lleva el mérito de palabra.
-        // El 'decay' se aplica por ronda que pasa.
+        // FÓRMULA IMPOSTOR: Adivinanza (Decay) + Supervivencia (Híbrida)
+        
+        // 1. Puntos por Palabra (Igual que antes)
         const wordScore = Math.max(0, config.impostor.guess_base - (config.impostor.guess_decay * (r - 1)));
         
-        // La supervivencia es exponencial
-        // Usamos Math.pow(base, exponente)
-        const survScore = Math.floor(config.impostor.surv_base * Math.pow(config.impostor.surv_multiplier, (r - 1)));
+        // 2. Puntos por Supervivencia (NUEVA LÓGICA)
+        let survScore;
+        const cutoffRound = 3; // Límite de crecimiento exponencial
+        
+        if (r <= cutoffRound) {
+            // FASE 1: Crecimiento Exponencial (Rondas 1, 2, 3)
+            // Fórmula original: Base * Multiplier^(r-1)
+            survScore = Math.floor(config.impostor.surv_base * Math.pow(config.impostor.surv_multiplier, (r - 1)));
+        } else {
+            // FASE 2: Crecimiento Lineal (Ronda 4 en adelante)
+            
+            // Calculamos cuánto valía en la ronda de corte (R3)
+            const baseAtCutoff = Math.floor(config.impostor.surv_base * Math.pow(config.impostor.surv_multiplier, (cutoffRound - 1)));
+            
+            // Calculamos cuántas rondas extra has sobrevivido
+            const extraRounds = r - cutoffRound;
+            
+            // Sumamos el paso lineal por cada ronda extra
+            const linearBonus = extraRounds * (config.impostor.surv_linear_step || 500); // Fallback por seguridad
+            
+            survScore = baseAtCutoff + linearBonus;
+        }
         
         return Math.round(wordScore + survScore);
 
     } else {
-        // FÓRMULA CIUDADANO: (Bote / Ronda) + Bonus
+        // (Lógica de ciudadanos sin cambios...)
         const potScore = Math.floor(config.citizen.base_pot / r);
         return Math.round(potScore + config.citizen.flat_bonus);
     }
@@ -430,7 +449,7 @@ async function endGameWithWinner(winner) {
     // Ronda 1 = 0 muertos. Ronda 2 = 1 muerto. Ronda 3 = 2 muertos.
     // Por tanto: Ronda Actual = (Muertos Inocentes + Muertos Impostores) + 1
     const deadPlayersCount = gameData.assignments.filter(p => !p.alive).length;
-    const currentRound = deadPlayersCount + 1;
+    const currentRound = deadPlayersCount;
 
     // --- CÁLCULO DE PUNTOS ---
     const pointsAwarded = calculateScore(winner, currentRound);

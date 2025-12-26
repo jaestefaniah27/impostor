@@ -9,15 +9,15 @@ const SCORING_MODES = {
         id: 'HUNTER',
         name: "🏹 Supervivencia (Impostor gana fácil)",
         desc: "Puntos bajos al inicio, suben exponencialmente. Obliga al impostor a sobrevivir.",
-        impostor: { guess_base: 150, guess_decay: 40, surv_base: 20, surv_multiplier: 4.5 },
-        citizen: { base_pot: 600, flat_bonus: 50 }
+        impostor: { guess_base: 200, guess_decay: 40, surv_base: 50, surv_multiplier: 5.0, surv_linear_step: 500 },
+        citizen: { base_pot: 150, flat_bonus: 50 }
     },
     SIEGE: {
         id: 'SIEGE',
         name: "🏰 Alto riesgo (Ciudadanos ganan fácil)",
         desc: "Puntos altos desde el inicio. Premia cualquier victoria del impostor.",
-        impostor: { guess_base: 300, guess_decay: 50, surv_base: 80, surv_multiplier: 2.0 },
-        citizen: { base_pot: 250, flat_bonus: 30 }
+        impostor: { guess_base: 400, guess_decay: 80, surv_base: 100, surv_multiplier: 5.0, surv_linear_step: 1000 },
+        citizen: { base_pot: 150, flat_bonus: 50 }
     }
 };
 
