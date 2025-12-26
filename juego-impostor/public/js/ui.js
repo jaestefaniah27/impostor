@@ -509,24 +509,42 @@ function exitGameToHome() {
     showScreen('screen-home');
 }
 
-// --- GESTIÓN DE MODO DE PUNTUACIÓN ---
+// --- GESTIÓN DE MODO DE PUNTUACIÓN (TOGGLE) ---
 function initScoringUI() {
-    const selector = document.getElementById('scoring-mode-select');
-    const desc = document.getElementById('mode-description');
+    const toggle = document.getElementById('scoring-mode-toggle');
     
-    if (selector && desc) {
-        // Poner valor actual
-        selector.value = currentScoringMode;
-        // Poner descripción actual
-        desc.innerText = SCORING_MODES[currentScoringMode].desc;
+    if (toggle) {
+        // Si el modo es SIEGE (Alto riesgo), el toggle debe estar encendido (checked)
+        const isSiege = (currentScoringMode === 'SIEGE');
+        toggle.checked = isSiege;
+        
+        // Actualizamos el texto descriptivo
+        updateScoringText(isSiege);
     }
 }
 
-function changeScoringMode(modeId) {
-    if (SCORING_MODES[modeId]) {
-        currentScoringMode = modeId;
-        const desc = document.getElementById('mode-description');
-        if(desc) desc.innerText = SCORING_MODES[modeId].desc;
-        saveAllData(); // Guardar preferencia si quieres (necesitaría añadirlo a saveAllData en data.js)
+function toggleScoringMode(checkbox) {
+    const isSiege = checkbox.checked;
+    
+    // Asignar el modo basado en el estado del toggle
+    currentScoringMode = isSiege ? 'SIEGE' : 'HUNTER';
+    
+    // Guardar preferencia (usaremos saveAllData para que sea persistente)
+    saveAllData(); 
+    
+    // Actualizar texto visual
+    updateScoringText(isSiege);
+}
+
+function updateScoringText(isSiege) {
+    const desc = document.getElementById('mode-description');
+    if (!desc) return;
+
+    if (isSiege) {
+        // Texto para Modo Alto riesgo
+        desc.innerHTML = `<span style="color:#e74c3c">☠️ Alto riesgo</span> <small style="opacity:0.7">(Si el Impostor gana poco, Se premia victoria rápida)</small>`;
+    } else {
+        // Texto para Modo Supervivencia
+        desc.innerHTML = `<span style="color:#2ecc71">⏳ Supervivencia</span> <small style="opacity:0.7">(Si el Impostor gana mucho. Se premia más la supervivencia)</small>`;
     }
 }

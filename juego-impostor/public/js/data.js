@@ -7,14 +7,14 @@ let selectedThemesIds = [];
 const SCORING_MODES = {
     HUNTER: {
         id: 'HUNTER',
-        name: "🏹 Cacería (Impostor gana fácil)",
+        name: "🏹 Supervivencia (Impostor gana fácil)",
         desc: "Puntos bajos al inicio, suben exponencialmente. Obliga al impostor a sobrevivir.",
         impostor: { guess_base: 150, guess_decay: 40, surv_base: 20, surv_multiplier: 4.5 },
         citizen: { base_pot: 600, flat_bonus: 50 }
     },
     SIEGE: {
         id: 'SIEGE',
-        name: "🏰 Asedio (Ciudadanos ganan fácil)",
+        name: "🏰 Alto riesgo (Ciudadanos ganan fácil)",
         desc: "Puntos altos desde el inicio. Premia cualquier victoria del impostor.",
         impostor: { guess_base: 300, guess_decay: 50, surv_base: 80, surv_multiplier: 2.0 },
         citizen: { base_pot: 250, flat_bonus: 30 }
@@ -103,12 +103,20 @@ function loadGameData() {
     if (pStored) players = JSON.parse(pStored); else players = ['Jugador 1', 'Jugador 2', 'Jugador 3'];
     const aStored = localStorage.getItem('impostorAvatars');
     if (aStored) playerAvatars = JSON.parse(aStored);
-    players.forEach(p => { if(!playerAvatars[p]) playerAvatars[p] = getRandomAvatar(); });
+    players.forEach(p => { if (!playerAvatars[p]) playerAvatars[p] = getRandomAvatar(); });
+    // --- Cargar modo de puntuación ---
+    const modeStored = localStorage.getItem('impostorScoringMode');
+    if (modeStored && SCORING_MODES[modeStored]) {
+        currentScoringMode = modeStored;
+    } else {
+        currentScoringMode = 'HUNTER'; // Por defecto
+    }
 }
 
 function saveAllData() {
     localStorage.setItem('impostorPlayers', JSON.stringify(players));
     localStorage.setItem('impostorAvatars', JSON.stringify(playerAvatars));
+    localStorage.setItem('impostorScoringMode', currentScoringMode);
 }
 
 function getRandomAvatar() { return emojis[Math.floor(Math.random() * emojis.length)]; }
