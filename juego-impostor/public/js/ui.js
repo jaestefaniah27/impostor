@@ -322,14 +322,21 @@ async function loadAndShowHistory() {
                     // Lógica Partida Individual
                     const wTxt = record.winner === 'Impostor' ? '👑 Ganó Impostor' : '🛡️ Ganaron Ciudadanos';
                     const wClass = record.winner === 'Impostor' ? 'win-imp-text' : 'win-cit-text';
-                    const timeStr = formatDuration(record.duration); // Duración individual
+                    const timeStr = formatDuration(record.duration);
+                    
+                    // NUEVO: Mostrar puntos y ronda si existen
+                    const ptsStr = record.points ? `<span style="color:#f1c40f; font-weight:bold;">+${record.points} pts</span>` : '';
+                    const roundStr = record.rounds ? `(Ronda ${record.rounds})` : '';
 
                     return `
                     <div class="history-card h-type-single">
                         <div class="h-header">
                             <div>
-                                <strong>${record.word}</strong> <span style="font-size:0.8em; opacity:0.7">(${date})</span>
-                                <div style="font-size:0.8em; color:#bdc3c7;">⏱️ ${timeStr}</div>
+                                <div style="display:flex; justify-content:space-between;">
+                                    <strong>${record.word}</strong>
+                                    ${ptsStr}
+                                </div>
+                                <span style="font-size:0.8em; opacity:0.7">(${date}) • ${timeStr} ${roundStr}</span>
                                 <div class="${wClass}" style="font-size:0.9em; margin-top:2px;">${wTxt}</div>
                             </div>
                         </div>
@@ -337,6 +344,7 @@ async function loadAndShowHistory() {
                             <p>😈 Impostor: ${record.impostor}</p>
                             ${record.accomplice ? `<p>🤝 Cómplice: ${record.accomplice}</p>` : ''}
                             <p style="font-size:0.8em">Jugadores: ${record.players ? record.players.join(', ') : '?'}</p>
+                            ${record.mode ? `<p style="font-size:0.7em; color:#7f8c8d">Modo: ${record.mode}</p>` : ''}
                         </div>
                     </div>`;
                 }
@@ -499,4 +507,26 @@ function exitGameToHome() {
         clearGameState(); // Borrar partida activa
     }
     showScreen('screen-home');
+}
+
+// --- GESTIÓN DE MODO DE PUNTUACIÓN ---
+function initScoringUI() {
+    const selector = document.getElementById('scoring-mode-select');
+    const desc = document.getElementById('mode-description');
+    
+    if (selector && desc) {
+        // Poner valor actual
+        selector.value = currentScoringMode;
+        // Poner descripción actual
+        desc.innerText = SCORING_MODES[currentScoringMode].desc;
+    }
+}
+
+function changeScoringMode(modeId) {
+    if (SCORING_MODES[modeId]) {
+        currentScoringMode = modeId;
+        const desc = document.getElementById('mode-description');
+        if(desc) desc.innerText = SCORING_MODES[modeId].desc;
+        saveAllData(); // Guardar preferencia si quieres (necesitaría añadirlo a saveAllData en data.js)
+    }
 }

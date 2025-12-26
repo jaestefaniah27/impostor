@@ -381,38 +381,64 @@ function continueGame() {
     }
 }
 
+// --- MOTOR DE PUNTUACIÓN ---
+function calculateScore(winnerTeam, roundsPlayed) {
+    const config = SCORING_MODES[currentScoringMode];
+    // Asegurar que r es al menos 1
+    const r = Math.max(1, roundsPlayed);
+
+    if (winnerTeam === 'Impostor') {
+        // FÓRMULA IMPOSTOR: (BasePalabra - Decay) + (BaseSurv * Multi^Ronda)
+        // Nota: Si adivina, asumimos que se lleva el mérito de palabra.
+        // El 'decay' se aplica por ronda que pasa.
+        const wordScore = Math.max(0, config.impostor.guess_base - (config.impostor.guess_decay * (r - 1)));
+        
+        // La supervivencia es exponencial
+        // Usamos Math.pow(base, exponente)
+        const survScore = Math.floor(config.impostor.surv_base * Math.pow(config.impostor.surv_multiplier, (r - 1)));
+        
+        return Math.round(wordScore + survScore);
+
+    } else {
+        // FÓRMULA CIUDADANO: (Bote / Ronda) + Bonus
+        const potScore = Math.floor(config.citizen.base_pot / r);
+        return Math.round(potScore + config.citizen.flat_bonus);
+    }
+}
+
 async function endGameWithWinner(winner) {
-    if (gameData.lastWinner) return; // Candado
-    gameData.lastWinner = winner;    // Bloqueo
+    if (gameData.lastWinner) return; 
+    gameData.lastWinner = winner;
 
     if (!gameData.pastImpostors) gameData.pastImpostors = [];
     
-    // Identificar impostores de esta partida
-    const currentImpostors = gameData.assignments
-        .filter(p => p.isImpostor)
-        .map(p => p.name);
-    
-    // Añadirlos AL PRINCIPIO de la lista (índice 0 = más reciente)
-    // Usamos un loop por si hay varios impostores
+    // Actualizar historial de roles recientes (Lógica existente)
+    const currentImpostors = gameData.assignments.filter(p => p.isImpostor).map(p => p.name);
     currentImpostors.forEach(impName => {
-        // Si ya estaba en la lista, lo quitamos de su posición vieja para ponerlo primero
         const oldIdx = gameData.pastImpostors.indexOf(impName);
         if (oldIdx !== -1) gameData.pastImpostors.splice(oldIdx, 1);
-        
         gameData.pastImpostors.unshift(impName);
     });
-
-    // Limitar el historial para no ocupar memoria infinita (guardamos el doble de jugadores)
     const memoryLimit = Math.ceil(players.length * 1.2);
-    if (gameData.pastImpostors.length > memoryLimit) {
-        gameData.pastImpostors = gameData.pastImpostors.slice(0, memoryLimit);
-    }
+    if (gameData.pastImpostors.length > memoryLimit) gameData.pastImpostors = gameData.pastImpostors.slice(0, memoryLimit);
 
     clearInterval(timerInterval);
-    const durationSec = gameData.startTime ? Math.round((Date.now() - gameData.startTime) / 1000) : 0;    
+    const durationSec = gameData.startTime ? Math.round((Date.now() - gameData.startTime) / 1000) : 0;
+    
+    // --- CÁLCULO DE RONDAS ---
+    // En tu juego, una "ronda" pasa cuando se expulsa a alguien.
+    // Ronda 1 = 0 muertos. Ronda 2 = 1 muerto. Ronda 3 = 2 muertos.
+    // Por tanto: Ronda Actual = (Muertos Inocentes + Muertos Impostores) + 1
+    const deadPlayersCount = gameData.assignments.filter(p => !p.alive).length;
+    const currentRound = deadPlayersCount + 1;
+
+    // --- CÁLCULO DE PUNTOS ---
+    const pointsAwarded = calculateScore(winner, currentRound);
+
     const impostorObj = gameData.assignments.find(p => p.isImpostor);
     const accompliceObj = gameData.assignments.find(p => p.isAccomplice);
     
+    // Creamos el registro con los puntos guardados
     const currentGameRecord = {
         type: 'single_game', 
         date: new Date().toISOString(),
@@ -422,29 +448,50 @@ async function endGameWithWinner(winner) {
         accomplice: accompliceObj ? accompliceObj.name : null,
         word: gameData.secretWord,
         hint: gameData.secretHint,
-        winner: winner
+        winner: winner,
+        rounds: currentRound,     // <--- Guardamos ronda
+        points: pointsAwarded,    // <--- Guardamos puntos
+        mode: currentScoringMode  // <--- Guardamos qué modo se usó
     };
 
+    // --- GESTIÓN DE PUNTOS (TORNEO O NO) ---
+    // Ahora SIEMPRE calculamos puntos, si hay torneo los sumamos.
     if (isTournamentActive) {
         tournamentGames.push(currentGameRecord);
         gameData.assignments.forEach(p => {
             if (tournamentScores[p.name] === undefined) tournamentScores[p.name] = 0;
+            
             const isBad = p.isImpostor || p.isAccomplice;
-            if (winner === 'Impostor' && isBad) tournamentScores[p.name] += 5;
-            else if (winner === 'Ciudadanos' && !isBad) tournamentScores[p.name] += 2;
+            
+            // Si gana Impostor, suman los malos. Si gana Ciudadano, suman los buenos.
+            if (winner === 'Impostor' && isBad) {
+                tournamentScores[p.name] += pointsAwarded;
+            } else if (winner === 'Ciudadanos' && !isBad) {
+                // Opcional: ¿Los muertos suman? 
+                // En tu lógica original: Sí. En modo supervivencia estricto: Quizás no.
+                // Dejémoslo en que TODOS los ciudadanos suman si ganan.
+                tournamentScores[p.name] += pointsAwarded;
+            }
         });
         
         saveTournamentState();
         renderScoreboard();
         document.getElementById('scoreboard-container').classList.remove('hidden');
     } else {
+        // Si es partida rápida, guardamos en historial global
         await saveGameRecordToHistory(currentGameRecord);
         document.getElementById('scoreboard-container').classList.add('hidden');
     }
 
+    // --- INTERFAZ FINAL ---
     document.getElementById('final-word').innerText = gameData.secretWord;
     const display = document.getElementById('winner-display');
-    display.innerText = (winner === 'Impostor') ? "🏆 GANA EL IMPOSTOR" : "🛡️ GANAN CIUDADANOS";
+    
+    // AÑADIMOS LOS PUNTOS AL CARTEL DE VICTORIA
+    display.innerHTML = (winner === 'Impostor') 
+        ? `🏆 GANA EL IMPOSTOR<br><span style="font-size:0.6em; color:#fff;">+${pointsAwarded} pts (Ronda ${currentRound})</span>` 
+        : `🛡️ GANAN CIUDADANOS<br><span style="font-size:0.6em; color:#fff;">+${pointsAwarded} pts (Ronda ${currentRound})</span>`;
+    
     display.style.color = (winner === 'Impostor') ? "#e74c3c" : "#2ecc71";
 
     const rolesDiv = document.getElementById('roles-reveal');

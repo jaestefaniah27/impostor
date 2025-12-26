@@ -3,6 +3,26 @@ let players = [];
 let playerAvatars = {}; 
 let themes = [];
 let selectedThemesIds = [];
+// CONFIGURACIÓN DE PUNTUACIÓN (MODOS DE JUEGO)
+const SCORING_MODES = {
+    HUNTER: {
+        id: 'HUNTER',
+        name: "🏹 Cacería (Impostor gana fácil)",
+        desc: "Puntos bajos al inicio, suben exponencialmente. Obliga al impostor a sobrevivir.",
+        impostor: { guess_base: 150, guess_decay: 40, surv_base: 20, surv_multiplier: 4.5 },
+        citizen: { base_pot: 600, flat_bonus: 50 }
+    },
+    SIEGE: {
+        id: 'SIEGE',
+        name: "🏰 Asedio (Ciudadanos ganan fácil)",
+        desc: "Puntos altos desde el inicio. Premia cualquier victoria del impostor.",
+        impostor: { guess_base: 300, guess_decay: 50, surv_base: 80, surv_multiplier: 2.0 },
+        citizen: { base_pot: 250, flat_bonus: 30 }
+    }
+};
+
+// Variable de estado para el modo actual (Por defecto HUNTER)
+let currentScoringMode = 'HUNTER';
 
 // ESTADO DE JUEGO (Persistente)
 // Añadimos startTime para recuperar el tiempo real
@@ -141,6 +161,7 @@ function saveGameState(currentScreenId) {
         gameData: gameData,
         timeRemaining: timeRemaining,
         selectedThemesIds: selectedThemesIds, // GUARDA LA CONFIGURACIÓN DE TEMAS
+        scoringMode: currentScoringMode,
         timestamp: Date.now()
     };
     
@@ -181,6 +202,12 @@ function restoreGameState() {
                     restoreEndGameUI(state.screen);
                 }
             }
+        }
+        if (state.scoringMode && SCORING_MODES[state.scoringMode]) {
+            currentScoringMode = state.scoringMode;
+            // Actualizar selector visual si existe (lo crearemos luego en UI)
+            const selector = document.getElementById('scoring-mode-select');
+            if(selector) selector.value = currentScoringMode;
         }
     } catch (e) {
         console.error("Error restaurando partida", e);
