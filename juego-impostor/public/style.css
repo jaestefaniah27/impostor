@@ -555,6 +555,38 @@ input:checked+.slider:before {
     text-shadow: 0 0 10px var(--accent);
 }
 
+/* Buy Me a Coffee Button Style */
+.bmc-link {
+    text-decoration: none !important;
+}
+
+.bmc-button {
+    display: inline-flex;
+    align-items: center;
+    background: #ffdd00;
+    color: #000000 !important;
+    padding: 10px 20px;
+    border-radius: 50px;
+    font-weight: bold;
+    font-size: 0.9em;
+    font-family: 'Inter', sans-serif;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s, background 0.3s, box-shadow 0.3s;
+    user-select: none;
+    border: none;
+}
+
+.bmc-button:hover {
+    transform: translateY(-2px);
+    background: #ffea00;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+    text-shadow: none !important;
+}
+
+.bmc-button:active {
+    transform: translateY(0);
+}
+
 .credits-footer small {
     font-size: 0.75em;
     opacity: 0.5;
