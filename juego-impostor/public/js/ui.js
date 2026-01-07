@@ -6,69 +6,70 @@ let selectedForMerge = [];
 function showScreen(id, shouldSave = true) {
     document.querySelectorAll('.container').forEach(d => d.classList.add('hidden'));
     document.getElementById(id).classList.remove('hidden');
-    window.scrollTo(0, 0); 
-    
+    window.scrollTo(0, 0);
+
     // Guardar estado solo si se pide (por defecto sí)
     if (shouldSave && typeof saveGameState === 'function') {
-        saveGameState(id); 
+        saveGameState(id);
     }
 }
 
 function goToHome() { showScreen('screen-home'); }
+function showHowToPlay() { showScreen('screen-how-to-play'); }
 
 // --- RENDERIZADO JUGADORES (HOME) ---
 function renderPlayers() {
     const list = document.getElementById('players-list');
-    if(!list) return;
+    if (!list) return;
 
-    list.innerHTML = players.map((p,i) => 
-        `<span class="tag" onclick="removePlayer(${i})"><span class="avatar">${playerAvatars[p]||'👤'}</span>${p} ✕</span>`).join('');
-    
+    list.innerHTML = players.map((p, i) =>
+        `<span class="tag" onclick="removePlayer(${i})"><span class="avatar">${playerAvatars[p] || '👤'}</span>${p} ✕</span>`).join('');
+
     // Ajustar máximo de impostores según jugadores
-    const max = Math.max(1, Math.floor(players.length/2));
+    const max = Math.max(1, Math.floor(players.length / 2));
     const el = document.getElementById('impostor-count');
-    if(el) {
-        el.max = max; 
-        if(el.value > max) el.value = max;
+    if (el) {
+        el.max = max;
+        if (el.value > max) el.value = max;
     }
     updateConfigDisplay();
 }
 
 function addPlayer() {
     const v = document.getElementById('new-player').value.trim();
-    if(v && !players.includes(v)) { 
-        players.push(v); 
-        playerAvatars[v] = getRandomAvatar(); 
-        saveAllData(); 
-        renderPlayers(); 
-        document.getElementById('new-player').value=''; 
-    } else if(players.includes(v)) alert("Ese nombre ya existe.");
+    if (v && !players.includes(v)) {
+        players.push(v);
+        playerAvatars[v] = getRandomAvatar();
+        saveAllData();
+        renderPlayers();
+        document.getElementById('new-player').value = '';
+    } else if (players.includes(v)) alert("Ese nombre ya existe.");
 }
 
-function removePlayer(i) { 
-    players.splice(i,1); 
-    saveAllData(); 
-    renderPlayers(); 
+function removePlayer(i) {
+    players.splice(i, 1);
+    saveAllData();
+    renderPlayers();
 }
 
 function updateConfigDisplay() {
     const el = document.getElementById('impostor-val');
     const input = document.getElementById('impostor-count');
-    if(el && input) el.innerText = input.value;
+    if (el && input) el.innerText = input.value;
 }
 
 // --- PANTALLA DE SELECCIÓN DE TEMAS (JUGAR) ---
 function goToThemeSelection() {
-    if(players.length < 3) return alert("Mínimo 3 jugadores para jugar.");
+    if (players.length < 3) return alert("Mínimo 3 jugadores para jugar.");
     renderThemeGrid();
     showScreen('screen-themes');
 }
 
 function renderThemeGrid() {
     const container = document.getElementById('themes-grid');
-    if(!container) return;
-    
-    if(!themes || themes.length === 0) {
+    if (!container) return;
+
+    if (!themes || themes.length === 0) {
         container.innerHTML = "<p>No hay temas cargados.</p>";
         return;
     }
@@ -84,7 +85,7 @@ function renderThemeGrid() {
         const isSelected = selectedThemesIds.includes(t.id);
         const customClass = t.isCustom ? 'custom-theme-box' : '';
         const badge = t.isCustom ? '<span class="badge-custom">👤 PROPIA</span>' : '';
-        
+
         // En esta pantalla NO se edita, solo se selecciona
         return `
         <div class="theme-box ${isSelected ? 'selected' : ''} ${customClass}" onclick="toggleTheme(${t.id})">
@@ -100,15 +101,15 @@ function renderThemeGrid() {
 }
 
 function toggleTheme(id) {
-    selectedThemesIds.includes(id) ? 
-        selectedThemesIds = selectedThemesIds.filter(x => x !== id) : 
+    selectedThemesIds.includes(id) ?
+        selectedThemesIds = selectedThemesIds.filter(x => x !== id) :
         selectedThemesIds.push(id);
     renderThemeGrid();
 }
 
 // --- PANTALLA GESTOR DE TEMAS (ADMINISTRACIÓN) ---
 function goToThemeManager() {
-    if(!themes || themes.length === 0) {
+    if (!themes || themes.length === 0) {
         fetch('/api/themes').then(r => r.json()).then(data => { themes = data; renderThemeManagerList(); });
     } else {
         renderThemeManagerList();
@@ -118,7 +119,7 @@ function goToThemeManager() {
 
 function renderThemeManagerList() {
     const container = document.getElementById('manager-list');
-    if(!container) return;
+    if (!container) return;
 
     const sortedThemes = [...themes].sort((a, b) => {
         if (a.isCustom && !b.isCustom) return -1;
@@ -132,18 +133,18 @@ function renderThemeManagerList() {
 
         if (t.isCustom) {
             // TEMA PROPIO: Editable
-            badge = '<span class="badge-custom">👤 PROPIA</span>'; 
-            onClickAttr = `onclick="loadThemeForEdit(${t.id})"`; 
-            icon = '✏️'; 
+            badge = '<span class="badge-custom">👤 PROPIA</span>';
+            onClickAttr = `onclick="loadThemeForEdit(${t.id})"`;
+            icon = '✏️';
             style = 'cursor: pointer;';
         } else {
             // TEMA ORIGINAL: Bloqueado
-            badge = '<span style="display:block; margin-top:5px; font-size:0.7em; opacity:0.5;">🔒 ORIGINAL</span>'; 
-            onClickAttr = `onclick="alert('⚠️ Los temas originales no se pueden editar. Crea uno nuevo.')"`; 
-            icon = '🔒'; 
+            badge = '<span style="display:block; margin-top:5px; font-size:0.7em; opacity:0.5;">🔒 ORIGINAL</span>';
+            onClickAttr = `onclick="alert('⚠️ Los temas originales no se pueden editar. Crea uno nuevo.')"`;
+            icon = '🔒';
             style = 'opacity: 0.8; cursor: not-allowed; background: #2c3e50; border: 1px solid rgba(255,255,255,0.1);';
         }
-        
+
         return `
         <div class="theme-box ${customClass}" ${onClickAttr} style="${style}">
             <div style="display:flex; justify-content:space-between; align-items:start;">
@@ -163,7 +164,7 @@ function openThemeCreator() {
     document.getElementById('new-theme-title').value = '';
     document.getElementById('new-theme-suggestions').value = '';
     document.getElementById('words-container').innerHTML = '';
-    
+
     // Añadir 3 filas vacías por defecto
     addWordRow(); addWordRow(); addWordRow();
     showScreen('screen-create-theme');
@@ -176,12 +177,12 @@ function loadThemeForEdit(id) {
     editingThemeId = id; // Estamos editando
     document.getElementById('create-theme-title').innerText = "✏️ Editar Tema";
     document.getElementById('new-theme-title').value = theme.name;
-    
+
     const suggs = theme.suggestions ? theme.suggestions.join(' / ') : '';
     document.getElementById('new-theme-suggestions').value = suggs;
 
     const container = document.getElementById('words-container');
-    container.innerHTML = ''; 
+    container.innerHTML = '';
     theme.words.forEach(w => {
         addWordRow(w.text, Array.isArray(w.hints) ? w.hints.join(' / ') : w.hints);
     });
@@ -215,12 +216,12 @@ function showSuggestion() {
 
 function setupCardInteractions() {
     const c = document.getElementById('magic-card');
-    if(!c) return;
-    const s = (e) => { if(e.cancelable) e.preventDefault(); c.classList.add('revealed'); };
-    const h = (e) => { if(e.cancelable) e.preventDefault(); c.classList.remove('revealed'); };
+    if (!c) return;
+    const s = (e) => { if (e.cancelable) e.preventDefault(); c.classList.add('revealed'); };
+    const h = (e) => { if (e.cancelable) e.preventDefault(); c.classList.remove('revealed'); };
     // Eventos ratón y táctil
-    c.addEventListener('mousedown',s); c.addEventListener('mouseup',h); c.addEventListener('mouseleave',h);
-    c.addEventListener('touchstart',s,{passive:false}); c.addEventListener('touchend',h); c.addEventListener('touchcancel',h);
+    c.addEventListener('mousedown', s); c.addEventListener('mouseup', h); c.addEventListener('mouseleave', h);
+    c.addEventListener('touchstart', s, { passive: false }); c.addEventListener('touchend', h); c.addEventListener('touchcancel', h);
 }
 
 // --- ACTUALIZAR BANNER TORNEO (PUNTOS) ---
@@ -233,7 +234,7 @@ function updateTournamentBanner() {
         return;
     }
 
-    const sortedPlayers = Object.entries(tournamentScores).sort((a,b) => b[1] - a[1]);
+    const sortedPlayers = Object.entries(tournamentScores).sort((a, b) => b[1] - a[1]);
 
     if (sortedPlayers.length === 0) {
         container.innerHTML = "<small style='opacity:0.6; padding:0 5px;'>Esperando resultados...</small>";
@@ -243,7 +244,7 @@ function updateTournamentBanner() {
     container.innerHTML = sortedPlayers.map(([name, score], i) => {
         let icon = '👤';
         let colorStyle = '';
-        
+
         // Medallas
         if (i === 0 && score > 0) { icon = '🥇'; colorStyle = 'border-color: #f1c40f; color: #f1c40f;'; }
         else if (i === 1 && score > 0) { icon = '🥈'; colorStyle = 'border-color: #bdc3c7;'; }
@@ -272,24 +273,24 @@ async function loadAndShowHistory() {
         const res = await fetch('/api/history');
         const history = await res.json();
         const container = document.getElementById('history-list');
-        
+
         if (history.length === 0) {
             container.innerHTML = "<p>Vacío</p>";
         } else {
             container.innerHTML = history.map((record, index) => {
                 const date = new Date(record.date || Date.now()).toLocaleDateString();
-                
+
                 if (record.type === 'tournament') {
                     // Lógica Torneo
                     let winnerName = "Empate";
                     let maxScore = -1;
-                    if(record.scores) {
+                    if (record.scores) {
                         Object.entries(record.scores).forEach(([name, score]) => { if (score > maxScore) { maxScore = score; winnerName = name; } });
                     }
-                    
+
                     // Calcular duración total del torneo sumando partidas
                     let totalSeconds = 0;
-                    if(record.games) record.games.forEach(g => totalSeconds += (g.duration || 0));
+                    if (record.games) record.games.forEach(g => totalSeconds += (g.duration || 0));
                     const totalTimeStr = formatDuration(totalSeconds);
 
                     return `
@@ -305,7 +306,7 @@ async function loadAndShowHistory() {
                         </div>
                         <div class="h-body expanded" id="h-body-${index}">
                             <p style="color:#f1c40f; border-bottom:1px solid #555;">Clasificación Final:</p>
-                            ${record.scores ? Object.entries(record.scores).sort((a,b)=>b[1]-a[1]).map(([n,s]) => `
+                            ${record.scores ? Object.entries(record.scores).sort((a, b) => b[1] - a[1]).map(([n, s]) => `
                                 <div style="display:flex; justify-content:space-between; font-size:0.9em;"><span>${n}</span> <span>${s} pts</span></div>
                             `).join('') : ''}
                             
@@ -313,7 +314,7 @@ async function loadAndShowHistory() {
                             ${record.games ? record.games.map(g => `
                                 <div class="game-row">
                                     <span>${g.word} <small style="opacity:0.6">(${formatDuration(g.duration)})</small></span>
-                                    <span class="${g.winner==='Impostor'?'win-imp-text':'win-cit-text'}">${g.winner==='Impostor'?'Ganó Imp.':'Ganan Ciu.'}</span>
+                                    <span class="${g.winner === 'Impostor' ? 'win-imp-text' : 'win-cit-text'}">${g.winner === 'Impostor' ? 'Ganó Imp.' : 'Ganan Ciu.'}</span>
                                 </div>
                             `).join('') : ''}
                         </div>
@@ -323,7 +324,7 @@ async function loadAndShowHistory() {
                     const wTxt = record.winner === 'Impostor' ? '👑 Ganó Impostor' : '🛡️ Ganaron Ciudadanos';
                     const wClass = record.winner === 'Impostor' ? 'win-imp-text' : 'win-cit-text';
                     const timeStr = formatDuration(record.duration);
-                    
+
                     // NUEVO: Mostrar puntos y ronda si existen
                     const ptsStr = record.points ? `<span style="color:#f1c40f; font-weight:bold;">+${record.points} pts</span>` : '';
                     const roundStr = record.rounds ? `(Ronda ${record.rounds})` : '';
@@ -365,12 +366,12 @@ async function loadAndShowStats() {
 
     const totalMin = Math.floor(stats.global.totalTime / 60);
     document.getElementById('stat-total-games').innerText = stats.global.totalGames;
-    document.getElementById('stat-total-time').innerText = `${Math.floor(totalMin/60)}h ${totalMin%60}m`;
-    
+    document.getElementById('stat-total-time').innerText = `${Math.floor(totalMin / 60)}h ${totalMin % 60}m`;
+
     const playersArr = Object.values(stats.players);
-    const bestImp = playersArr.sort((a,b) => b.impWins - a.impWins)[0];
+    const bestImp = playersArr.sort((a, b) => b.impWins - a.impWins)[0];
     document.getElementById('stat-best-impostor').innerText = bestImp && bestImp.impWins > 0 ? `${bestImp.name} (${bestImp.impWins})` : "-";
-    const mostPlayed = [...playersArr].sort((a,b) => b.time - a.time)[0];
+    const mostPlayed = [...playersArr].sort((a, b) => b.time - a.time)[0];
     document.getElementById('stat-most-played').innerText = mostPlayed ? `${mostPlayed.name}` : "-";
 
     const screenStats = document.getElementById('screen-stats');
@@ -384,14 +385,14 @@ async function loadAndShowStats() {
 }
 
 function renderStatsList(playersArr) {
-    playersArr.sort((a,b) => b.games - a.games);
+    playersArr.sort((a, b) => b.games - a.games);
     document.getElementById('stats-list').innerHTML = playersArr.map(p => {
         const winRate = p.impTotal > 0 ? Math.round((p.impWins / p.impTotal) * 100) : 0;
         let displayName = p.name;
-        if (p.aka && p.aka.length > 1) displayName = `${p.name} | ${p.aka.filter(n=>n!==p.name).join(' | ')}`;
-        
-        const checkHtml = isMergeMode ? `<input type="checkbox" class="merge-check" value="${p.name}" ${selectedForMerge.includes(p.name)?'checked':''} onchange="updateMergeSelection(this)" style="width:20px; height:20px; margin-right:10px;">` : '';
-        
+        if (p.aka && p.aka.length > 1) displayName = `${p.name} | ${p.aka.filter(n => n !== p.name).join(' | ')}`;
+
+        const checkHtml = isMergeMode ? `<input type="checkbox" class="merge-check" value="${p.name}" ${selectedForMerge.includes(p.name) ? 'checked' : ''} onchange="updateMergeSelection(this)" style="width:20px; height:20px; margin-right:10px;">` : '';
+
         return `
         <div class="card" style="display:flex; align-items:center; padding:10px;">
             ${checkHtml}
@@ -401,7 +402,7 @@ function renderStatsList(playersArr) {
                     <span class="badge" style="background:#2f3640;">${p.games} partidas</span>
                 </div>
                 <div style="font-size:0.85em; color:#bdc3c7; margin-top:5px;">
-                    <span>⏱️ ${Math.round(p.time/60)} min</span> • <span>🥷 Wins: ${p.impWins}/${p.impTotal} (${winRate}%)</span>
+                    <span>⏱️ ${Math.round(p.time / 60)} min</span> • <span>🥷 Wins: ${p.impWins}/${p.impTotal} (${winRate}%)</span>
                 </div>
             </div>
         </div>`;
@@ -412,19 +413,19 @@ function toggleMergeMode() {
     isMergeMode = !isMergeMode;
     selectedForMerge = [];
     document.getElementById('merge-tool-bar').classList.toggle('hidden', !isMergeMode);
-    updateMergeToolbar(); 
-    loadAndShowStats(); 
+    updateMergeToolbar();
+    loadAndShowStats();
 }
 
 function updateMergeSelection(checkbox) {
     if (checkbox.checked) selectedForMerge.push(checkbox.value);
     else selectedForMerge = selectedForMerge.filter(n => n !== checkbox.value);
-    updateMergeToolbar(); 
+    updateMergeToolbar();
 }
 
 function updateMergeToolbar() {
     const btn = document.getElementById('merge-action-btn');
-    if(!btn) return;
+    if (!btn) return;
     if (selectedForMerge.length === 0) {
         btn.innerText = "Selecciona jugadores..."; btn.disabled = true; btn.style.opacity = 0.5; btn.style.background = "white"; btn.style.color = "#d35400"; btn.onclick = null;
     } else if (selectedForMerge.length === 1) {
@@ -436,10 +437,10 @@ function updateMergeToolbar() {
 
 async function executeMerge() {
     if (selectedForMerge.length < 2) return;
-    if (confirm(`¿Fusionar estadísticas bajo "${selectedForMerge[0]}"?`)) { 
-        await mergeAliases(selectedForMerge[0], selectedForMerge); 
-        alert("¡Fusión completada!"); 
-        toggleMergeMode(); 
+    if (confirm(`¿Fusionar estadísticas bajo "${selectedForMerge[0]}"?`)) {
+        await mergeAliases(selectedForMerge[0], selectedForMerge);
+        alert("¡Fusión completada!");
+        toggleMergeMode();
     }
 }
 
@@ -449,10 +450,10 @@ async function executeUnmerge() {
     const stats = await fetchStats();
     const player = Object.values(stats.players).find(p => p.name === target);
     if (!player || !player.aka || player.aka.length <= 1) return alert("Este jugador no tiene alias para separar.");
-    if (confirm(`¿Separar los nombres de "${target}"?`)) { 
-        await unmergeAliases(player.aka.filter(n=>n!==target)); 
-        alert("¡Separados!"); 
-        toggleMergeMode(); 
+    if (confirm(`¿Separar los nombres de "${target}"?`)) {
+        await unmergeAliases(player.aka.filter(n => n !== target));
+        alert("¡Separados!");
+        toggleMergeMode();
     }
 }
 
@@ -512,12 +513,12 @@ function exitGameToHome() {
 // --- GESTIÓN DE MODO DE PUNTUACIÓN (TOGGLE) ---
 function initScoringUI() {
     const toggle = document.getElementById('scoring-mode-toggle');
-    
+
     if (toggle) {
         // Si el modo es SIEGE (Alto riesgo), el toggle debe estar encendido (checked)
         const isSiege = (currentScoringMode === 'SIEGE');
         toggle.checked = isSiege;
-        
+
         // Actualizamos el texto descriptivo
         updateScoringText(isSiege);
     }
@@ -525,13 +526,13 @@ function initScoringUI() {
 
 function toggleScoringMode(checkbox) {
     const isSiege = checkbox.checked;
-    
+
     // Asignar el modo basado en el estado del toggle
     currentScoringMode = isSiege ? 'SIEGE' : 'HUNTER';
-    
+
     // Guardar preferencia (usaremos saveAllData para que sea persistente)
-    saveAllData(); 
-    
+    saveAllData();
+
     // Actualizar texto visual
     updateScoringText(isSiege);
 }
