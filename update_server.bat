@@ -1,13 +1,20 @@
 @echo off
-:: --- CONFIGURACIÓN ---
-set USER=ubuntu
-set HOST=143.47.37.92
+:: --- CARGAR CONFIGURACIÓN ---
+if exist secrets.bat (
+    call secrets.bat
+) else (
+    echo [ERROR] No se encontro el archivo secrets.bat
+    echo Por favor crea un archivo secrets.bat con las variables USER, HOST y KEY_PATH.
+    pause
+    exit /b
+)
 
-:: !!! IMPORTANTE !!!
-:: Cambia esto por la ruta real donde tienes tu archivo .pem
-:: Ejemplo: set KEY_PATH="C:\Users\jaest\Downloads\mi-clave.pem"
-set KEY_PATH="C:\Users\jaest\.ssh\minecraft_server\minecraft-server-private-key-ssh"
-
+:: --- VERIFICACIÓN ---
+if not defined KEY_PATH (
+    echo [ERROR] La variable KEY_PATH no esta definida en secrets.bat
+    pause
+    exit /b
+)
 echo ------------------------------------------------
 echo Conectando a %HOST%...
 echo ------------------------------------------------
