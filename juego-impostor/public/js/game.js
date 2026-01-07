@@ -263,7 +263,7 @@ function setupCardForPlayer() {
         const imps = gameData.assignments.filter(x => x.isImpostor).map(x => x.name).join(", ");
         rd.innerHTML = `🤫 CÓMPLICE<br>Protege a: <strong style='color:#e74c3c'>${imps}</strong>`;
     } else {
-        wd.innerText = gameData.secretWord; wd.style.color = "#2ecc71"; rd.innerText = "Ciudadano";
+        wd.innerText = gameData.secretWord; wd.style.color = "#2ecc71"; rd.innerText = "Tu eres: Ciudadano";
     }
 
     const btn = document.getElementById('next-btn');
