@@ -237,8 +237,7 @@ function setupCardInteractions() {
 
         c.classList.add('revealed');
         if (typeof gameData !== 'undefined') gameData.hasRevealed = true;
-        // Ocultar guía tutorial al interactuar
-        if (typeof hideTutorialGuide === 'function') hideTutorialGuide();
+        // La mano ya no se oculta aquí para mantener la inmersión
     };
     const h = (e) => {
         if (e.cancelable) e.preventDefault();
