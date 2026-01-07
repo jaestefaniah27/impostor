@@ -75,6 +75,17 @@
             </label>
         </div>
 
+        <div class="card" style="display: flex; justify-content: space-between; align-items: center;">
+            <div>
+                <h3 style="margin-bottom: 5px; border: none;">🎓 Modo Tutorial</h3>
+                <small style="color: #bdc3c7;">Guía visual con ayuda interactiva</small>
+            </div>
+            <label class="switch">
+                <input type="checkbox" id="tutorial-mode-toggle" onchange="toggleTutorialMode(this)">
+                <span class="slider round"></span>
+            </label>
+        </div>
+
         <div class="card">
             <h3>⚙️ Configuración</h3>
             <div>
@@ -374,6 +385,10 @@
             <button class="btn-secondary" style="margin:0; width:100%; max-width:500px;" onclick="goToHome()">🏠 VOLVER
                 AL INICIO</button>
         </div>
+    </div>
+
+    <div id="tutorial-guide-layer" class="tutorial-overlay hidden">
+        <div class="finger-guide">👆</div>
     </div>
 
     <script src="js/data.js"></script>

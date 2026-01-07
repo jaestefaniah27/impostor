@@ -12,6 +12,9 @@ function showScreen(id, shouldSave = true) {
     if (shouldSave && typeof saveGameState === 'function') {
         saveGameState(id);
     }
+
+    // Actualizar guía tutorial al cambiar de pantalla
+    if (typeof updateTutorialGuide === 'function') updateTutorialGuide();
 }
 
 function goToHome() { showScreen('screen-home'); }
@@ -217,8 +220,32 @@ function showSuggestion() {
 function setupCardInteractions() {
     const c = document.getElementById('magic-card');
     if (!c) return;
-    const s = (e) => { if (e.cancelable) e.preventDefault(); c.classList.add('revealed'); };
-    const h = (e) => { if (e.cancelable) e.preventDefault(); c.classList.remove('revealed'); };
+    const s = (e) => {
+        if (e.cancelable) e.preventDefault();
+
+        const cover = c.querySelector('.card-cover');
+        if (cover && cover.classList.contains('card-hint-lift')) {
+            // Capturar estado actual de la animación para transición suave
+            const currentTransform = window.getComputedStyle(cover).transform;
+            cover.style.transition = 'none';
+            cover.style.transform = currentTransform;
+            cover.classList.remove('card-hint-lift');
+            void cover.offsetHeight; // Forzar reflow
+            cover.style.transition = '';
+            cover.style.transform = '';
+        }
+
+        c.classList.add('revealed');
+        if (typeof gameData !== 'undefined') gameData.hasRevealed = true;
+        // Ocultar guía tutorial al interactuar
+        if (typeof hideTutorialGuide === 'function') hideTutorialGuide();
+    };
+    const h = (e) => {
+        if (e.cancelable) e.preventDefault();
+        c.classList.remove('revealed');
+        // Volver a mostrar guía tutorial si no se ha completado
+        if (typeof updateTutorialGuide === 'function') updateTutorialGuide();
+    };
     // Eventos ratón y táctil
     c.addEventListener('mousedown', s); c.addEventListener('mouseup', h); c.addEventListener('mouseleave', h);
     c.addEventListener('touchstart', s, { passive: false }); c.addEventListener('touchend', h); c.addEventListener('touchcancel', h);
@@ -548,4 +575,79 @@ function updateScoringText(isSiege) {
         // Texto para Modo Supervivencia
         desc.innerHTML = `<span style="color:#2ecc71">🥷 Supervivencia</span> <small style="opacity:0.7">(Si el Impostor gana mucho, se premia más la supervivencia)</small>`;
     }
+}
+
+// --- MODO TUTORIAL ---
+function initTutorialUI() {
+    const toggle = document.getElementById('tutorial-mode-toggle');
+    if (toggle) {
+        toggle.checked = isTutorialModeActive;
+    }
+    updateTutorialGuide();
+}
+
+function toggleTutorialMode(checkbox) {
+    isTutorialModeActive = checkbox.checked;
+    saveAllData();
+    updateTutorialGuide();
+}
+
+function updateTutorialGuide() {
+    const overlay = document.getElementById('tutorial-guide-layer');
+    const finger = overlay ? overlay.querySelector('.finger-guide') : null;
+
+    if (!isTutorialModeActive || !overlay || !finger) {
+        if (overlay) overlay.classList.add('hidden');
+        return;
+    }
+
+    const currentScreen = document.querySelector('.container:not(.hidden)');
+    if (!currentScreen) return;
+
+    // Reset animations
+    finger.classList.remove('anim-tap', 'anim-hold');
+    const cardCover = document.querySelector('.card-cover');
+    if (cardCover) cardCover.classList.remove('card-hint-lift');
+
+    let targetEl = null;
+    let animation = 'anim-tap';
+    let offsetX = 20;
+    let offsetY = 20;
+
+    switch (currentScreen.id) {
+        case 'screen-pass-device':
+            targetEl = currentScreen.querySelector('.btn-main');
+            animation = 'anim-tap';
+            break;
+        case 'screen-reveal':
+            const card = document.getElementById('magic-card');
+            if (card && !gameData.hasRevealed) {
+                targetEl = card;
+                animation = 'anim-hold';
+                // Añadir efecto de levantamiento a la tapa de la carta
+                if (cardCover) cardCover.classList.add('card-hint-lift');
+            } else {
+                targetEl = document.getElementById('next-btn');
+                animation = 'anim-tap';
+            }
+            break;
+        default:
+            overlay.classList.add('hidden');
+            return;
+    }
+
+    if (targetEl) {
+        const rect = targetEl.getBoundingClientRect();
+        finger.style.left = `${rect.left + rect.width / 2 - offsetX}px`;
+        finger.style.top = `${rect.top + rect.height / 2 - offsetY}px`;
+        finger.classList.add(animation);
+        overlay.classList.remove('hidden');
+    } else {
+        overlay.classList.add('hidden');
+    }
+}
+
+function hideTutorialGuide() {
+    const overlay = document.getElementById('tutorial-guide-layer');
+    if (overlay) overlay.classList.add('hidden');
 }

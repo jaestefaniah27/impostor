@@ -1,8 +1,9 @@
 // VARIABLES GLOBALES
-let players = []; 
-let playerAvatars = {}; 
+let players = [];
+let playerAvatars = {};
 let themes = [];
 let selectedThemesIds = [];
+let isTutorialModeActive = false;
 // CONFIGURACIÓN DE PUNTUACIÓN (MODOS DE JUEGO)
 const SCORING_MODES = {
     HUNTER: {
@@ -26,17 +27,18 @@ let currentScoringMode = 'HUNTER';
 
 // ESTADO DE JUEGO (Persistente)
 // Añadimos startTime para recuperar el tiempo real
-let gameData = { 
-    assignments: [], 
-    currentIndex: 0, 
-    secretWord: '', 
-    secretHint: '', 
-    currentSuggestions: [], 
-    impostorsCaught: 0, 
-    totalImpostors: 0, 
+let gameData = {
+    assignments: [],
+    currentIndex: 0,
+    secretWord: '',
+    secretHint: '',
+    currentSuggestions: [],
+    impostorsCaught: 0,
+    totalImpostors: 0,
     startTime: null,
     lastWinner: null,
-    pastImpostors: []
+    pastImpostors: [],
+    hasRevealed: false
 };
 let gameHistory = []; // Almacén para todo el historial de palabras usadas
 let timerInterval;
@@ -46,29 +48,29 @@ let editingThemeId = null; // Para el editor de temas
 // ESTADO DE TORNEO (Persistente)
 let isTournamentActive = false;
 let currentTournamentName = "";
-let tournamentScores = {}; 
-let tournamentGames = []; 
+let tournamentScores = {};
+let tournamentGames = [];
 
-const emojis = ["🦁","🐯","🐻","🐨","🐼","🐸","🐙","🦄","🐝","🐞","🦖","👽","🤖","👻","🤡","🤠","🎃","💀","🍄","🍔","🍕","⚽","🚀","💡","🔥","💎","🎸","🎮"];
+const emojis = ["🦁", "🐯", "🐻", "🐨", "🐼", "🐸", "🐙", "🦄", "🐝", "🐞", "🦖", "👽", "🤖", "👻", "🤡", "🤠", "🎃", "💀", "🍄", "🍔", "🍕", "⚽", "🚀", "💡", "🔥", "💎", "🎸", "🎮"];
 const defaultSuggestions = ["¿Es grande?", "¿Está vivo?", "¿Tecnología?", "¿Uso diario?", "¿Color?", "¿Supermercado?", "¿Ruido?", "¿Electricidad?", "¿Comida?", "¿Peligroso?", "¿Bolsillo?", "¿Caro?"];
 
 // --- INICIALIZACIÓN CON PANTALLA DE CARGA SUAVE ---
 window.onload = async () => {
-    
+
     // Función para ocultar la carga suavemente
     const removeLoadingScreen = () => {
         const loader = document.getElementById('screen-loading');
         if (loader && !loader.classList.contains('hidden')) {
             // 1. Bajamos la opacidad de TODO el bloque a la vez
             loader.style.opacity = '0';
-            
+
             // 2. Esperamos a que termine la transición CSS (0.5s) y lo quitamos
             setTimeout(() => {
                 loader.classList.add('hidden');
                 // Comprobación de seguridad: si no hay pantalla, ir a Home
                 const anyVisible = document.querySelector('.container:not(.hidden):not(#screen-loading)');
                 if (!anyVisible && typeof showScreen === 'function') showScreen('screen-home');
-            }, 500); 
+            }, 500);
         }
     };
 
@@ -77,19 +79,20 @@ window.onload = async () => {
 
     try {
         // Cargas de datos
-        loadGameData();      
-        await fetchThemes();   
-        
+        loadGameData();
+        await fetchThemes();
+
         await fetchGameHistory();
-        
+
         restoreTournamentState();
         restoreGameState();
 
-        if(typeof renderPlayers === 'function') renderPlayers();
-        if(typeof setupCardInteractions === 'function') setupCardInteractions();
+        if (typeof renderPlayers === 'function') renderPlayers();
+        if (typeof setupCardInteractions === 'function') setupCardInteractions();
         if (typeof checkTournamentState === 'function') checkTournamentState();
-        if(typeof initScoringUI === 'function') initScoringUI();
-        
+        if (typeof initScoringUI === 'function') initScoringUI();
+        if (typeof initTutorialUI === 'function') initTutorialUI();
+
     } catch (e) {
         console.error("Error init:", e);
     } finally {
@@ -112,12 +115,16 @@ function loadGameData() {
     } else {
         currentScoringMode = 'HUNTER'; // Por defecto
     }
+
+    // --- Cargar modo tutorial ---
+    isTutorialModeActive = localStorage.getItem('impostorTutorialMode') === 'true';
 }
 
 function saveAllData() {
     localStorage.setItem('impostorPlayers', JSON.stringify(players));
     localStorage.setItem('impostorAvatars', JSON.stringify(playerAvatars));
     localStorage.setItem('impostorScoringMode', currentScoringMode);
+    localStorage.setItem('impostorTutorialMode', isTutorialModeActive);
 }
 
 function getRandomAvatar() { return emojis[Math.floor(Math.random() * emojis.length)]; }
@@ -173,7 +180,7 @@ function saveGameState(currentScreenId) {
         scoringMode: currentScoringMode,
         timestamp: Date.now()
     };
-    
+
     localStorage.setItem('impostorGameState', JSON.stringify(state));
 }
 
@@ -185,7 +192,7 @@ function restoreGameState() {
         const state = JSON.parse(saved);
         gameData = state.gameData;
         timeRemaining = state.timeRemaining || 600;
-        
+
         // RESTAURAR CONFIGURACIÓN DE TEMAS
         if (state.selectedThemesIds) {
             selectedThemesIds = state.selectedThemesIds;
@@ -194,18 +201,18 @@ function restoreGameState() {
         }
 
         if (state.screen) {
-            if(typeof showScreen === 'function') {
-                showScreen(state.screen, false); 
-                
+            if (typeof showScreen === 'function') {
+                showScreen(state.screen, false);
+
                 if (state.screen === 'screen-pass-device' && typeof showPassScreen === 'function') showPassScreen();
                 if (state.screen === 'screen-reveal' && typeof setupCardForPlayer === 'function') setupCardForPlayer();
                 if (state.screen === 'screen-active') {
-                    if(typeof renderVotingList === 'function') renderVotingList();
-                    if(typeof startTimer === 'function') startTimer();
+                    if (typeof renderVotingList === 'function') renderVotingList();
+                    if (typeof startTimer === 'function') startTimer();
                     const st = document.getElementById('starter-name');
-                    if(st) st.innerText = "Continúa la partida...";
+                    if (st) st.innerText = "Continúa la partida...";
                 }
-                
+
                 // RESTAURAR PANTALLAS DE FIN DE JUEGO
                 if (state.screen === 'screen-solution' || state.screen === 'screen-result') {
                     restoreEndGameUI(state.screen);
@@ -215,7 +222,7 @@ function restoreGameState() {
         if (state.scoringMode && SCORING_MODES[state.scoringMode]) {
             currentScoringMode = state.scoringMode;
             // Actualizar el interruptor visualmente
-            if(typeof initScoringUI === 'function') initScoringUI();
+            if (typeof initScoringUI === 'function') initScoringUI();
         }
     } catch (e) {
         console.error("Error restaurando partida", e);
@@ -226,10 +233,10 @@ function restoreGameState() {
 // NUEVA: Restaura la UI de ganador al recargar
 function restoreEndGameUI(screen) {
     const winner = gameData.lastWinner; // Recuperamos el ganador guardado
-    
+
     // Restaurar palabra secreta
     const finalWordEl = document.getElementById('final-word');
-    if(finalWordEl) finalWordEl.innerText = gameData.secretWord;
+    if (finalWordEl) finalWordEl.innerText = gameData.secretWord;
 
     // Restaurar cartel de ganador
     const display = document.getElementById('winner-display');
@@ -252,7 +259,7 @@ function restoreEndGameUI(screen) {
     if (isTournamentActive && typeof renderScoreboard === 'function') {
         renderScoreboard();
         const scoreContainer = document.getElementById('scoreboard-container');
-        if(scoreContainer) scoreContainer.classList.remove('hidden');
+        if (scoreContainer) scoreContainer.classList.remove('hidden');
     }
 }
 
@@ -265,7 +272,7 @@ async function fetchGameHistory() {
     try {
         const r = await fetch('/api/history');
         gameHistory = await r.json();
-    } catch(e) { 
+    } catch (e) {
         console.error("Error cargando historial:", e);
         gameHistory = [];
     }
@@ -276,13 +283,13 @@ async function fetchThemes() {
         const r = await fetch('/api/themes');
         themes = await r.json();
         if (typeof renderThemeGrid === 'function') renderThemeGrid();
-    } catch(e) { console.error(e); }
+    } catch (e) { console.error(e); }
 }
 
 async function saveThemeFromUI() {
     const n = document.getElementById('new-theme-title').value;
-    if(!n) return alert("Pon título");
-    
+    if (!n) return alert("Pon título");
+
     const suggestionsRaw = document.getElementById('new-theme-suggestions').value.trim();
     let themeSuggestions = [];
     if (suggestionsRaw) themeSuggestions = suggestionsRaw.split('/').map(s => s.trim()).filter(s => s.length > 0);
@@ -291,28 +298,28 @@ async function saveThemeFromUI() {
     document.querySelectorAll('.word-row').forEach(r => {
         const t = r.querySelector('.input-word').value.trim();
         const h = r.querySelector('.input-hints').value.trim();
-        if(t) w.push({text:t, hints:h ? h.split('/') : ["Sin pista"]});
+        if (t) w.push({ text: t, hints: h ? h.split('/') : ["Sin pista"] });
     });
-    
-    if(w.length < 4) return alert("Mín 4 palabras");
-    
+
+    if (w.length < 4) return alert("Mín 4 palabras");
+
     // Objeto a enviar (incluye id si estamos editando)
     const payload = {
         id: editingThemeId, // Global definida en ui.js
-        name: n, 
-        words: w, 
+        name: n,
+        words: w,
         suggestions: themeSuggestions
     };
-    
+
     await fetch('/api/themes', {
-        method:'POST',
-        headers:{'Content-Type':'application/json'},
-        body:JSON.stringify(payload)
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
     });
-    
+
     alert(editingThemeId ? "Tema actualizado" : "Tema creado");
     await fetchThemes(); // Recargar lista
-    
+
     // Volver al gestor
     if (typeof goToThemeManager === 'function') {
         goToThemeManager();
@@ -324,9 +331,9 @@ async function saveThemeFromUI() {
 async function saveGameRecordToHistory(record) {
     try {
         // 1. Guardar en el servidor
-        await fetch('/api/history', { 
-            method: 'POST', 
-            headers: { 'Content-Type': 'application/json' }, 
+        await fetch('/api/history', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(record)
         });
 
@@ -344,13 +351,13 @@ async function fetchStats() {
     try {
         const r = await fetch('/api/stats');
         return await r.json();
-    } catch(e) { console.error(e); return null; }
+    } catch (e) { console.error(e); return null; }
 }
 
 async function mergeAliases(mainName, aliases) {
     await fetch('/api/aliases', {
         method: 'POST',
-        headers: {'Content-Type': 'application/json'},
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ mainName: mainName, aliasesToMerge: aliases })
     });
 }
@@ -358,7 +365,7 @@ async function mergeAliases(mainName, aliases) {
 async function unmergeAliases(namesToFree) {
     await fetch('/api/aliases/unmerge', {
         method: 'POST',
-        headers: {'Content-Type': 'application/json'},
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ namesToFree: namesToFree })
     });
 }
