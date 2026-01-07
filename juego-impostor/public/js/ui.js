@@ -570,10 +570,10 @@ function updateScoringText(isSiege) {
 
     if (isSiege) {
         // Texto para Modo Alto riesgo
-        desc.innerHTML = `<span style="color:#e74c3c">☠️ Alto riesgo</span> <small style="opacity:0.7">El impostor gana más puntos por adivinar la palabra secreta.<br>Activar este modo si los ciudadanos ganan frecuentemente.</small>`;
+        desc.innerHTML = `<span style="color:#e74c3c">☠️ Alto riesgo</span> <br><small style="opacity:0.7">El impostor gana más puntos por adivinar la palabra secreta.<br>Activar este modo si los ciudadanos ganan frecuentemente.</small>`;
     } else {
         // Texto para Modo Supervivencia
-        desc.innerHTML = `<span style="color:#2ecc71">🥷 Supervivencia</span> <small style="opacity:0.7">El impostor gana más puntos por sobrevivir sin ser descubierto.<br>Activar este modo si el impostor gana frecuentemente.</small>`;
+        desc.innerHTML = `<span style="color:#2ecc71">🥷 Supervivencia</span> <br><small style="opacity:0.7">El impostor gana más puntos por sobrevivir sin ser descubierto.<br>Activar este modo si el impostor gana frecuentemente.</small>`;
     }
 }
 
