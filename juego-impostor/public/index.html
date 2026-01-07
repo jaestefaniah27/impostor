@@ -53,51 +53,53 @@
             </div>
         </div>
 
-        <div class="card" style="display: flex; justify-content: space-between; align-items: center;">
-            <div>
-                <h3 style="margin-bottom: 5px; border: none;">💡 Pistas Impostor</h3>
-                <small style="color: #bdc3c7;">Ayuda para disimular</small>
-            </div>
-            <label class="switch">
-                <input type="checkbox" id="hints-toggle" checked>
-                <span class="slider round"></span>
-            </label>
-        </div>
-
-        <div class="card" style="display: flex; justify-content: space-between; align-items: center;">
-            <div>
-                <h3 style="margin-bottom: 5px; border: none;">🤝 Cómplice</h3>
-                <small style="color: #bdc3c7;">Ayuda al impostor (Mín 4 jug.)</small>
-            </div>
-            <label class="switch">
-                <input type="checkbox" id="accomplice-toggle">
-                <span class="slider round"></span>
-            </label>
-        </div>
-
-        <div class="card" style="display: flex; justify-content: space-between; align-items: center;">
-            <div>
-                <h3 style="margin-bottom: 5px; border: none;">🎓 Modo Tutorial</h3>
-                <small style="color: #bdc3c7;">Guía visual con ayuda interactiva</small>
-            </div>
-            <label class="switch">
-                <input type="checkbox" id="tutorial-mode-toggle" onchange="toggleTutorialMode(this)">
-                <span class="slider round"></span>
-            </label>
-        </div>
-
         <div class="card">
             <h3>⚙️ Configuración</h3>
-            <div>
+            <div style="margin-bottom: 20px;">
                 <label>Impostores: <span id="impostor-val">1</span></label>
                 <input type="range" id="impostor-count" min="1" max="3" value="1" oninput="updateConfigDisplay()">
             </div>
+
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                <div>
+                    <strong style="font-size: 1.1em;">💡 Pistas Impostor</strong><br>
+                    <small style="color: #bdc3c7;">Ayuda para disimular</small>
+                </div>
+                <label class="switch">
+                    <input type="checkbox" id="hints-toggle" checked>
+                    <span class="slider round"></span>
+                </label>
+            </div>
+
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                <div>
+                    <strong style="font-size: 1.1em;">🤝 Cómplice</strong><br>
+                    <small style="color: #bdc3c7;">Ayuda al impostor (Mín 4 jug.)</small>
+                </div>
+                <label class="switch">
+                    <input type="checkbox" id="accomplice-toggle">
+                    <span class="slider round"></span>
+                </label>
+            </div>
+
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                <div>
+                    <strong style="font-size: 1.1em;">👆 Modo Tutorial</strong><br>
+                    <small style="color: #bdc3c7;">Guía visual con ayuda interactiva</small>
+                </div>
+                <label class="switch">
+                    <input type="checkbox" id="tutorial-mode-toggle" onchange="toggleTutorialMode(this)">
+                    <span class="slider round"></span>
+                </label>
+            </div>
+
             <div style="display:flex; justify-content:space-between; align-items:center;">
                 <div>
-                    Sistema de Puntos
+                    <strong>Sistema de Puntos</strong>
                     <div id="mode-description" style="font-size:0.8em; color:#bdc3c7; margin-top:2px;">
-                        <span style="color:#2ecc71">⏳ Supervivencia</span> <small style="opacity:0.7">(Si el Impostor
-                            gana mucho, se premia más la supervivencia)</small>
+                        <span style="color:#2ecc71">⏳ Supervivencia</span> <small style="opacity:0.7">El impostor gana
+                            más puntos por sobrevivir sin ser descubierto. Activar este modo si el impostor gana
+                            frecuentemente.</small>
                     </div>
                 </div>
 
